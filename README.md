@@ -6,22 +6,32 @@
 
 # Branch說明
 * master
-    穩定版本使用
-    非穩定板不使用
+    >穩定版本使用，非穩定版會使用開發版
 * develop
-    開發版本使用
-    就是平常在使用的Branch
+    >開發版本使用，就是平常在使用的Branch
+
 * function/
     開發各項功能使用
     * function/PersonnelManagement
-        人員管理
+
+        >人員管理
+
     * function/LoginLogoutSystem
-        登入登出系統
+
+        >登入登出系統
+
     * function/Sale
-        前台交易
+
+        >前台交易
+
     * function/Stock
-        庫存管理
+
+        >庫存管理
+
     * function/SalesReport
-        報表結算
+
+        >報表結算
+
     * function/...
-        等等...
+
+        >等等...
