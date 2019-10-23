@@ -1,6 +1,6 @@
 店鋪管理端 Documentation
 ===
-![](https://img.shields.io/github/downloads/atom/atom/total.svg)
+![release]](https://img.shields.io/github/release/vssvrsr/POS-system)
 ![build](https://img.shields.io/appveyor/ci/:user/:repo.svg)
 ![chat](https://img.shields.io/discord/532568788911128587.svg)
 
