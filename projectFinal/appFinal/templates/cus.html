@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        顧客管理
+      </h1>
+
+      <ol class="breadcrumb">
+        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+        <li>人員管理</li>
+        <li class="active">顧客管理</li>
+      </ol>
+    </section>
+
+{% endblock %}
+
+{% block content %}
+<section class="content">
+  <!-- <div class="box box-primary">
+    <form role="form">
+      <div class="box-body">
+        <div class="form-group">
+            <div class="row"> 
+              <div class="col-xs-6">
+                <label>搜尋客戶</label>
+                <input type="text" class="form-control" name="cusSearch" placeholder="搜尋姓名、電話或客戶編號">
+              </div>
+              <div class="col-xs-6">
+                <label>客戶等級篩選</label>
+                <select class="form-control">
+                  <option>選擇客戶等級</option>
+                  <option>銅</option>
+                  <option>銀</option>
+                  <option>金</option>
+                </select>
+              </div>
+            </div>
+        </div>
+      </div>
+  
+      <div class="box-footer">
+        <input type="submit" name="resetB" class="btn btn-default" value="重整">
+        <input type="submit" name="searchB" class="btn btn-primary" value="搜尋">
+      </div>
+    </form>
+  </div> -->
+  
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">搜尋顧客</h3>
+      <small>點擊姓名以編輯</small>
+      <div class ="pull-right">
+          <a class="btn btn-primary" href="/app/index"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
+          <a class="btn btn-primary" href="/app/index"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
+      </div>
+    </div>
+    <div class="box-body">
+      <table id="cusTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>顧客姓名</th>
+          <th>顧客編號</th>
+          <th>手機號碼</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for cus in cusAll %}
+          <tr>
+            <th><a href="/app/index">{{cus.cus_name}}</a></th>
+            <th>{{cus.cus_id}}</th>
+            <th>{{cus.cus_phone1}}</th>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>顧客姓名</th>
+            <th>顧客編號</th>
+            <th>手機號碼</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.box-body -->
+  </div>
+    <!-- /.box -->
+</section>
+{% endblock %}
+
+
+{% block script %}
+
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#cusTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
+{% endblock %}

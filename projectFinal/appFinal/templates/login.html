@@ -1,0 +1,35 @@
+{% load static %}
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{% static 'login/css/login.css' %}" rel="stylesheet"/>
+        <title>管理系統</title>
+    </head>
+
+    <body>
+    <div class="container">
+        <div class="col">
+            <br>
+            <h1 class="text-center" style="font-family:Microsoft JhengHei;">管理系統</h1>
+            <form method="post" class="form-login">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label style="font-family:Microsoft JhengHei;">帳號:</label>
+                    <input class="form-control" type="text" name="userId" placeholder="輸入帳號" autofocus required/><br>
+                </div>
+                <div class="form-group">
+                    密碼: <input class="form-control" type="password" name="userPw" placeholder="輸入密碼" style="font-family:Microsoft JhengHei;" required/><br>
+                </div>
+                <div>
+                    <input type="submit" value="登入" name="loginB" class="btn btn-primary float-right" style="font-family:Microsoft JhengHei;">
+                </div>
+            </form>
+        </div>
+    </div>
+        
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </body>
+</html>
