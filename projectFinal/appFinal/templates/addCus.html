@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈 | 新增顧客{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        新增顧客
+      </h1>
+
+      <ol class="breadcrumb">
+        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+        <li>人員管理</li>
+        <li><a href="/app/cus">顧客管理</a></li>
+        <li class="active">新增顧客</li>
+      </ol>
+    </section>
+
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <form role="form" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">基本資料</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>客戶姓名</label>
+                            <input type="text" class="form-control" name="cusName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>英文名</label>
+                            <input type="text" class="form-control" name="cusEnName">
+                        </div>
+                        <div class="form-group">
+                            <label>性別</label>
+                            <select class="form-control" name="cusSex">
+                                <option>---</option>
+                                <option value="M">男</option>
+                                <option value="F">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>客戶編號</label>
+                            <input type="text" class="form-control" name="cusId" p required>
+                        </div>
+                        <div class="form-group">
+                            <label>等級</label>
+                            <select class="form-control" name="cusClass">
+                                <option>---</option>
+                                <option value="3">銅</option>
+                                <option value="2">銀</option>
+                                <option value="1">金</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>身份證字號</label>
+                            <input type="text" class="form-control" name="cusIdCard" required>
+                        </div>
+                        <div class="form-group">
+                            <label>生日:</label>
+            
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="datepicker1" name="cusBd">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <div class="form-group">
+                            <label>加入日:</label>
+            
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="datepicker2" name="cusArrDate">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">聯絡資訊</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>手機</label>
+                            <input type="text" class="form-control" name="cusPhone1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>市話</label>
+                            <input type="text" class="form-control" name="cusPhone2">
+                        </div>
+                        <div class="form-group">
+                            <label>通訊地址</label>
+                            <input type="text" class="form-control" name="cusAddr1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>戶籍地址</label>
+                            <input type="text" class="form-control" name="cusAddr2" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="cusEmail" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">其他資訊</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>備註</label>
+                            <textarea type="text" class="form-control" name="cusRemark" row="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right">
+            <a class="btn btn-default" href="/app/addCus">重整</a>
+            <input type="submit" name="saveB" class="btn btn-primary" value="儲存">
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+
+
+
+
+<script>
+    $(function () {
+        $('#datepicker1').datepicker({
+            autoclose:true,
+            language:"zh-TW"
+        })
+        $('#datepicker2').datepicker({
+            autoclose:true,
+            language:"zh-TW"
+        })
+    })
+</script>
+{% endblock %}

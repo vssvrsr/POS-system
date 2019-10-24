@@ -6,7 +6,10 @@ app_name = 'appFinal'
 urlpatterns = [
     path('', appViews.login),
     path('index/', appViews.index, name='index'),
+
     path('cus/', appViews.cus, name='cus'),
+    path('addCus/', appViews.addCus, name='addCus'),
+
     path('emp/', appViews.emp, name='emp'),
     path('sale/', appViews.sale, name='sale'),
     path('service/', appViews.service, name='service'),

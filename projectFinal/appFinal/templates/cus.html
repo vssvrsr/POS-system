@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈{% endblock %}
+{% block title %}茵悦薈 | 顧客管理{% endblock %}
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
@@ -58,8 +58,8 @@
       <h3 class="box-title">搜尋顧客</h3>
       <small>點擊姓名以編輯</small>
       <div class ="pull-right">
-          <a class="btn btn-primary" href="/app/index"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
-          <a class="btn btn-primary" href="/app/index"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
+          <a class="btn btn-primary" href="/app/addCus"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
+          <a class="btn btn-primary" href="#"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
       </div>
     </div>
     <div class="box-body">
