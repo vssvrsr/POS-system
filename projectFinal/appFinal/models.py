@@ -26,7 +26,7 @@ class Customer(models.Model):
     cus_arr_date = models.CharField(max_length=50)
 
     cus_source = models.CharField(max_length=50, null=True)
-    cus_remark = models.CharField(max_length=50, null=True)
+    cus_remark = models.CharField(max_length=300, null=True)
 
     def __str__(self):
         return self.cus_name

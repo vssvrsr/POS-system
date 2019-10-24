@@ -9,6 +9,7 @@ urlpatterns = [
 
     path('cus/', appViews.cus, name='cus'),
     path('addCus/', appViews.addCus, name='addCus'),
+    path('editCus/<str:a>', appViews.editCus, name='editCus'),
 
     path('emp/', appViews.emp, name='emp'),
     path('sale/', appViews.sale, name='sale'),
