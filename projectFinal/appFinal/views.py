@@ -59,6 +59,21 @@ def editCus(request, a):
         otherSexValue = 'M'
         otherSex = '男'
 
+    cusThisClassOther = []
+    cusThisClassOtherValue = []
+    if cusThis.cus_class == '3':
+        cusThisClass = '金'
+        cusThisClassOther.append('銅').append('銀')
+        cusThisClassOtherValue.append('1').append('2')
+    elif cusThis.cus_class == '2':
+        cusThisClass = '銀'
+        cusThisClassOther.append('銅').append('金')
+        cusThisClassOtherValue.append('1').append('3')
+    elif cusThis.cus_class == '1':
+        cusThisClass = '銅'
+        cusThisClassOther.append('銀').append('金')
+        cusThisClassOtherValue.append('2').append('3')
+
     if 'saveB' in request.POST:
         cusName = request.POST['cusName']
         cusEnName = request.POST['cusEnName']

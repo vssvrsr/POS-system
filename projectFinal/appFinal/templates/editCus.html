@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label>英文名</label>
-                            <input type="text" class="form-control" name="cusEnName" value="{{cusThis.cus_name_en}}">
+                            <input type="text" class="form-control" name="cusEnName" value="{{cusThis.cus_name_en|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>性別</label>
@@ -56,16 +56,16 @@
                         </div>
                         <div class="form-group">
                             <label>等級</label>
-                            <select class="form-control" name="cusClass" value="{{cusThis.cus_class}}">
-                                <option>---</option>
-                                <option value="3">銅</option>
-                                <option value="2">銀</option>
-                                <option value="1">金</option>
+                            <select class="form-control" name="cusClass" value="{{cusThis.cus_class|default:''}}">
+                                <option value="cusThis.cus_class">---</option>
+                                {% for classOther, classOtherValue in cusThisClassOther, cusThisClassOtherValue %}
+                                    <option value="{{classOtherValue}}">{{classOther}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="form-group">
                             <label>身份證字號</label>
-                            <input type="text" class="form-control" name="cusIdCard" required value="{{cusThis.cus_idcard}}">
+                            <input type="text" class="form-control" name="cusIdCard" value="{{cusThis.cus_idcard|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>生日:</label>
@@ -100,23 +100,23 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>手機</label>
-                            <input type="text" class="form-control" name="cusPhone1" required value="{{cusThis.cus_phone1}}">
+                            <input type="text" class="form-control" name="cusPhone1" required value="{{cusThis.cus_phone1|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>市話</label>
-                            <input type="text" class="form-control" name="cusPhone2" value="{{cusThis.cus_phone2}}">
+                            <input type="text" class="form-control" name="cusPhone2" value="{{cusThis.cus_phone2|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>通訊地址</label>
-                            <input type="text" class="form-control" name="cusAddr1" value="{{cusThis.cus_addr1}}">
+                            <input type="text" class="form-control" name="cusAddr1" value="{{cusThis.cus_addr1|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>戶籍地址</label>
-                            <input type="text" class="form-control" name="cusAddr2" value="{{cusThis.cus_addr2}}">
+                            <input type="text" class="form-control" name="cusAddr2" value="{{cusThis.cus_addr2|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" name="cusEmail" reired value="{{cusThis.cus_email}}">
+                            <input type="email" class="form-control" name="cusEmail" reired value="{{cusThis.cus_email|default:''}}">
                         </div>
                     </div>
                 </div>
