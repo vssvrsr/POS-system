@@ -77,8 +77,8 @@
           <tr>
             <th><a href="/app/editCus/{{cus.cus_id}}">{{cus.cus_name}}</a></th>
             <th>{{cus.cus_id}}</th>
-            <th>{{cus.cus_phone1|default_if_none:"-"}}</th>
-            <th>{{cus.cus_phone2|default_if_none:"-"}}</th>
+            <th>{{cus.cus_phone1|default:"-"}}</th>
+            <th>{{cus.cus_phone2|default:"-"}}</th>
           </tr>
           {% endfor %}
         </tbody>

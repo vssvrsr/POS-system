@@ -62,7 +62,7 @@ def editCus(request, a):
     if 'saveB' in request.POST:
         cusName = request.POST['cusName']
         cusEnName = request.POST['cusEnName']
-        cusId = request.POST['cusName']
+        cusId = request.POST['cusId']
         cusClass = request.POST['cusClass']
         cusIdCard = request.POST['cusIdCard']
         cusSex = request.POST['cusSex']
