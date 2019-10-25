@@ -172,7 +172,7 @@ desired effect
               <!-- The user image in the navbar-->
               <img src="{% static 'adminlet-2.4.10/dist/img/user_kiki.jpg' %}" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">KIKI</span>
+              <span class="hidden-xs">{{userNow.user}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
@@ -180,7 +180,7 @@ desired effect
                 <img src="{% static 'adminlet-2.4.10/dist/img/user_kiki.jpg' %}" class="img-circle" alt="User Image">
 
                 <p>
-                    KIKI
+                    {{userNow.user}}
                   <small>2019-10-20</small>
                 </p>
               </li>
@@ -205,7 +205,7 @@ desired effect
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="/app/logout/{{userNow.user}}" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>

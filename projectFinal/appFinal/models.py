@@ -8,6 +8,13 @@ class User(models.Model):
     def __str__(self):
         return self.user_id
 
+class LogedIn(models.Model):
+    loged_user = models.CharField(max_length=50)
+    loged_ip = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.loged_ip
+
 class Customer(models.Model):
     # cus_photo = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
     cus_name = models.CharField(max_length=50)
@@ -24,6 +31,8 @@ class Customer(models.Model):
     cus_bd = models.CharField(max_length=50, null=True)
     cus_shop_id = models.CharField(max_length=50, null=True)
     cus_arr_date = models.CharField(max_length=50)
+
+    cus_seeable = models.CharField(max_length=50, null = True)
 
     cus_source = models.CharField(max_length=50, null=True)
     cus_remark = models.CharField(max_length=300, null=True)

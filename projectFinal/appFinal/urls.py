@@ -5,11 +5,15 @@ app_name = 'appFinal'
 
 urlpatterns = [
     path('', appViews.login),
+    path('logout/<str:a>', appViews.logout, name='logout'),
     path('index/', appViews.index, name='index'),
 
     path('cus/', appViews.cus, name='cus'),
     path('addCus/', appViews.addCus, name='addCus'),
     path('editCus/<str:a>', appViews.editCus, name='editCus'),
+    path('removedCus/', appViews.removedCus, name='removedCus'),
+    path('restoreCus/<str:a>', appViews.restoreCus, name='restoreCus'),
+    path('deleteCus/<str:a>', appViews.deleteCus, name='deleteCus'),
 
     path('emp/', appViews.emp, name='emp'),
     path('sale/', appViews.sale, name='sale'),

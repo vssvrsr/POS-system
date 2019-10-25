@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈 | 已移籍客戶{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+            已移籍客戶
+      </h1>
+
+      <ol class="breadcrumb">
+        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+        <li>人員管理</li>
+        <li class="active">已移籍客戶</li>
+      </ol>
+    </section>
+
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+        <h3 class="box-title">搜尋顧客</h3>
+        <small>點擊姓名以編輯</small>
+        </div>
+        <div class="box-body">
+        <table id="cusTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+            <th>顧客姓名</th>
+            <th>顧客編號</th>
+            <th>手機號碼</th>
+            <th>市話</th>
+            <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cus in removedAll %}
+            <tr>
+                <th>{{cus.cus_name}}</th>
+                <th>{{cus.cus_id}}</th>
+                <th>{{cus.cus_phone1|default:"-"}}</th>
+                <th>{{cus.cus_phone2|default:"-"}}</th>
+                <th>
+                    <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalRestore">
+                        恢復
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modalDelete">
+                        刪除
+                    </button>
+                </th>
+            </tr>
+            <div class="modal fade" id="modalRestore" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                        </div>
+                        <div class="modal-body">
+                            確定恢復嗎?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                            <a href="/app/restoreCus/{{cus.cus_id}} "class="btn btn-warning">恢復</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                            </div>
+                            <div class="modal-body">
+                                確定刪除嗎?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                                <a href="/app/deleteCus/{{cus.cus_id}} "class="btn btn-danger">刪除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>顧客姓名</th>
+                <th>顧客編號</th>
+                <th>手機號碼</th>
+                <th>市話</th>
+                <th>操作</th>
+            </tr>
+            </tfoot>
+        </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+
+</section>
+{% endblock %}
+
+
+{% block script %}
+
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#cusTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
+{% endblock %}
