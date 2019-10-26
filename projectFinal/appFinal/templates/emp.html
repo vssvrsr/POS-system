@@ -1,26 +1,91 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈{% endblock %}
+{% block title %}茵悦薈 | 員工資料操作{% endblock %}
 
-{% block css %}{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        員工管理
+        員工資料操作
       </h1>
+
       <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>人員管理</li>
-        <li class="active">員工管理</li>
+        <li class="active">員工資料操作</li>
       </ol>
     </section>
+
 {% endblock %}
 
 {% block content %}
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">搜尋員工</h3>
+      <small>點擊姓名以編輯</small>
+      <div class ="pull-right">
+          <a class="btn btn-defaut" href="/app/removed/emp">已移籍員工</a>
+          <a class="btn btn-primary" href="/app/addEmp"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
+          <a class="btn btn-primary" href="#"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
+      </div>
+    </div>
+    <div class="box-body">
+      <table id="empTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>員工姓名</th>
+          <th>員工編號</th>
+          <th>手機號碼</th>
+          <th>市話</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for emp in empAll %}
+          <tr>
+            <th><a href="/app/editEmp/{{emp.emp_id}}">{{emp.emp_name_ch}}</a></th>
+            <th>{{emp.emp_id}}</th>
+            <th>{{emp.emp_phone1|default:"-"}}</th>
+            <th>{{emp.emp_phone2|default:"-"}}</th>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>員工姓名</th>
+            <th>員工編號</th>
+            <th>手機號碼</th>
+            <th>市話</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.box-body -->
+  </div>
+    <!-- /.box -->
+</section>
 {% endblock %}
 
 
 {% block script %}
+
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#empTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
 {% endblock %}

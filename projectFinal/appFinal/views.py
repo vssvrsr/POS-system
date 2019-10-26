@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import User, Customer, LogedIn
+from .models import User, Customer, LogedIn, Employee, Shop
 
 def getIP(request):
     if 'HTTP_X_FORWARDED_FOR' in request.META:
@@ -57,7 +57,7 @@ def cus(request):
         return redirect('/app')
     persMenuOpen = "active menu-open"
 
-    cusAll = Customer.objects.all().exclude(cus_seeable='0')
+    cusAll = Customer.objects.all().exclude(cus_seeable=False)
 
     return render(request, 'cus.html', locals())
 
@@ -141,34 +141,135 @@ def editCus(request, a):
         return redirect('/app/cus')
 
     if 'removeB' in request.POST:
-        Customer.objects.filter(cus_id=a).update(cus_seeable='0')
+        Customer.objects.filter(cus_id=a).update(cus_seeable=False)
 
         return redirect('/app/cus')       
 
     return render(request, 'editCus.html', locals())
 
-def removedCus(request):
+def removed(request, a):
     persMenuOpen = "active menu-open"
-    removedAll = Customer.objects.filter(cus_seeable='0')
-    return render(request, 'removedCus.html', locals())
 
-def restoreCus(request, a):
-    Customer.objects.filter(cus_id=a).update(cus_seeable='1')
+    if a == 'emp':
+        type = '員工'
+        typeValue = a
+        removedAll = Employee.objects.filter(emp_seeable=False)
+        for removed in removedAll:
+            removed.name = removed.emp_name_ch
+            removed.id = removed.emp_id
+    if a == 'cus':
+        type = '顧客'
+        typeValue = a
+        removedAll = Customer.objects.filter(cus_seeable=False)
+        for removed in removedAll:
+            removed.name = removed.cus_name
+            removed.id = removed.cus_id
+    return render(request, 'removed.html', locals())
 
-    return redirect('/app/removedCus')    
+def restore(request, a, b):
+    if a == 'emp':
+        Employee.objects.filter(emp_id=b).update(emp_seeable=True)
+        return redirect('/app/removed/emp') 
 
-def deleteCus(request, a):
+    if a == 'cus':
+        Customer.objects.filter(cus_id=b).update(cus_seeable=True)
+        return redirect('/app/removed/cus')    
 
-    Customer.objects.get(cus_id=a).delete()
+def delete(request, a, b):
+    if a == 'emp':
+        Employee.objects.get(emp_id=b).delete()
+        return redirect('/app/removed/emp')   
 
-    return redirect('/app/removedCus')    
+    if a == 'cus':
+        Customer.objects.get(cus_id=b).delete()
+        return redirect('/app/removed/cus')    
 
 def emp(request):
     userNow = getIP(request)
     if not LogedIn.objects.filter(loged_ip=userNow['ip']):
         return redirect('/app')
     persMenuOpen = "active menu-open"
+
+    empAll = Employee.objects.all().exclude(emp_seeable=False)
+
     return render(request, 'emp.html', locals())
+
+def addEmp(request):
+    userNow = getIP(request)
+    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+        return redirect('/app')
+    persMenuOpen = "active menu-open"
+
+    if 'saveB' in request.POST:
+        empName = request.POST['empName']
+        empEnName = request.POST['empEnName']
+        empId = request.POST['empId']
+        empClass = request.POST['empClass']
+        empIdCard = request.POST['empIdCard']
+        empSalary = request.POST['empSalary']
+        empBd = request.POST['empBd']
+        empArrDate = request.POST['empArrDate']
+        empLeaveDate = request.POST['empLeaveDate']
+        empPhone1 = request.POST['empPhone1']
+        empPhone2 = request.POST['empPhone2']
+        empAddr1 = request.POST['empAddr1']
+        empAddr2 = request.POST['empAddr2']
+        empEmail = request.POST['empEmail']
+        empRemark = request.POST['empRemark']
+        Employee.objects.create(emp_name_ch=empName, emp_name_en=empEnName, emp_id=empId, emp_class=empClass, emp_idcard=empIdCard, emp_salary=empSalary, emp_phone1=empPhone1, emp_phone2=empPhone2, emp_addr1=empAddr1, emp_addr2=empAddr2, emp_email=empEmail, emp_bd=empBd, emp_shop_id="tmp", emp_arr_date=empArrDate, emp_leave_date=empLeaveDate, emp_remark=empRemark)
+    
+        return redirect('/app/emp')
+    return render(request, 'addEmp.html', locals())
+
+def editEmp(request, a):
+    userNow = getIP(request)
+    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+        return redirect('/app')
+    persMenuOpen = "active menu-open"
+
+    empThis = Employee.objects.get(emp_id=a)
+ 
+    empThisClassOther = ['頭皮護理師', '資深設計師', '設計師', '助理']
+    if empThis.emp_class == '頭皮護理師':
+        empThisClass = '頭皮護理師'
+        empThisClassOther.remove('頭皮護理師')
+    elif empThis.emp_class == '資深設計師':
+        empThisClass = '資深設計師'
+        empThisClassOther.remove('資深設計師')
+    elif empThis.emp_class == '設計師':
+        empThisClass = '設計師'
+        empThisClassOther.remove('設計師')
+    elif empThis.emp_class == '助理':
+        empThisClass = '助理'
+        empThisClassOther.remove('助理')
+    else:
+        empThisClass = "---"
+
+    if 'saveB' in request.POST:
+        empName = request.POST['empName']
+        empEnName = request.POST['empEnName']
+        empId = request.POST['empId']
+        empClass = request.POST['empClass']
+        empIdCard = request.POST['empIdCard']
+        empSalary = request.POST['empSalary']
+        empBd = request.POST['empBd']
+        empArrDate = request.POST['empArrDate']
+        empLeaveDate = request.POST['empLeaveDate']
+        empPhone1 = request.POST['empPhone1']
+        empPhone2 = request.POST['empPhone2']
+        empAddr1 = request.POST['empAddr1']
+        empAddr2 = request.POST['empAddr2']
+        empEmail = request.POST['empEmail']
+        empRemark = request.POST['empRemark']
+        Employee.objects.filter(emp_id=a).update(emp_name_ch=empName, emp_name_en=empEnName, emp_id=empId, emp_class=empClass, emp_idcard=empIdCard, emp_salary=empSalary, emp_phone1=empPhone1, emp_phone2=empPhone2, emp_addr1=empAddr1, emp_addr2=empAddr2, emp_email=empEmail, emp_bd=empBd, emp_shop_id="tmp", emp_arr_date=empArrDate, emp_leave_date=empLeaveDate, emp_remark=empRemark)
+    
+        return redirect('/app/emp')
+
+    if 'removeB' in request.POST:
+        Employee.objects.filter(emp_id=a).update(emp_seeable=False)
+        return redirect('/app/emp')
+
+    return render(request, 'editEmp.html', locals())
 
 def stock(request):
     userNow = getIP(request)
@@ -245,3 +346,30 @@ def setting(request):
     if not LogedIn.objects.filter(loged_ip=userNow['ip']):
         return redirect('/app')
     return render(request, 'setting.html', locals())
+
+def setShop(request):
+    userNow = getIP(request)
+    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+        return redirect('/app')   
+    
+    return render(request, 'setShop.html', locals())
+
+def addShop(request):
+    userNow = getIP(request)
+    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+        return redirect('/app')  
+
+    if 'saveB' in request.POST:
+        shop_name = request.POST['shop_name']
+        shop_id = request.POST['shop_id']
+        shop_class = request.POST['shop_class']
+        shop_addr = request.POST['shop_addr']
+        shop_phone1 = request.POST['shop_phone1']
+        shop_phone2 = request.POST['shop_phone2']
+        shop_remark = request.POST['shop_remark']
+
+        Shop.objects.create(shop_name=shop_name, shop_id=shop_id, shop_class=shop_class, shop_addr=shop_addr, shop_phone1=shop_phone1, shop_phone2=shop_phone2, shop_remark=shop_remark)
+
+        return redirect('/app/setting/shop')
+    
+    return render(request, 'addShop.html', locals())

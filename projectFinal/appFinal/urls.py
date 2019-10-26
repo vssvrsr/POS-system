@@ -4,18 +4,22 @@ from appFinal import views as appViews
 app_name = 'appFinal'
 
 urlpatterns = [
-    path('', appViews.login),
+    path('', appViews.login, name='login'),
     path('logout/<str:a>', appViews.logout, name='logout'),
     path('index/', appViews.index, name='index'),
 
     path('cus/', appViews.cus, name='cus'),
     path('addCus/', appViews.addCus, name='addCus'),
     path('editCus/<str:a>', appViews.editCus, name='editCus'),
-    path('removedCus/', appViews.removedCus, name='removedCus'),
-    path('restoreCus/<str:a>', appViews.restoreCus, name='restoreCus'),
-    path('deleteCus/<str:a>', appViews.deleteCus, name='deleteCus'),
 
     path('emp/', appViews.emp, name='emp'),
+    path('addEmp/', appViews.addEmp, name='addEmp'),
+    path('editEmp/<str:a>', appViews.editEmp, name='editEmp'),
+
+    path('removed/<str:a>', appViews.removed, name='removed'),
+    path('restore/<str:a>/<str:b>', appViews.restore, name='restoreCus'),
+    path('delete/<str:a>/<str:b>', appViews.delete, name='deleteCus'),
+
     path('sale/', appViews.sale, name='sale'),
     path('service/', appViews.service, name='service'),
     path('deduct/', appViews.deduct, name='deduct'),
@@ -26,5 +30,8 @@ urlpatterns = [
     path('exportStock/', appViews.exportStock, name='exportStock'),
     path('salaryCount/', appViews.salaryCount, name='salaryCount'),
     path('turnoverCount/', appViews.turnoverCount, name='turnoverCount'),
+
     path('setting/', appViews.setting, name='setting'),
+    path('setting/shop', appViews.setShop, name='setShop'),
+    path('setting/addShop', appViews.addShop, name='addShop'),
 ]

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈 | 新增顧客{% endblock %}
+{% block title %}茵悦薈 | 新增員工{% endblock %}
 
 {% block css %}
 
@@ -11,14 +11,14 @@
 <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        新增顧客
+        新增員工
       </h1>
 
       <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>人員管理</li>
-        <li><a href="/app/cus">顧客管理</a></li>
-        <li class="active">新增顧客</li>
+        <li><a href="/app/emp">員工資料操作</a></li>
+        <li class="active">新增員工</li>
       </ol>
     </section>
 
@@ -36,37 +36,34 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group">
-                            <label>客戶姓名</label>
-                            <input type="text" class="form-control" name="cusName" required>
+                            <label>員工姓名</label>
+                            <input type="text" class="form-control" name="empName" required>
                         </div>
                         <div class="form-group">
                             <label>英文名</label>
-                            <input type="text" class="form-control" name="cusEnName">
+                            <input type="text" class="form-control" name="empEnName">
                         </div>
                         <div class="form-group">
-                            <label>性別</label>
-                            <select class="form-control" name="cusSex">
-                                <option>---</option>
-                                <option value="M">男</option>
-                                <option value="F">女</option>
-                            </select>
+                            <label>員工編號</label>
+                            <input type="text" class="form-control" name="empId" p required>
                         </div>
                         <div class="form-group">
-                            <label>客戶編號</label>
-                            <input type="text" class="form-control" name="cusId" p required>
-                        </div>
-                        <div class="form-group">
-                            <label>等級</label>
-                            <select class="form-control" name="cusClass">
+                            <label>職階</label>
+                            <select class="form-control" name="empClass">
                                 <option value="">---</option>
-                                <option value="3">銅</option>
-                                <option value="2">銀</option>
-                                <option value="1">金</option>
+                                <option value="頭皮護理師">頭皮護理師</option>
+                                <option value="資深設計師">資深設計師</option>
+                                <option value="設計師">設計師</option>
+                                <option value="助理">助理</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>身份證字號</label>
-                            <input type="text" class="form-control" name="cusIdCard">
+                            <input type="text" class="form-control" name="empIdCard">
+                        </div>
+                        <div class="form-group">
+                            <label>底薪</label>
+                            <input type="text" class="form-control" name="empSalary" required>
                         </div>
                         <div class="form-group">
                             <label>生日:</label>
@@ -75,18 +72,29 @@
                                 <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker1" name="cusBd">
+                                <input type="text" class="form-control pull-right" id="datepicker1" name="empBd">
                             </div>
                             <!-- /.input group -->
                         </div>
                         <div class="form-group">
-                            <label>加入日:</label>
+                            <label>到職日:</label>
             
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker2" name="cusArrDate">
+                                <input type="text" class="form-control pull-right" id="datepicker2" name="empArrDate">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <div class="form-group">
+                            <label>離職日:</label>
+            
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="datepicker3" name="empLeaveDate">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -101,23 +109,23 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>手機</label>
-                            <input type="text" class="form-control" name="cusPhone1" required>
+                            <input type="text" class="form-control" name="empPhone1" required>
                         </div>
                         <div class="form-group">
                             <label>市話</label>
-                            <input type="text" class="form-control" name="cusPhone2">
+                            <input type="text" class="form-control" name="empPhone2">
                         </div>
                         <div class="form-group">
                             <label>通訊地址</label>
-                            <input type="text" class="form-control" name="cusAddr1">
+                            <input type="text" class="form-control" name="empAddr1">
                         </div>
                         <div class="form-group">
                             <label>戶籍地址</label>
-                            <input type="text" class="form-control" name="cusAddr2">
+                            <input type="text" class="form-control" name="empAddr2">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" name="cusEmail">
+                            <input type="email" class="form-control" name="empEmail">
                         </div>
                     </div>
                 </div>
@@ -128,7 +136,7 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>備註</label>
-                            <textarea type="text" class="form-control" name="cusRemark" row="3"></textarea>
+                            <textarea type="text" class="form-control" name="empRemark" row="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -175,6 +183,10 @@
             language:"zh-TW"
         })
         $('#datepicker2').datepicker({
+            autoclose:true,
+            language:"zh-TW"
+        })
+        $('#datepicker3').datepicker({
             autoclose:true,
             language:"zh-TW"
         })

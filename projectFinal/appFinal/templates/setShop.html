@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈 | 系統設定{% endblock %}
+{% block title %}茵悦薈 | 分店設定{% endblock %}
 
 {% block css %}{% endblock %}
 
@@ -8,11 +8,12 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-  系統設定
+  分店設定
   </h1>
   <ol class="breadcrumb">
     <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
-    <li class="active">系統設定</li>
+    <li><a href="/app/setting">系統設定</a></li>
+    <li class="active">分店設定</li>
   </ol>
 </section>  
 {% endblock %}
@@ -21,11 +22,12 @@
 <section class="content">
   <div class="box">
     <div class="box-header">
-      <h3 class="box-title">選擇設定</h3>
+      <h3 class="box-title">分店設定</h3>
     </div>
     <div class="box-body">
-      <a href="/app/setting/shop" class="btn btn-primary btn-lg">分店設定</a>
-
+        <div class="pull-right">
+            <a class="btn btn-primary" href="/app/setting/addShop"><i class="fa fa-plus"></i>&nbsp;新增分店</a>
+        </div>
     </div>
     <!-- /.box-body -->
   </div>

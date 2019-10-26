@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈 | 新增分店{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        新增分店
+      </h1>
+
+      <ol class="breadcrumb">
+        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+        <li><a href="/app/setting">系統設定</a></li>
+        <li><a href="/app/setting/shop">分店管理</a></li>
+        <li class="active">新增分店</li>
+      </ol>
+    </section>
+
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <form role="form" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">基本資料</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>分店名稱</label>
+                            <input type="text" class="form-control" name="shop_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>分店編號</label>
+                            <input type="text" class="form-control" name="shop_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label>店家等級</label>
+                            <select class="form-control" name="shop_class">
+                                <option value="">---</option>
+                                <option value="直營店">直營店</option>
+                                <option value="特約店">特約店</option>
+                            </select>
+                        </div>
+                    </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">其他資訊</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>備註</label>
+                            <textarea type="text" class="form-control" name="shop_remark" row="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">聯絡資訊</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>地址</label>
+                            <input type="text" class="form-control" name="shop_addr">
+                        </div>
+                        <div class="form-group">
+                            <label>電話</label>
+                            <input type="text" class="form-control" name="shop_phone1">
+                        </div>
+                        <div class="form-group">
+                            <label>電話2</label>
+                            <input type="text" class="form-control" name="shop_phone2">
+                        </div>                   
+                    </div>
+                </div>
+                <div class="pull-right">
+                <a class="btn btn-default" href="/app/addCus">重整</a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    完成
+                </button>
+        </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                    </div>
+                    <div class="modal-body">
+                        確定儲存嗎?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                        <input type="submit" class="btn btn-primary" name="saveB" value="儲存"></input>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}
