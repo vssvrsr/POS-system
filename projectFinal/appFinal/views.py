@@ -50,8 +50,11 @@ def login(request):
             request.session['user_emp_id'] = user.user_emp_id
 
             # 將employee中文名放進session
-            employee = Employee.objects.get(emp_id=user.user_emp_id)
-            request.session['emp_name_ch'] = employee.emp_name_ch
+            try:
+                employee = Employee.objects.get(emp_id=user.user_emp_id)
+                request.session['emp_name_ch'] = employee.emp_name_ch
+            except BaseException as e:
+                print(e)
 
             return redirect('/app/index')
         else:  # 密碼錯誤
@@ -252,7 +255,7 @@ def delete(request, a, b):
 def emp(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('userId')
+    userNow = request.session.get('user_id')
 
     persMenuOpen = "active menu-open"
 
