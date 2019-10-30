@@ -50,7 +50,7 @@ def login(request):
         except:  # 比對帳號密碼失敗，轉跳/app
             return redirect('/app')
 
-    else:  # 未提交帳號密碼，提供表單，等待提交
+    else:  # 未提交帳號密碼時，提供輸入框，並等待提交
         return render(request, 'login.html', locals())
 
 
