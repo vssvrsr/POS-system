@@ -51,7 +51,7 @@ desired effect
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
 
-    <!-- Main Header -->
+    <!-- 頂部功能列 Main Header -->
     <header class="main-header">
 
       <!-- Logo -->
@@ -62,16 +62,17 @@ desired effect
         <span class="logo-lg"><b>管理系統</b></span>
       </a>
 
-      <!-- Header Navbar -->
+      <!-- 導航區 Header Navbar -->
       <nav class="navbar navbar-static-top" role="navigation">
-        <!-- Sidebar toggle button-->
+        <!-- 左邊漢堡 Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
-        <!-- Navbar Right Menu -->
+        <!-- 右上角功能區 Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
-            <!-- Messages: style can be found in dropdown.less-->
+
+            <!-- 第一訊息欄 Messages: style can be found in dropdown.less-->
             <li class="dropdown messages-menu">
               <!-- Menu toggle button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -109,7 +110,7 @@ desired effect
             </li>
             <!-- /.messages-menu -->
 
-            <!-- Notifications Menu -->
+            <!-- 第二訊息欄 Notifications Menu -->
             <li class="dropdown notifications-menu">
               <!-- Menu toggle button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -133,7 +134,8 @@ desired effect
                 <li class="footer"><a href="#">View all</a></li>
               </ul>
             </li>
-            <!-- Tasks Menu -->
+
+            <!-- 第三訊息欄 Tasks Menu -->
             <li class="dropdown tasks-menu">
               <!-- Menu Toggle Button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -171,14 +173,15 @@ desired effect
                 </li>
               </ul>
             </li>
-            <!-- User Account Menu -->
+
+            <!-- 大頭貼 User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <!-- The user image in the navbar-->
                 <img src="{% static 'adminlet-2.4.10/dist/img/user_kiki.jpg' %}" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs">{{userNow.user}}</span>
+                <span class="hidden-xs">{# 顯示目前登入者 #}{{userNow.user}}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
@@ -186,11 +189,12 @@ desired effect
                   <img src="{% static 'adminlet-2.4.10/dist/img/user_kiki.jpg' %}" class="img-circle" alt="User Image">
 
                   <p>
+                    {# 顯示目前登入者 #}
                     {{userNow.user}}
                     <small>2019-10-20</small>
                   </p>
                 </li>
-                <!-- Menu Body -->
+                <!-- 主體 Menu Body -->
                 <li class="user-body">
                   <div class="row">
                     <div class="col-xs-4 text-center">
@@ -205,12 +209,13 @@ desired effect
                   </div>
                   <!-- /.row -->
                 </li>
-                <!-- Menu Footer-->
+                <!-- 底部資訊欄 Menu Footer-->
                 <li class="user-footer">
                   <div class="pull-left">
                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                   </div>
                   <div class="pull-right">
+                    <!-- 登出 -->
                     <a href="/app/logout/{{userNow.user}}" class="btn btn-default btn-flat">Sign out</a>
                   </div>
                 </li>
@@ -257,6 +262,7 @@ desired effect
           <!-- Optionally, you can add icons to the links -->
           <li><a href="{% url 'appFinal:index' %}"><i class="fa fa-home"></i> <span>主頁</span></a></li>
           <!-- 前台交易sidebar -->
+          {# 控制sidebar狀態 #}
           <li class="treeview {{saleMenuOpen}}">
             <a href="#">
               <i class="fa fa-dollar"></i>
@@ -271,7 +277,9 @@ desired effect
               <li><a href="{% url 'appFinal:deduct' %}"><i class="fa fa-circle-o"></i> <span>課程扣點</span></a></li>
             </ul>
           </li>
+
           <!-- 商品管理sidebar -->
+          {# 控制sidebar狀態 #}
           <li class="treeview {{stockMenuOpen}}">
             <a href="#">
               <i class="fa fa-cubes"></i>
@@ -287,7 +295,9 @@ desired effect
               <li><a href="{% url 'appFinal:exportStock' %}"><i class="fa fa-circle-o"></i> <span>出貨</span></a></li>
             </ul>
           </li>
+
           <!-- 人員管理sidebar -->
+          {# 控制sidebar狀態 #}
           <li class="treeview {{persMenuOpen}}">
             <a href="#">
               <i class="fa fa-user"></i>
@@ -301,7 +311,9 @@ desired effect
               <li><a href="{% url 'appFinal:emp' %}"><i class="fa fa-circle-o"></i> <span>員工管理</span></a></li>
             </ul>
           </li>
-          <!-- 報表結算idebar -->
+
+          <!-- 報表結算sidebar -->
+          {# 控制sidebar狀態 #}
           <li class="treeview {{reportMenuOpen}}">
             <a href="#">
               <i class="fa fa-pencil"></i>
@@ -318,7 +330,12 @@ desired effect
               </li>
             </ul>
           </li>
-          <li><a href="{% url 'appFinal:setting' %}"><i class="fa fa-gear"></i> <span>系統設定</span></a></li>
+
+          <!-- 系統管理sidebar -->
+          <li>
+            <a href="{% url 'appFinal:setting' %}"><i class="fa fa-gear"></i>
+              <span>系統設定</span></a>
+          </li>
 
 
 
