@@ -5,7 +5,7 @@ app_name = 'appFinal'
 
 urlpatterns = [
     path('', appViews.login, name='login'),
-    path('logout/<str:a>', appViews.logout, name='logout'),
+    path('logout/', appViews.logout, name='logout'),
     path('index/', appViews.index, name='index'),
 
     path('cus/', appViews.cus, name='cus'),

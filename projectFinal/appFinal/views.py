@@ -30,47 +30,86 @@ def login(request):
     TODO: 帳密錯誤提示訊息
     """
 
+    if request.session.get('is_login', None):  # 不允許重複登入，已登入者轉跳/app/index
+        return redirect('/app/index')
+
     if 'loginB' in request.POST:  # 已提交了帳號密碼，開始進行確認
         userId = request.POST['userId']
         userPw = request.POST['userPw']
 
-        try:  # 進資料庫比對帳號密碼
-            User.objects.get(user_id=userId, user_pw=userPw)
-            userNow = userId
+        try:  # 先進資料庫比對帳號
+            user = User.objects.get(user_id=userId)
+        except:  # 帳號比對失敗
+            message = '帳號不存在'
+            return render(request, 'login.html', locals())
 
+        if user.user_pw == userPw:  # 帳號比對成功，開始進行密碼比對
+            # 密碼比對成功，開始將使用者資料放進session
+            request.session['is_login'] = True
+            request.session['user_id'] = user.user_id
+            request.session['user_emp_id'] = user.user_emp_id
+
+            # 將employee中文名放進session
+            employee = Employee.objects.get(emp_id=user.user_emp_id)
+            request.session['emp_name_ch'] = employee.emp_name_ch
+
+            return redirect('/app/index')
+        else:  # 密碼錯誤
+            message = '密碼錯誤'
+            return render(request, 'login.html', locals())
+
+            # 棄用紀錄IP來保持登入的方式，改成session
+            """
+            userNow = userId
             if 'HTTP_X_FORWARDED_FOR' in request.META:
                 ip = request.META['HTTP_X_FORWARDED_FOR']
             else:
                 ip = request.META['REMOTE_ADDR']
 
             LogedIn.objects.get_or_create(loged_user=userId, loged_ip=ip)
-
-            return redirect('/app/index')
-
-        except:  # 比對帳號密碼失敗，轉跳/app
-            return redirect('/app')
+            """
 
     else:  # 未提交帳號密碼時，提供輸入框，並等待提交
         return render(request, 'login.html', locals())
 
 
-def logout(request, a):
+def logout(request):
+
+    if not request.session.get('is_login', None):  # 如果本來就沒登入
+        return redirect('/app')
+
+    request.session.flush()
+    # 或者使用下面的方法
+    # del request.session['is_login']
+    # del request.session['user_id']
+    # del request.session['user_name']
+    return redirect('/app')
+
+    """
     LogedIn.objects.filter(loged_user=a).delete()
     return redirect('/app')
+    """
 
 
 def index(request):
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
+    userNow = request.session.get('user_id')
+
+    """
     userNow = getIP(request)
     if not LogedIn.objects.filter(loged_ip=userNow['ip']):
         return redirect('/app')
+    """
 
     return render(request, 'index.html', locals())
 
 
 def cus(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     persMenuOpen = "active menu-open"
 
     cusAll = Customer.objects.all().exclude(cus_seeable=False)
@@ -79,9 +118,10 @@ def cus(request):
 
 
 def addCus(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     persMenuOpen = "active menu-open"
     if 'saveB' in request.POST:
         cusName = request.POST['cusName']
@@ -106,9 +146,10 @@ def addCus(request):
 
 
 def editCus(request, a):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     persMenuOpen = "active menu-open"
     cusThis = Customer.objects.get(cus_id=a)
 
@@ -209,9 +250,10 @@ def delete(request, a, b):
 
 
 def emp(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('userId')
+
     persMenuOpen = "active menu-open"
 
     empAll = Employee.objects.all().exclude(emp_seeable=False)
@@ -220,9 +262,10 @@ def emp(request):
 
 
 def addEmp(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     persMenuOpen = "active menu-open"
 
     if 'saveB' in request.POST:
@@ -249,9 +292,10 @@ def addEmp(request):
 
 
 def editEmp(request, a):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     persMenuOpen = "active menu-open"
 
     empThis = Employee.objects.get(emp_id=a)
@@ -301,104 +345,115 @@ def editEmp(request, a):
 
 
 def stock(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     stockMenuOpen = "active menu-open"
     return render(request, 'stock.html', locals())
 
 
 def sale(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     saleMenuOpen = "active menu-open"
     return render(request, 'sale.html', locals())
 
 
 def service(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     saleMenuOpen = "active menu-open"
     return render(request, 'service.html', locals())
 
 
 def addStock(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     stockMenuOpen = "active menu-open"
     return render(request, 'addStock.html', locals())
 
 
 def deduct(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     saleMenuOpen = "active menu-open"
     return render(request, 'deduct.html', locals())
 
 
 def exportStock(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     stockMenuOpen = "active menu-open"
     return render(request, 'exportStock.html', locals())
 
 
 def importStock(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     stockMenuOpen = "active menu-open"
     return render(request, 'importStock.html', locals())
 
 
 def report(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     reportMenuOpen = "active menu-open"
     return render(request, 'report.html', locals())
 
 
 def salaryCount(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     reportMenuOpen = "active menu-open"
     return render(request, 'salaryCount.html', locals())
 
 
 def turnoverCount(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     reportMenuOpen = "active menu-open"
     return render(request, 'turnoverCount.html', locals())
 
 
 def setting(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
+
     return render(request, 'setting.html', locals())
 
 
 def setShop(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
 
     return render(request, 'setShop.html', locals())
 
 
 def addShop(request):
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
+    if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+    userNow = request.session.get('user_id')
 
     if 'saveB' in request.POST:
         shop_name = request.POST['shop_name']
