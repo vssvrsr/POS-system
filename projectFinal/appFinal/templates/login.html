@@ -12,24 +12,32 @@
     <div class="container">
         <div class="col">
             <br>
-            <h1 class="text-center" style="font-family:Microsoft JhengHei;">管理系統</h1>
+            <h1 class="text-center">管理系統</h1>
             <form method="post" class="form-login">
                 {% if message %}
                 <div class="alert alert-warning">{{ message }}</div>
                 {% endif %}
                 {% csrf_token %}
                 <div class="form-group">
-                    <label style="font-family:Microsoft JhengHei;">帳號:</label>
+                    <label >帳號:</label>
                     <input class="form-control" type="text" name="userId" placeholder="輸入帳號" autofocus required /><br>
                 </div>
                 <div class="form-group">
-                    <label style="font-family:Microsoft JhengHei;">密碼:</label>
+                    <label >密碼:</label>
                     <input class="form-control" type="password" name="userPw" placeholder="輸入密碼"
-                        style="font-family:Microsoft JhengHei;" required /><br>
+                         required /><br>
                 </div>
+                <div class="form-group">
+                    <select name="loginShop" class="form-control" required>
+                        <option>請選擇店鋪</option>
+                        {% for shop in shopAll %}
+                        <option value="{{shop.shop_id}}">{{shop.shop_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
                 <div>
-                    <input type="submit" value="登入" name="loginB" class="btn btn-primary float-right"
-                        style="font-family:Microsoft JhengHei;">
+                    <input type="submit" value="登入" name="loginB" class="btn btn-primary float-right">
                 </div>
             </form>
         </div>

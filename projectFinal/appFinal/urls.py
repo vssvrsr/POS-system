@@ -7,6 +7,7 @@ urlpatterns = [
     path('', appViews.login, name='login'),
     path('logout/', appViews.logout, name='logout'),
     path('index/', appViews.index, name='index'),
+    path('changeShop/<str:a>', appViews.changeShop, name='changeShop'),
 
     path('cus/', appViews.cus, name='cus'),
     path('addCus/', appViews.addCus, name='addCus'),

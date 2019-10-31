@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from .models import User, Customer, LogedIn, Employee, Shop
 
-
 def getIP(request):
     if 'HTTP_X_FORWARDED_FOR' in request.META:
         ip = request.META['HTTP_X_FORWARDED_FOR']
@@ -29,13 +28,14 @@ def login(request):
     ------------------------
     TODO: 帳密錯誤提示訊息
     """
-
+    shopAll = Shop.objects.all()
     if request.session.get('is_login', None):  # 不允許重複登入，已登入者轉跳/app/index
         return redirect('/app/index')
 
     if 'loginB' in request.POST:  # 已提交了帳號密碼，開始進行確認
         userId = request.POST['userId']
-        userPw = request.POST['userPw']
+        userPw = request.POST['userPw']      
+        userShop = request.POST['loginShop']
 
         try:  # 先進資料庫比對帳號
             user = User.objects.get(user_id=userId)
@@ -48,6 +48,8 @@ def login(request):
             request.session['is_login'] = True
             request.session['user_id'] = user.user_id
             request.session['user_emp_id'] = user.user_emp_id
+            request.session['user_shop'] = userShop
+            request.session['user_shop_name'] = Shop.objects.get(shop_id=userShop).shop_name
 
             # 將employee中文名放進session
             try:
@@ -93,11 +95,13 @@ def logout(request):
     return redirect('/app')
     """
 
-
 def index(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     """
     userNow = getIP(request)
@@ -107,11 +111,18 @@ def index(request):
 
     return render(request, 'index.html', locals())
 
+def changeShop(request, a):
+    request.session['user_shop'] = a
+    request.session['user_shop_name'] = Shop.objects.get(shop_id=a).shop_name
+
+    return redirect('/app/index')
 
 def cus(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     persMenuOpen = "active menu-open"
 
@@ -123,7 +134,9 @@ def cus(request):
 def addCus(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     persMenuOpen = "active menu-open"
     if 'saveB' in request.POST:
@@ -151,7 +164,9 @@ def addCus(request):
 def editCus(request, a):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     persMenuOpen = "active menu-open"
     cusThis = Customer.objects.get(cus_id=a)
@@ -255,7 +270,9 @@ def delete(request, a, b):
 def emp(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     persMenuOpen = "active menu-open"
 
@@ -267,7 +284,9 @@ def emp(request):
 def addEmp(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     persMenuOpen = "active menu-open"
 
@@ -297,7 +316,9 @@ def addEmp(request):
 def editEmp(request, a):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     persMenuOpen = "active menu-open"
 
@@ -350,7 +371,9 @@ def editEmp(request, a):
 def stock(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
     return render(request, 'stock.html', locals())
@@ -359,7 +382,9 @@ def stock(request):
 def sale(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     saleMenuOpen = "active menu-open"
     return render(request, 'sale.html', locals())
@@ -368,7 +393,9 @@ def sale(request):
 def service(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     saleMenuOpen = "active menu-open"
     return render(request, 'service.html', locals())
@@ -377,7 +404,9 @@ def service(request):
 def addStock(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
     return render(request, 'addStock.html', locals())
@@ -386,7 +415,9 @@ def addStock(request):
 def deduct(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     saleMenuOpen = "active menu-open"
     return render(request, 'deduct.html', locals())
@@ -395,7 +426,9 @@ def deduct(request):
 def exportStock(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
     return render(request, 'exportStock.html', locals())
@@ -404,7 +437,9 @@ def exportStock(request):
 def importStock(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
     return render(request, 'importStock.html', locals())
@@ -413,7 +448,9 @@ def importStock(request):
 def report(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     reportMenuOpen = "active menu-open"
     return render(request, 'report.html', locals())
@@ -422,7 +459,9 @@ def report(request):
 def salaryCount(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     reportMenuOpen = "active menu-open"
     return render(request, 'salaryCount.html', locals())
@@ -431,7 +470,9 @@ def salaryCount(request):
 def turnoverCount(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     reportMenuOpen = "active menu-open"
     return render(request, 'turnoverCount.html', locals())
@@ -440,7 +481,9 @@ def turnoverCount(request):
 def setting(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     return render(request, 'setting.html', locals())
 
@@ -448,7 +491,9 @@ def setting(request):
 def setShop(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     return render(request, 'setShop.html', locals())
 
@@ -456,7 +501,9 @@ def setShop(request):
 def addShop(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    userNow = request.session.get('user_id')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
 
     if 'saveB' in request.POST:
         shop_name = request.POST['shop_name']
