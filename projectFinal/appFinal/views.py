@@ -19,7 +19,6 @@ def getIP(request):
 
     return tmp
 
-
 def login(request):
     """
     歡迎畫面
@@ -76,7 +75,6 @@ def login(request):
 
     else:  # 未提交帳號密碼時，提供輸入框，並等待提交
         return render(request, 'login.html', locals())
-
 
 def logout(request):
 
