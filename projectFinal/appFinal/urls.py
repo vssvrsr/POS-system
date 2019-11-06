@@ -35,4 +35,6 @@ urlpatterns = [
     path('setting/', appViews.setting, name='setting'),
     path('setting/shop', appViews.setShop, name='setShop'),
     path('setting/addShop', appViews.addShop, name='addShop'),
+
+    path('ok', appViews.ok, name='ok'),
 ]

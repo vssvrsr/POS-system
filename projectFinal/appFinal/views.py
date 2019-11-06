@@ -518,3 +518,11 @@ def addShop(request):
         return redirect('/app/setting/shop')
 
     return render(request, 'addShop.html', locals())
+
+def ok(request):
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
+    return render(request, 'ok.html', locals())
