@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈{% endblock %}
+{% block title %}茵悦薈 | 品項管理{% endblock %}
 
-{% block css %}{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
@@ -19,8 +21,69 @@
 {% endblock %}
 
 {% block content %}
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">搜尋商品</h3>
+      <small>點擊商品名稱以編輯</small>
+      <div class ="pull-right">
+          <a class="btn btn-defaut" href="/app/removed/stock">已移籍商品</a>
+          <a class="btn btn-primary" href="/app/addStock"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
+          <a class="btn btn-primary" href="#"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
+      </div>
+    </div>
+    <div class="box-body">
+      <table id="stockTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>商品名稱</th>
+          <th>商品編號</th>
+          <th>牌價</th>
+          <th>庫存量</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for stock in stockAll %}
+          <tr>
+            <th><a href="/app/editStock/{{stock.stock_id}}">{{stock.stock_name}}</a></th>
+            <th>{{stock.stock_id}}</th>
+            <th>{{stock.stock_price|default:"-"}}</th>
+            <th>{{stock.instock_qua}}</th>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>商品名稱</th>
+            <th>商品編號</th>
+            <th>牌價</th>
+            <th>庫存量</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- /.box-body -->
+  </div>
+    <!-- /.box -->
+</section>
 {% endblock %}
 
 
 {% block script %}
+
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#stockTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
 {% endblock %}

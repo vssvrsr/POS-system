@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import User, Customer, LogedIn, Employee, Shop
+from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock
+
 
 def getIP(request):
     if 'HTTP_X_FORWARDED_FOR' in request.META:
@@ -19,6 +20,7 @@ def getIP(request):
 
     return tmp
 
+
 def login(request):
     """
     歡迎畫面
@@ -33,7 +35,7 @@ def login(request):
 
     if 'loginB' in request.POST:  # 已提交了帳號密碼，開始進行確認
         userId = request.POST['userId']
-        userPw = request.POST['userPw']      
+        userPw = request.POST['userPw']
         userShop = request.POST['loginShop']
 
         try:  # 先進資料庫比對帳號
@@ -47,34 +49,29 @@ def login(request):
             request.session['is_login'] = True
             request.session['user_id'] = user.user_id
             request.session['user_emp_id'] = user.user_emp_id
-            request.session['user_shop'] = userShop
-            request.session['user_shop_name'] = Shop.objects.get(shop_id=userShop).shop_name
 
-            # 將employee中文名放進session
-            try:
+            try:  # 將進當前店鋪資訊放進session
+                request.session['user_shop'] = userShop
+                request.session['user_shop_name'] = Shop.objects.get(
+                    shop_id=userShop).shop_name
+            except BaseException as e:
+                print(e)
+
+            try:  # 將employee中文名放進session
                 employee = Employee.objects.get(emp_id=user.user_emp_id)
                 request.session['emp_name_ch'] = employee.emp_name_ch
             except BaseException as e:
                 print(e)
 
             return redirect('/app/index')
+
         else:  # 密碼錯誤
             message = '密碼錯誤'
             return render(request, 'login.html', locals())
 
-            # 棄用紀錄IP來保持登入的方式，改成session
-            """
-            userNow = userId
-            if 'HTTP_X_FORWARDED_FOR' in request.META:
-                ip = request.META['HTTP_X_FORWARDED_FOR']
-            else:
-                ip = request.META['REMOTE_ADDR']
-
-            LogedIn.objects.get_or_create(loged_user=userId, loged_ip=ip)
-            """
-
     else:  # 未提交帳號密碼時，提供輸入框，並等待提交
         return render(request, 'login.html', locals())
+
 
 def logout(request):
 
@@ -86,34 +83,27 @@ def logout(request):
     # del request.session['is_login']
     # del request.session['user_id']
     # del request.session['user_name']
+
     return redirect('/app')
 
-    """
-    LogedIn.objects.filter(loged_user=a).delete()
-    return redirect('/app')
-    """
 
 def index(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
-    
+
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
 
-    """
-    userNow = getIP(request)
-    if not LogedIn.objects.filter(loged_ip=userNow['ip']):
-        return redirect('/app')
-    """
-
     return render(request, 'index.html', locals())
+
 
 def changeShop(request, a):
     request.session['user_shop'] = a
     request.session['user_shop_name'] = Shop.objects.get(shop_id=a).shop_name
 
     return redirect('/app/index')
+
 
 def cus(request):
     if not request.session.get('is_login', None):  # 確認是否登入
@@ -132,6 +122,7 @@ def cus(request):
 def addCus(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
@@ -162,6 +153,7 @@ def addCus(request):
 def editCus(request, a):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
+
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
@@ -374,6 +366,12 @@ def stock(request):
     shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
+    
+    stockAll = Stock.objects.all()
+
+    for stock in stockAll:
+        stock.instock_qua = Instock.objects.get(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+
     return render(request, 'stock.html', locals())
 
 
@@ -407,6 +405,25 @@ def addStock(request):
     shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
+
+    if 'saveB' in request.POST:
+        stock_type = request.POST['stock_type']
+        stock_id = request.POST['stock_id']
+        stock_name = request.POST['stock_name']
+        stock_price = request.POST['stock_price']
+        stock_cost = request.POST['stock_cost']
+        stock_point = request.POST['stock_point']
+        stock_remark = request.POST['stock_remark']
+
+        Stock.objects.create(stock_type=stock_type, stock_id=stock_id, stock_name=stock_name,
+                            stock_price=stock_price, stock_cost=stock_cost, stock_point=stock_point, stock_remark=stock_remark)
+        
+        for shop in shopAll:
+            Instock.objects.create(instock_id=stock_id, insock_shop_id=shop.shop_id, instock_qua=0, instock_salesvolume=0)
+
+        return redirect('/app/stock')
+
+
     return render(request, 'addStock.html', locals())
 
 
@@ -440,7 +457,28 @@ def importStock(request):
     shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
+
+    stockAll = Stock.objects.all()
+    for stock in stockAll:
+        stock.instock_qua = Instock.objects.get(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+
     return render(request, 'importStock.html', locals())
+
+# def selectImport(request):
+#     if not request.session.get('is_login', None):  # 確認是否登入
+#     return redirect('/app')
+#     userNow = request.session['emp_name_ch']
+#     shopNow = request.session['user_shop_name']
+#     shopAll = Shop.objects.all()
+
+#     stockMenuOpen = "active menu-open"
+
+#     stockAll = Stock.objects.all()
+#     for stock in stockAll:
+#         stock.instock_qua = Instock.objects.get(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+
+#     return redirect('/app/import/')
+
 
 
 def report(request):
@@ -515,9 +553,14 @@ def addShop(request):
         Shop.objects.create(shop_name=shop_name, shop_id=shop_id, shop_class=shop_class, shop_addr=shop_addr,
                             shop_phone1=shop_phone1, shop_phone2=shop_phone2, shop_remark=shop_remark)
 
+        stockAll = Stock.objects.all()
+        for stock in stockAll:
+            Instock.objects.create(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop'], instock_qua=0, instock_salesvolume=0)
+
         return redirect('/app/setting/shop')
 
     return render(request, 'addShop.html', locals())
+
 
 def ok(request):
     if not request.session.get('is_login', None):  # 確認是否登入

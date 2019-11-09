@@ -80,3 +80,24 @@ class Shop(models.Model):
 
     def __str__(self):
         return self.shop_name
+
+class Stock(models.Model):
+    stock_type = models.CharField(max_length=50)
+    stock_id = models.CharField(max_length=50, unique=True)
+    stock_name = models.CharField(max_length=50)
+    stock_price = models.IntegerField()
+    stock_cost = models.IntegerField()
+    stock_point = models.IntegerField()
+    stock_remark = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return self.stock_name
+
+class Instock(models.Model):
+    instock_id = models.CharField(max_length=50)
+    insock_shop_id = models.CharField(max_length=50)
+    instock_qua = models.IntegerField(default=0)
+    instock_salesvolume = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.instock_id

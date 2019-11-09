@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Customer, LogedIn, Employee, Shop
+from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -17,3 +17,5 @@ admin.site.register(Customer, CustomerAdmin)
 admin.site.register(LogedIn)
 admin.site.register(Employee)
 admin.site.register(Shop)
+admin.site.register(Stock)
+admin.site.register(Instock)

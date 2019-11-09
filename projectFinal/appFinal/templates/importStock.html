@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈{% endblock %}
+{% block title %}茵悦薈 | 商品進貨{% endblock %}
 
-{% block css %}{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
@@ -19,8 +21,170 @@
 {% endblock %}
 
 {% block content %}
+<section class="content">
+    <form role="form" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">選擇</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#selectStockModal">
+                                選擇進貨商品
+                            </button>
+                        </div>                
+                        <table id="stockTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>商品名稱</th>
+                                <th>商品編號</th>
+                                <th>從</th>
+                                <th>數量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for stock in selectedStockAll %}
+                        <tr>
+                            <th>{{stock.stock_name}}</a></th>
+                            <th>{{stock.stock_id}}</th>
+                            <th>
+                                <select class="form-control" name="shop_from">
+                                    <option value="">---</option>
+                                    {% for shop in shopAll %}
+                                    <option value="{{shop.shop_id}}">{{shop.shop_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </th>
+                            <th>{{stock.instock_qua}}</th>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>商品名稱</th>
+                                <th>商品編號</th>
+                                <th>從</th>
+                                <th>數量</th>
+                            </tr>
+                        </tfoot>
+                    </table>                                       
+                    </div>
+                </div>               
+            </div>
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">其他資訊</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>備註</label>
+                            <textarea type="text" class="form-control" name="stock_remark" row="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </div>
+      <div class="pull-right">
+          <a class="btn btn-default" href="/app/addStock">重整</a>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#completeModal">
+              完成
+          </button>
+      </div>
+      <div class="modal fade" id="completeModal" tabindex="-1" role="dialog" aria-labelledby="completeModalTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                  </div>
+                  <div class="modal-body">
+                      確定儲存嗎?
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                      <input type="submit" class="btn btn-primary" name="saveB" value="儲存"></input>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal fade" id="selectStockModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇商品</h2>
+                </div>
+                <div class="modal-body">
+                    <table id="selectStockTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                            <th>商品名稱</th>
+                            <th>商品編號</th>
+                            <th>牌價</th>
+                            <th>庫存量</th>
+                            <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for stock in stockAll %}
+                        <tr>
+                            <th><a href="/app/editStock/{{stock.stock_id}}">{{stock.stock_name}}</a></th>
+                            <th>{{stock.stock_id}}</th>
+                            <th>{{stock.stock_price|default:"-"}}</th>
+                            <th>{{stock.instock_qua|default:"-"}}</th>
+                            <th>
+                                <a href="/app/selectImport/{{stock.stock_id}}" class="btn btn-primary btn-xs">
+                                    選擇
+                                </a>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>商品名稱</th>
+                                <th>商品編號</th>
+                                <th>牌價</th>
+                                <th>庫存量</th>
+                                <th>選擇</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>        
+              </div>
+          </div>
+      </div>
+  </form>
+</section>
 {% endblock %}
 
 
 {% block script %}
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#selectStockTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+    $(function () {
+      $('#stockTable').DataTable({
+        'paging'      : false,
+        'lengthChange': true,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
 {% endblock %}
