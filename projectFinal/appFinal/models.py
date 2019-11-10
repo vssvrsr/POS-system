@@ -101,3 +101,21 @@ class Instock(models.Model):
 
     def __str__(self):
         return self.instock_id
+
+class ImportReport(models.Model):
+    ir_id = models.CharField(max_length=50)
+    ir_date = models.CharField(max_length=50)
+    ir_remark = models.CharField(max_length=300, null=True)
+    ir_complete = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.ir_id
+
+class ImportStock(models.Model):
+    is_ir_id = models.CharField(max_length=50)
+    is_stock_id = models.CharField(max_length=50)
+    is_qua = models.IntegerField()
+    is_from_shop_id = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.is_ir_id

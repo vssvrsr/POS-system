@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock
+from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock
 
 
 def getIP(request):
@@ -36,9 +36,14 @@ def login(request):
     if 'loginB' in request.POST:  # 已提交了帳號密碼，開始進行確認
         userId = request.POST['userId']
         userPw = request.POST['userPw']
-        userShop = request.POST['loginShop']
 
-        try:  # 先進資料庫比對帳號
+        try:    # 偵測是否有選擇店鋪
+            userShop = request.POST['loginShop']
+        except:
+            message = '請選擇店鋪'
+            return render(request, 'login.html', locals())
+
+        try:    # 先進資料庫比對帳號
             user = User.objects.get(user_id=userId)
         except:  # 帳號比對失敗
             message = '帳號不存在'
@@ -49,6 +54,9 @@ def login(request):
             request.session['is_login'] = True
             request.session['user_id'] = user.user_id
             request.session['user_emp_id'] = user.user_emp_id
+
+            irIdNow = ImportReport.objects.all().order_by('-ir_id')[0].ir_id
+            request.session['irIdNow'] = irIdNow
 
             try:  # 將進當前店鋪資訊放進session
                 request.session['user_shop'] = userShop
@@ -366,11 +374,12 @@ def stock(request):
     shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
-    
+
     stockAll = Stock.objects.all()
 
     for stock in stockAll:
-        stock.instock_qua = Instock.objects.get(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+        stock.instock_qua = Instock.objects.get(
+            instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
 
     return render(request, 'stock.html', locals())
 
@@ -416,13 +425,13 @@ def addStock(request):
         stock_remark = request.POST['stock_remark']
 
         Stock.objects.create(stock_type=stock_type, stock_id=stock_id, stock_name=stock_name,
-                            stock_price=stock_price, stock_cost=stock_cost, stock_point=stock_point, stock_remark=stock_remark)
-        
+                             stock_price=stock_price, stock_cost=stock_cost, stock_point=stock_point, stock_remark=stock_remark)
+
         for shop in shopAll:
-            Instock.objects.create(instock_id=stock_id, insock_shop_id=shop.shop_id, instock_qua=0, instock_salesvolume=0)
+            Instock.objects.create(
+                instock_id=stock_id, insock_shop_id=shop.shop_id, instock_qua=0, instock_salesvolume=0)
 
         return redirect('/app/stock')
-
 
     return render(request, 'addStock.html', locals())
 
@@ -449,36 +458,83 @@ def exportStock(request):
     return render(request, 'exportStock.html', locals())
 
 
+def nextIrId(idNow):
+    num = int(idNow[2:5])
+    num += 1
+    num = format(num, '03d')
+    return 'IM' + str(num)
+
+
 def importStock(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
+    shopIdNow = request.session['user_shop']
     shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
 
     stockAll = Stock.objects.all()
     for stock in stockAll:
-        stock.instock_qua = Instock.objects.get(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+        stock.instock_qua = Instock.objects.get(
+            instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+
+    irIdNow = request.session['irIdNow']
+
+    if ImportReport.objects.get(ir_id=irIdNow).ir_complete:
+        irIdNext = nextIrId(irIdNow)
+        irIdNow = irIdNext
+        request.session['irIdNow'] = irIdNext
+        ImportReport.objects.create(
+            ir_id=irIdNext, ir_date='tmp', ir_complete=False)
+    selectedStockAll = ImportStock.objects.filter(is_ir_id=irIdNow)
+    for selectedStock in selectedStockAll:
+        selectedStock.stock_name = Stock.objects.get(
+            stock_id=selectedStock.is_stock_id).stock_name
+
+    if 'saveB' in request.POST:
+        ir_date = request.POST['ir_date']
+        ir_remark = request.POST['ir_remark']
+        ir_complete = True
+
+        for stock in selectedStockAll:
+            is_from_shop_id = request.POST[stock.is_stock_id +
+                                           '_is_from_shop_id']
+            is_qua = request.POST[stock.is_stock_id + '_is_qua']
+
+            stockQuaNow = Instock.objects.get(
+                instock_id=stock.is_stock_id, insock_shop_id=shopIdNow).instock_qua
+            Instock.objects.filter(instock_id=stock.is_stock_id, insock_shop_id=shopIdNow).update(
+                instock_qua=stockQuaNow+int(is_qua))
+
+            if not is_from_shop_id == 'out':
+                fromStockQuaNow = Instock.objects.get(
+                    instock_id=stock.is_stock_id, insock_shop_id=is_from_shop_id).instock_qua
+                Instock.objects.filter(instock_id=stock.is_stock_id, insock_shop_id=is_from_shop_id).update(
+                    instock_qua=fromStockQuaNow-int(is_qua))
+
+            ImportStock.objects.filter(is_ir_id=request.session['irIdNow']).update(
+                is_from_shop_id=is_from_shop_id, is_qua=is_qua)
+
+        ImportReport.objects.filter(ir_id=request.session['irIdNow']).update(
+            ir_date=ir_date, ir_remark=ir_remark, ir_complete=ir_complete)
+
+        return redirect('/app/stock')
 
     return render(request, 'importStock.html', locals())
 
-# def selectImport(request):
-#     if not request.session.get('is_login', None):  # 確認是否登入
-#     return redirect('/app')
-#     userNow = request.session['emp_name_ch']
-#     shopNow = request.session['user_shop_name']
-#     shopAll = Shop.objects.all()
 
-#     stockMenuOpen = "active menu-open"
+def selectImport(request, a, b):
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
 
-#     stockAll = Stock.objects.all()
-#     for stock in stockAll:
-#         stock.instock_qua = Instock.objects.get(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+    irIdNow = a
+    selectStock = b
+    ImportStock.objects.create(
+        is_ir_id=irIdNow, is_stock_id=selectStock, is_qua=0, is_from_shop_id='')
 
-#     return redirect('/app/import/')
-
+    return redirect('/app/importStock/')
 
 
 def report(request):
@@ -555,7 +611,8 @@ def addShop(request):
 
         stockAll = Stock.objects.all()
         for stock in stockAll:
-            Instock.objects.create(instock_id=stock.stock_id, insock_shop_id=request.session['user_shop'], instock_qua=0, instock_salesvolume=0)
+            Instock.objects.create(
+                instock_id=stock.stock_id, insock_shop_id=request.session['user_shop'], instock_qua=0, instock_salesvolume=0)
 
         return redirect('/app/setting/shop')
 

@@ -29,7 +29,7 @@ urlpatterns = [
     path('addStock/', appViews.addStock, name='addStock'),
     path('stock/', appViews.stock, name='stock'),
     path('importStock/', appViews.importStock, name='importStock'),
-    # path('selectImport/<str:a>', appViews.selectImport, name='selectImport'),
+    path('selectImport/<str:a>/<str:b>', appViews.selectImport, name='selectImport'),
     path('exportStock/', appViews.exportStock, name='exportStock'),
 
     path('salaryCount/', appViews.salaryCount, name='salaryCount'),

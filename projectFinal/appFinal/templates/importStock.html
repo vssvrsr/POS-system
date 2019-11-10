@@ -49,16 +49,17 @@
                         {% for stock in selectedStockAll %}
                         <tr>
                             <th>{{stock.stock_name}}</a></th>
-                            <th>{{stock.stock_id}}</th>
+                            <th>{{stock.is_stock_id}}</th>
                             <th>
-                                <select class="form-control" name="shop_from">
+                                <select class="form-control" name="{{stock.is_stock_id}}_is_from_shop_id">
                                     <option value="">---</option>
                                     {% for shop in shopAll %}
                                     <option value="{{shop.shop_id}}">{{shop.shop_name}}</option>
                                     {% endfor %}
+                                    <option value="out">外部</option>
                                 </select>
                             </th>
-                            <th>{{stock.instock_qua}}</th>
+                            <th><input type="text" class="form-control" name="{{stock.is_stock_id}}_is_qua"></th>
                         </tr>
                         {% endfor %}
                         </tbody>
@@ -81,8 +82,12 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group">
+                            <label>進貨日期</label>
+                            <input type="text" class="form-control" name="ir_date" row="3"></input>
+                        </div>
+                        <div class="form-group">
                             <label>備註</label>
-                            <textarea type="text" class="form-control" name="stock_remark" row="3"></textarea>
+                            <textarea type="text" class="form-control" name="ir_remark" row="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -130,12 +135,12 @@
                         <tbody>
                         {% for stock in stockAll %}
                         <tr>
-                            <th><a href="/app/editStock/{{stock.stock_id}}">{{stock.stock_name}}</a></th>
+                            <th>{{stock.stock_name}}</th>
                             <th>{{stock.stock_id}}</th>
                             <th>{{stock.stock_price|default:"-"}}</th>
                             <th>{{stock.instock_qua|default:"-"}}</th>
                             <th>
-                                <a href="/app/selectImport/{{stock.stock_id}}" class="btn btn-primary btn-xs">
+                                <a href="/app/selectImport/{{irIdNow}}/{{stock.stock_id}}" class="btn btn-primary btn-xs">
                                     選擇
                                 </a>
                             </th>
