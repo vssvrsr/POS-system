@@ -3,21 +3,22 @@
 {% block title %}茵悦薈 | 品項管理{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+<link rel="stylesheet"
+  href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        品項管理
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
-        <li>庫存管理</a></li>
-        <li class="active">品項管理</li>
-      </ol>
-    </section>
+<section class="content-header">
+  <h1>
+    品項管理
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+    <li>庫存管理</a></li>
+    <li class="active">品項管理</li>
+  </ol>
+</section>
 {% endblock %}
 
 {% block content %}
@@ -26,21 +27,21 @@
     <div class="box-header">
       <h3 class="box-title">搜尋商品</h3>
       <small>點擊商品名稱以編輯</small>
-      <div class ="pull-right">
-          <a class="btn btn-defaut" href="/app/removed/stock">已移籍商品</a>
-          <a class="btn btn-primary" href="/app/addStock"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
-          <a class="btn btn-primary" href="#"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
+      <div class="pull-right">
+        <a class="btn btn-defaut" href="/app/removed/stock">已移籍商品</a>
+        <a class="btn btn-primary" href="/app/addStock"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
+        <a class="btn btn-primary" href="#"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
       </div>
     </div>
     <div class="box-body">
-      <table id="stockTable" class="table table-bordered table-striped">
+      <table id="stockTable" class="table table-bordered table-striped table-hover">
         <thead>
-        <tr>
-          <th>商品名稱</th>
-          <th>商品編號</th>
-          <th>牌價</th>
-          <th>庫存量</th>
-        </tr>
+          <tr>
+            <th>商品名稱</th>
+            <th>商品編號</th>
+            <th>牌價</th>
+            <th>庫存量</th>
+          </tr>
         </thead>
         <tbody>
           {% for stock in stockAll %}
@@ -53,18 +54,18 @@
           {% endfor %}
         </tbody>
         <tfoot>
-        <tr>
+          <tr>
             <th>商品名稱</th>
             <th>商品編號</th>
             <th>牌價</th>
             <th>庫存量</th>
-        </tr>
+          </tr>
         </tfoot>
       </table>
     </div>
     <!-- /.box-body -->
   </div>
-    <!-- /.box -->
+  <!-- /.box -->
 </section>
 {% endblock %}
 
@@ -75,15 +76,15 @@
 <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
 <script>
-    $(function () {
-      $('#stockTable').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
-        'searching'   : true,
-        'ordering'    : true,
-        'info'        : false,
-        'autoWidth'   : true
-      })
+  $(function () {
+    $('#stockTable').DataTable({
+      'paging': true,
+      'lengthChange': true,
+      'searching': true,
+      'ordering': true,
+      'info': false,
+      'autoWidth': true
     })
-  </script>
+  })
+</script>
 {% endblock %}

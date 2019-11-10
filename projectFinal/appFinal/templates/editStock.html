@@ -1,2 +1,112 @@
+{# 繼承模板 #}
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}茵悦薈 | 庫存資料修改{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>庫存資料修改</h1>
+    <ol class="breadcrumb">
+        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+        <li>庫存管理</a></li>
+        <li class="active">庫存資料修改</li>
+    </ol>
+</section>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<section class="content">
+    <form role="form" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">基本資料</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>類型</label>
+                            <input type="text" class="form-control" name="stock_type" required>
+                        </div>
+                        <div class="form-group">
+                            <label>商品編號</label>
+                            <input type="text" class="form-control" name="stock_id">
+                        </div>
+                        <div class="form-group">
+                            <label>商品名稱</label>
+                            <input type="text" class="form-control" name="stock_name">
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">其他資訊</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>備註</label>
+                            <textarea type="text" class="form-control" name="stock_remark" row="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">銷售資訊</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>牌價</label>
+                            <input type="text" class="form-control" name="stock_price" required>
+                        </div>
+                        <div class="form-group">
+                            <label>進貨價</label>
+                            <input type="text" class="form-control" name="stock_cost">
+                        </div>
+                        <div class="form-group">
+                            <label>計積點數</label>
+                            <input type="text" class="form-control" name="stock_point">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+        <div class="pull-right">
+            <a class="btn btn-default" href="/app/addStock">重整</a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                完成
+            </button>
+        </div>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                    </div>
+                    <div class="modal-body">
+                        確定儲存嗎?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                        <input type="submit" class="btn btn-primary" name="saveB" value="儲存"></input>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock content %}
+
+
+{% block script %}
+{% endblock script %}

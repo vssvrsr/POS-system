@@ -436,6 +436,41 @@ def addStock(request):
     return render(request, 'addStock.html', locals())
 
 
+def editStock(request, row_index):
+    """
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
+
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
+
+    stockMenuOpen = "active menu-open"
+
+    if 'saveB' in request.POST:  # 提交新數據
+        stock_type = request.POST['stock_type']
+        stock_id = request.POST['stock_id']
+        stock_name = request.POST['stock_name']
+        stock_price = request.POST['stock_price']
+        stock_cost = request.POST['stock_cost']
+        stock_point = request.POST['stock_point']
+        stock_remark = request.POST['stock_remark']
+
+        Stock.objects.filter(stock_id=row_index).update(stock_type=stock_type, stock_id=stock_id, stock_name=stock_name,
+                             stock_price=stock_price, stock_cost=stock_cost, stock_point=stock_point, stock_remark=stock_remark)
+
+
+        for shop in shopAll: # 
+            Instock.objects.create(
+                instock_id=stock_id, insock_shop_id=shop.shop_id, instock_qua=0, instock_salesvolume=0)
+
+        return redirect('/app/stock')
+
+    return render(request, 'editStock.html', locals())
+    """
+    return HttpResponse("待完善")
+
+
 def deduct(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')

@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈 | {% endblock %}
+{% block title %}茵悦薈 | 新增品項{% endblock %}
 
 {% block css %}
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
+<section class="content-header">
+    <h1>
         新增品項
-      </h1>
-      <ol class="breadcrumb">
+    </h1>
+    <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>庫存管理</a></li>
         <li class="active">新增品項</li>
-      </ol>
-    </section>
+    </ol>
+</section>
 {% endblock %}
 
 
@@ -42,9 +42,9 @@
                         <div class="form-group">
                             <label>商品名稱</label>
                             <input type="text" class="form-control" name="stock_name">
-                        </div>                                         
+                        </div>
                     </div>
-                </div>      
+                </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">其他資訊</h3>
@@ -85,7 +85,8 @@
                 完成
             </button>
         </div>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

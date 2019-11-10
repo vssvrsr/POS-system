@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class User(models.Model):
     user_id = models.CharField(max_length=50, unique=True)
     user_pw = models.CharField(max_length=50)
@@ -8,12 +9,14 @@ class User(models.Model):
     def __str__(self):
         return self.user_id
 
+
 class LogedIn(models.Model):
     loged_user = models.CharField(max_length=50)
     loged_ip = models.CharField(max_length=50)
 
     def __str__(self):
         return self.loged_ip
+
 
 class Customer(models.Model):
     # cus_photo = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
@@ -40,10 +43,11 @@ class Customer(models.Model):
     def __str__(self):
         return self.cus_name
 
+
 class Employee(models.Model):
     # emp_photo = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
     emp_id = models.CharField(max_length=50, unique=True)
-    # emp_cus_id = 
+    # emp_cus_id =
     emp_name_ch = models.CharField(max_length=50)
     emp_name_en = models.CharField(max_length=50, null=True)
     emp_idcard = models.CharField(max_length=50, null=True)
@@ -69,6 +73,7 @@ class Employee(models.Model):
     def __str__(self):
         return self.emp_name_ch
 
+
 class Shop(models.Model):
     shop_id = models.CharField(max_length=50, unique=True)
     shop_name = models.CharField(max_length=50)
@@ -81,17 +86,21 @@ class Shop(models.Model):
     def __str__(self):
         return self.shop_name
 
+# 庫存管理
+
+
 class Stock(models.Model):
     stock_type = models.CharField(max_length=50)
     stock_id = models.CharField(max_length=50, unique=True)
     stock_name = models.CharField(max_length=50)
     stock_price = models.IntegerField()
-    stock_cost = models.IntegerField()
-    stock_point = models.IntegerField()
+    stock_cost = models.IntegerField(null=True)
+    stock_point = models.IntegerField(null=True)
     stock_remark = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return self.stock_name
+
 
 class Instock(models.Model):
     instock_id = models.CharField(max_length=50)
@@ -102,14 +111,16 @@ class Instock(models.Model):
     def __str__(self):
         return self.instock_id
 
+
 class ImportReport(models.Model):
     ir_id = models.CharField(max_length=50)
     ir_date = models.CharField(max_length=50)
     ir_remark = models.CharField(max_length=300, null=True)
     ir_complete = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return self.ir_id
+
 
 class ImportStock(models.Model):
     is_ir_id = models.CharField(max_length=50)

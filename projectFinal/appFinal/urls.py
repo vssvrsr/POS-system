@@ -26,10 +26,14 @@ urlpatterns = [
     path('deduct/', appViews.deduct, name='deduct'),
     path('report/', appViews.report, name='report'),
 
-    path('addStock/', appViews.addStock, name='addStock'),
+
+
     path('stock/', appViews.stock, name='stock'),
+    path('addStock/', appViews.addStock, name='addStock'),
+    path('editStock/<str:row_index>', appViews.editStock, name='editStock'),
     path('importStock/', appViews.importStock, name='importStock'),
-    path('selectImport/<str:a>/<str:b>', appViews.selectImport, name='selectImport'),
+    path('selectImport/<str:a>/<str:b>',
+         appViews.selectImport, name='selectImport'),
     path('exportStock/', appViews.exportStock, name='exportStock'),
 
     path('salaryCount/', appViews.salaryCount, name='salaryCount'),
