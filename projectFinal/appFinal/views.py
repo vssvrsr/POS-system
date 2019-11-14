@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock
+from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc
 
 
 def getIP(request):
@@ -57,6 +57,9 @@ def login(request):
 
             irIdNow = ImportReport.objects.all().order_by('-ir_id')[0].ir_id
             request.session['irIdNow'] = irIdNow
+
+            saleIdNow = Sale.objects.all().order_by('-sale_id')[0].sale_id
+            request.session['saleIdNow'] = saleIdNow
 
             try:  # 將進當前店鋪資訊放進session
                 request.session['user_shop'] = userShop
@@ -226,9 +229,15 @@ def editCus(request, a):
 
 
 def removed(request, a):
-    persMenuOpen = "active menu-open"
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
 
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
+    
     if a == 'emp':
+        persMenuOpen = "active menu-open"
         type = '員工'
         typeValue = a
         removedAll = Employee.objects.filter(emp_seeable=False)
@@ -236,12 +245,21 @@ def removed(request, a):
             removed.name = removed.emp_name_ch
             removed.id = removed.emp_id
     if a == 'cus':
+        persMenuOpen = "active menu-open"
         type = '顧客'
         typeValue = a
         removedAll = Customer.objects.filter(cus_seeable=False)
         for removed in removedAll:
             removed.name = removed.cus_name
             removed.id = removed.cus_id
+    if a == 'stock':
+        stockMenuOpen = "active menu-open"
+        type = '商品'
+        typeValue = a
+        removedAll = Stock.objects.filter(stock_seeable=False)
+        for removed in removedAll:
+            removed.name = removed.stock_name
+            removed.id = removed.stock_id
     return render(request, 'removed.html', locals())
 
 
@@ -254,6 +272,10 @@ def restore(request, a, b):
         Customer.objects.filter(cus_id=b).update(cus_seeable=True)
         return redirect('/app/removed/cus')
 
+    if a == 'stock':
+        Stock.objects.filter(stock_id=b).update(stock_seeable=True)
+        return redirect('/app/removed/stock')
+
 
 def delete(request, a, b):
     if a == 'emp':
@@ -262,6 +284,11 @@ def delete(request, a, b):
 
     if a == 'cus':
         Customer.objects.get(cus_id=b).delete()
+        return redirect('/app/removed/stock')
+
+    if a == 'stock':
+        Customer.objects.get(stock_id=b).delete()
+        Instock.objects.filter(stock_id=b).delete()
         return redirect('/app/removed/cus')
 
 
@@ -375,25 +402,99 @@ def stock(request):
 
     stockMenuOpen = "active menu-open"
 
-    stockAll = Stock.objects.all()
+    stockAll = Stock.objects.all().exclude(stock_seeable=False)
 
+    # 庫存量目前有空值，待修改
     for stock in stockAll:
-        stock.instock_qua = Instock.objects.get(
-            instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+        try:
+            stock.instock_qua = Instock.objects.get(
+            instock_id=stock.stock_id, instock_shop_id=request.session['user_shop']).instock_qua
+        except:
+            stock.instock_qua = 10
 
     return render(request, 'stock.html', locals())
 
+def nextSaleId(idNow):
+    num = int(idNow[2:5])
+    num += 1
+    num = format(num, '03d')
+    return 'ST' + str(num)
 
 def sale(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
+    userId = request.session['user_id']
+    shopIdNow = request.session['user_shop']
+    saleIdNow = request.session['saleIdNow']
     shopAll = Shop.objects.all()
-
+    stockAll = Stock.objects.all().exclude(stock_seeable=False)
+    cusAll = Customer.objects.all().exclude(cus_seeable=False)
+    empAll = Employee.objects.all().exclude(emp_seeable=False)
     saleMenuOpen = "active menu-open"
+
+    if Sale.objects.get(sale_id=saleIdNow).sale_complete:
+        saleIdNext = nextSaleId(saleIdNow)
+        saleIdNow = saleIdNext
+        request.session['saleIdNow'] = saleIdNext
+        Sale.objects.create(
+            sale_id = saleIdNext,
+            sale_cus = Customer.objects.get(cus_id='CZ1234556'),
+            sale_date = 'tmp',
+            sale_person_in_charge = Employee.objects.get(emp_id='120004'),
+            sale_stock_price_total = 0,
+            sale_price_total = 0,
+            sale_point = 0,
+            sale_pay = 'tmp',
+            sale_type = 'tmp',
+            sale_shop = Shop.objects.get(shop_id=shopIdNow),
+            sale_remark = 'tmp',
+            sale_created_by_user = User.objects.get(user_id = userId)
+        )
+    sale_now = Sale.objects.get(sale_id=saleIdNow)
+    saleStockAll = sale_now.salestock_set.all()
+    saleAllocAll = sale_now.salealloc_set.all()
+
+    if 'nextB'in request.POST:
+        for salestock in saleStockAll:
+            Salestock.objects.filter(
+                salestock_sale=sale_now,
+                salestock_stock=salestock.salestock_stock
+            ).update(
+                salestock_price=request.POST[salestock.salestock_stock.stock_id + '_price'],
+                salestock_amount=request.POST[salestock.salestock_stock.stock_id + '_amount'] 
+            )
+        for salealloc in saleAllocAll:
+            Salealloc.objects.filter(
+                salealloc_sale=sale_now,
+                salealloc_emp=salealloc.salealloc_emp
+            ).update(salealloc_perc=request.POST[salealloc.salealloc_emp.emp_id + '_perc'])
+
+        return redirect('/app/sale/next')
+    
     return render(request, 'sale.html', locals())
 
+def saleNext(request):
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
+    saleMenuOpen = "active menu-open"
+
+    return render(request, 'saleNext.html', locals())
+
+def selectSale(request, a, b):
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
+    sale_id = a
+    select_stock = b
+    sale_now = Sale.objects.get(sale_id=sale_id)
+    sale_now.salestock_set.create(
+        salestock_stock = Stock.objects.get(stock_id=select_stock),
+        salestock_price = 0,
+        salestock_amount = 0
+    )
+
+    return redirect('/app/sale')
 
 def service(request):
     if not request.session.get('is_login', None):  # 確認是否登入
@@ -429,7 +530,7 @@ def addStock(request):
 
         for shop in shopAll:
             Instock.objects.create(
-                instock_id=stock_id, insock_shop_id=shop.shop_id, instock_qua=0, instock_salesvolume=0)
+                instock_id=stock_id, instock_shop_id=shop.shop_id, instock_qua=0, instock_salesvolume=0)
 
         return redirect('/app/stock')
 
@@ -437,7 +538,7 @@ def addStock(request):
 
 
 def editStock(request, row_index):
-    """
+    
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
 
@@ -446,6 +547,8 @@ def editStock(request, row_index):
     shopAll = Shop.objects.all()
 
     stockMenuOpen = "active menu-open"
+
+    stockThis = Stock.objects.get(stock_id=row_index)
 
     if 'saveB' in request.POST:  # 提交新數據
         stock_type = request.POST['stock_type']
@@ -458,17 +561,17 @@ def editStock(request, row_index):
 
         Stock.objects.filter(stock_id=row_index).update(stock_type=stock_type, stock_id=stock_id, stock_name=stock_name,
                              stock_price=stock_price, stock_cost=stock_cost, stock_point=stock_point, stock_remark=stock_remark)
+        
+        return redirect('/app/stock')
 
-
-        for shop in shopAll: # 
-            Instock.objects.create(
-                instock_id=stock_id, insock_shop_id=shop.shop_id, instock_qua=0, instock_salesvolume=0)
-
+    if 'removeB' in request.POST:
+        Stock.objects.filter(stock_id=row_index).update(stock_seeable=False)
+        
         return redirect('/app/stock')
 
     return render(request, 'editStock.html', locals())
-    """
-    return HttpResponse("待完善")
+    
+    ### return HttpResponse("待完善")
 
 
 def deduct(request):
@@ -513,7 +616,7 @@ def importStock(request):
     stockAll = Stock.objects.all()
     for stock in stockAll:
         stock.instock_qua = Instock.objects.get(
-            instock_id=stock.stock_id, insock_shop_id=request.session['user_shop']).instock_qua
+            instock_id=stock.stock_id, instock_shop_id=request.session['user_shop']).instock_qua
 
     irIdNow = request.session['irIdNow']
 
@@ -539,14 +642,14 @@ def importStock(request):
             is_qua = request.POST[stock.is_stock_id + '_is_qua']
 
             stockQuaNow = Instock.objects.get(
-                instock_id=stock.is_stock_id, insock_shop_id=shopIdNow).instock_qua
-            Instock.objects.filter(instock_id=stock.is_stock_id, insock_shop_id=shopIdNow).update(
+                instock_id=stock.is_stock_id, instock_shop_id=shopIdNow).instock_qua
+            Instock.objects.filter(instock_id=stock.is_stock_id, instock_shop_id=shopIdNow).update(
                 instock_qua=stockQuaNow+int(is_qua))
 
             if not is_from_shop_id == 'out':
                 fromStockQuaNow = Instock.objects.get(
-                    instock_id=stock.is_stock_id, insock_shop_id=is_from_shop_id).instock_qua
-                Instock.objects.filter(instock_id=stock.is_stock_id, insock_shop_id=is_from_shop_id).update(
+                    instock_id=stock.is_stock_id, instock_shop_id=is_from_shop_id).instock_qua
+                Instock.objects.filter(instock_id=stock.is_stock_id, instock_shop_id=is_from_shop_id).update(
                     instock_qua=fromStockQuaNow-int(is_qua))
 
             ImportStock.objects.filter(is_ir_id=request.session['irIdNow']).update(
@@ -647,7 +750,7 @@ def addShop(request):
         stockAll = Stock.objects.all()
         for stock in stockAll:
             Instock.objects.create(
-                instock_id=stock.stock_id, insock_shop_id=request.session['user_shop'], instock_qua=0, instock_salesvolume=0)
+                instock_id=stock.stock_id, instock_shop_id=shop_id, instock_qua=0, instock_salesvolume=0)
 
         return redirect('/app/setting/shop')
 
@@ -661,3 +764,25 @@ def ok(request):
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
     return render(request, 'ok.html', locals())
+
+def selectPerson(request, a, b, c):
+    if not request.session.get('is_login', None):  # 確認是否登入
+        return redirect('/app')
+
+    select_type = a
+    select_sale_id = b
+    select_person_id = c
+
+    if select_type == 'cus':
+        Sale.objects.filter(sale_id=select_sale_id).update(sale_cus=Customer.objects.get(cus_id=select_person_id))
+    if select_type == 'emp':
+        Sale.objects.filter(sale_id=select_sale_id).update(sale_person_in_charge=Employee.objects.get(emp_id=select_person_id))
+    if select_type == 'empAlloc':
+        sale_now = Sale.objects.get(sale_id=select_sale_id)
+        sale_now.salealloc_set.create(
+            salealloc_emp = Employee.objects.get(emp_id=select_person_id),
+            salealloc_perc = 0
+        )
+        
+
+    return redirect('/app/sale')

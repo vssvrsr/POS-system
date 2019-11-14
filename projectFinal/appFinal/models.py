@@ -96,6 +96,7 @@ class Stock(models.Model):
     stock_price = models.IntegerField()
     stock_cost = models.IntegerField(null=True)
     stock_point = models.IntegerField(null=True)
+    stock_seeable = models.BooleanField(default=True)
     stock_remark = models.CharField(max_length=50, null=True)
 
     def __str__(self):
@@ -104,7 +105,7 @@ class Stock(models.Model):
 
 class Instock(models.Model):
     instock_id = models.CharField(max_length=50)
-    insock_shop_id = models.CharField(max_length=50)
+    instock_shop_id = models.CharField(max_length=50)
     instock_qua = models.IntegerField(default=0)
     instock_salesvolume = models.IntegerField(default=0)
 
@@ -130,3 +131,39 @@ class ImportStock(models.Model):
 
     def __str__(self):
         return self.is_ir_id
+
+class Sale(models.Model):
+    sale_id = models.CharField(max_length=50)
+    sale_cus = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    sale_date = models.CharField(max_length=50)
+    sale_person_in_charge = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    sale_stock_price_total = models.IntegerField()
+    sale_price_total = models.IntegerField()
+    sale_point = models.IntegerField()
+    sale_pay = models.CharField(max_length=50)
+    sale_type = models.CharField(max_length=50)
+    sale_shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    sale_remark = models.CharField(max_length=50)
+    sale_created_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='create_by_this_user', null=True)
+    sale_modified_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='modified_by_this_user', null=True)
+    sale_complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.sale_id
+
+class Salestock(models.Model):
+    salestock_sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
+    salestock_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    salestock_price = models.IntegerField()
+    salestock_amount = models.IntegerField()
+
+    def __str__(self):
+        return self.salestock_sale.sale_id
+
+class Salealloc(models.Model):
+    salealloc_sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
+    salealloc_emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    salealloc_perc = models.IntegerField()
+
+    def __str__(self):
+        return self.salealloc_sale.sale_id

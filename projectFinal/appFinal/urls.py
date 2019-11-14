@@ -22,6 +22,9 @@ urlpatterns = [
     path('delete/<str:a>/<str:b>', appViews.delete, name='deleteCus'),
 
     path('sale/', appViews.sale, name='sale'),
+    path('sale/next', appViews.saleNext, name='saleNext'),
+    path('selectSale/<str:a>/<str:b>', appViews.selectSale, name='selectSale'),
+
     path('service/', appViews.service, name='service'),
     path('deduct/', appViews.deduct, name='deduct'),
     path('report/', appViews.report, name='report'),
@@ -32,8 +35,7 @@ urlpatterns = [
     path('addStock/', appViews.addStock, name='addStock'),
     path('editStock/<str:row_index>', appViews.editStock, name='editStock'),
     path('importStock/', appViews.importStock, name='importStock'),
-    path('selectImport/<str:a>/<str:b>',
-         appViews.selectImport, name='selectImport'),
+    path('selectImport/<str:a>/<str:b>',appViews.selectImport, name='selectImport'),
     path('exportStock/', appViews.exportStock, name='exportStock'),
 
     path('salaryCount/', appViews.salaryCount, name='salaryCount'),
@@ -42,6 +44,8 @@ urlpatterns = [
     path('setting/', appViews.setting, name='setting'),
     path('setting/shop', appViews.setShop, name='setShop'),
     path('setting/addShop', appViews.addShop, name='addShop'),
+
+    path('selectPerson/<str:a>/<str:b>/<str:c>', appViews.selectPerson, name='selectPerson'),
 
     path('ok', appViews.ok, name='ok'),
 ]

@@ -33,15 +33,18 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>類型</label>
-                            <input type="text" class="form-control" name="stock_type" required>
+                            <input type="text" class="form-control" name="stock_type"
+                                value="{{stockThis.stock_type|default:''}}" required>
                         </div>
                         <div class="form-group">
                             <label>商品編號</label>
-                            <input type="text" class="form-control" name="stock_id">
+                            <input type="text" class="form-control" name="stock_id"
+                                value="{{stockThis.stock_id|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>商品名稱</label>
-                            <input type="text" class="form-control" name="stock_name">
+                            <input type="text" class="form-control" name="stock_name"
+                                value="{{stockThis.stock_name|default:''}}">
                         </div>
                     </div>
                 </div>
@@ -52,7 +55,8 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>備註</label>
-                            <textarea type="text" class="form-control" name="stock_remark" row="3"></textarea>
+                            <textarea type="text" class="form-control" name="stock_remark" row="3"
+                                value="{{stockThis.stock_remark|default:''}}"></textarea>
                         </div>
                     </div>
                 </div>
@@ -65,15 +69,18 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>牌價</label>
-                            <input type="text" class="form-control" name="stock_price" required>
+                            <input type="text" class="form-control" name="stock_price"
+                                value="{{stockThis.stock_price|default:''}}" required>
                         </div>
                         <div class="form-group">
                             <label>進貨價</label>
-                            <input type="text" class="form-control" name="stock_cost">
+                            <input type="text" class="form-control" name="stock_cost"
+                                value="{{stockThis.stock_cost|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>計積點數</label>
-                            <input type="text" class="form-control" name="stock_point">
+                            <input type="text" class="form-control" name="stock_point"
+                                value="{{stockThis.stock_point|default:''}}">
                         </div>
                     </div>
                 </div>
@@ -81,24 +88,42 @@
         </div>
         <!-- Button trigger modal -->
         <div class="pull-right">
-            <a class="btn btn-default" href="/app/addStock">重整</a>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalRemove">
+                移籍
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalComplete">
                 完成
             </button>
-        </div>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+            <div class="modal fade" id="modalComplete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                        </div>
+                        <div class="modal-body">
+                            確定儲存嗎?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                            <input type="submit" class="btn btn-primary" name="saveB" value="儲存"></input>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        確定儲存嗎?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
-                        <input type="submit" class="btn btn-primary" name="saveB" value="儲存"></input>
+                </div>
+            </div>
+            <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                        </div>
+                        <div class="modal-body">
+                            確定移籍嗎?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                            <input type="submit" class="btn btn-warning" name="removeB" value="移籍"></input>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
@@ -59,7 +60,7 @@
                                     <option value="out">外部</option>
                                 </select>
                             </th>
-                            <th><input type="text" class="form-control" name="{{stock.is_stock_id}}_is_qua"></th>
+                            <th><input type="text" class="form-control" name="{{stock.is_stock_id}}_is_qua" required></th>
                         </tr>
                         {% endfor %}
                         </tbody>
@@ -83,12 +84,17 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>進貨日期</label>
-                            <input type="text" class="form-control" name="ir_date" row="3"></input>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="datepicker" name="ir_date">
+                            </div>                          
                         </div>
                         <div class="form-group">
                             <label>備註</label>
                             <textarea type="text" class="form-control" name="ir_remark" row="3"></textarea>
-                        </div>
+                        </div>                    
                     </div>
                 </div>
             </div>
@@ -169,6 +175,17 @@
 {% block script %}
 <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+
+<script>
+    $(function () {
+        $('#datepicker').datepicker({
+            autoclose:true,
+            language:"zh-TW"
+        })
+    })
+</script>
 
 <script>
     $(function () {

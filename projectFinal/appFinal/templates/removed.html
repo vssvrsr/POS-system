@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈 | 已移籍客戶{% endblock %}
+{% block title %}茵悦薈 | 已移籍{{type}}{% endblock %}
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
@@ -15,7 +15,7 @@
 
       <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
-        <li>人員管理</li>
+        <li>{{type}}管理</li>
         <li class="active">已移籍{{type}}</li>
       </ol>
     </section>
