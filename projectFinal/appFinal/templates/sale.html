@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈{% endblock %}
+{% block title %}茵悦薈 | 商品銷售{% endblock %}
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
@@ -35,12 +35,11 @@
                         <label>銷售客戶姓名</label>       
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button ty
-                                pe="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectCus">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectCus">
                                     選擇客戶
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_cus.cus_name}}" required>
+                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_cus.cus_name}}" placeholder="{{sale_now.sale_cus.cus_name}}" required>
                         </div>                              
                     </div>
                 </div>         
@@ -99,12 +98,11 @@
                         <label>操作員工</label>       
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button ty
-                                pe="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
                                     選擇員工
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}} {{sale_now.sale_person_in_charge.emp_name_en}}" required>
+                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}}" placeholder="{{sale_now.sale_person_in_charge.emp_name_ch}}" required>
                         </div>                              
                     </div>
                 </div>         
@@ -341,6 +339,14 @@
         'autoWidth'   : true
       })
       $('#selectCusTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#stockTable').DataTable({
         'paging'      : true,
         'lengthChange': true,
         'searching'   : true,

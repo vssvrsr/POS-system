@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}茵悦薈{% endblock %}
+{% block title %}茵悦薈 | 服務銷售{% endblock %}
 
-{% block css %}{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
@@ -19,8 +21,306 @@
 {% endblock %}
 
 {% block content %}
+<section class="content">
+  <form role="form" method="POST">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">銷售客戶</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">        
+                        <label>銷售客戶姓名</label>       
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectCus">
+                                    選擇客戶
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_cus.cus_name}}" placeholder="{{sale_now.sale_cus.cus_name}}" required>
+                        </div>                              
+                    </div>
+                </div>         
+            </div>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">選擇服務項目</h3>
+                </div>
+                <div class="box-body">
+                    <label>選擇</label>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-btn">                            
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectService">
+                                    選擇服務
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="cusName" value="{{stock.stock_name}}" required>
+                        </div> 
+                    </div>                                                     
+                </div>
+            </div>    
+        </div>
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">操作員工</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>專業操作</label>       
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
+                                    選擇
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}}" placeholder="{{sale_now.sale_person_in_charge.emp_name_ch}}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>吹整造型</label> 
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
+                                    選擇
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}}" placeholder="{{sale_now.sale_person_in_charge.emp_name_ch}}" required>
+                        </div>  
+                    </div>           
+                    <div class="form-group">
+                        <label>洗髮</label> 
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
+                                    選擇
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}}" placeholder="{{sale_now.sale_person_in_charge.emp_name_ch}}" required>
+                        </div>   
+                    </div>                                               
+                </div>         
+            </div>
+        </div>
+    </div>
+                 
+    <div class="pull-right">
+        <a class="btn btn-default" href="/app/addStock">重整</a>
+        <input type="submit" class="btn btn-primary" name="nextB" value="下一步"></input>
+    </div>
+    <div class="modal fade" id="selectStockModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <h2 class="modal-title" id="exampleModalLongTitle">選擇服務</h2>
+              </div>
+              <div class="modal-body">
+                  <table id="selectCusTable" class="table table-bordered table-striped">
+                      <thead>
+                          <tr>
+                          <th>服務名稱</th>
+                          <th>服務編號</th>
+                          <th>牌價</th>
+                          <th>庫存量</th>
+                          <th>選擇</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      {% for stock in stockAll %}
+                      <tr>
+                          <th>{{stock.stock_name}}</th>
+                          <th>{{stock.stock_id}}</th>
+                          <th>{{stock.stock_price|default:"-"}}</th>
+                          <th>{{stock.instock_qua|default:"-"}}</th>
+                          <th>
+                              <a href="/app/selectSale/{{saleIdNow}}/{{stock.stock_id}}" class="btn btn-primary btn-xs">
+                                  選擇
+                              </a>
+                          </th>
+                      </tr>
+                      {% endfor %}
+                      </tbody>
+                      <tfoot>
+                          <tr>
+                              <th>服務名稱</th>
+                              <th>服務編號</th>
+                              <th>牌價</th>
+                              <th>庫存量</th>
+                              <th>選擇</th>
+                          </tr>
+                      </tfoot>
+                  </table>
+              </div>        
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalSelectCus" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
+                </div>
+                <div class="modal-body">
+                    <table id="selectStockTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                            <th>客戶姓名</th>
+                            <th>客戶編號</th>
+                            <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for cus in cusAll %}
+                        <tr>
+                            <th>{{cus.cus_name}}</th>
+                            <th>{{cus.cus_id}}</th>
+                            <th>
+                                <a href="/app/selectPerson/cus/{{saleIdNow}}/{{cus.cus_id}}" class="btn btn-primary btn-xs">
+                                    選擇
+                                </a>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>客戶姓名</th>
+                                <th>客戶編號</th>
+                                <th>選擇</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>        
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalSelectEmp" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
+                </div>
+                <div class="modal-body">
+                    <table id="selectStockTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                            <th>員工姓名</th>
+                            <th>員工編號</th>
+                            <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for emp in empAll %}
+                        <tr>
+                            <th>{{emp.emp_name_ch}} {{emp.emp_name_en}}</th>
+                            <th>{{emp.emp_id}}</th>
+                            <th>
+                                <a href="/app/selectPerson/emp/{{saleIdNow}}/{{emp.emp_id}}" class="btn btn-primary btn-xs">
+                                    選擇
+                                </a>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>員工姓名</th>
+                                <th>員工編號</th>
+                                <th>選擇</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>        
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalSelectService" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
+                </div>
+                <div class="modal-body">
+                    <table id="selectStockTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                            <th>服務名稱</th>
+                            <th>服務編號</th>
+                            <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for service in serviceAll %}
+                        <tr>
+                            <th>{{service.stock_name}}</th>
+                            <th>{{service.stock_id}}</th>
+                            <th>
+                                <a href="/app/selectPerson/empAlloc/{{saleIdNow}}/{{emp.emp_id}}" class="btn btn-primary btn-xs">
+                                    選擇
+                                </a>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>服務名稱</th>
+                                <th>服務編號</th>
+                                <th>選擇</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>        
+            </div>
+        </div>
+    </div>
+</form>
+</section>  
+
 {% endblock %}
 
 
 {% block script %}
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#selectStockTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#selectCusTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#stockTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#empTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
 {% endblock %}

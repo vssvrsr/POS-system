@@ -440,9 +440,9 @@ def sale(request):
         request.session['saleIdNow'] = saleIdNext
         Sale.objects.create(
             sale_id = saleIdNext,
-            sale_cus = Customer.objects.get(cus_id='CZ1234556'),
+            sale_cus = Customer.objects.get(cus_id='default'),
             sale_date = 'tmp',
-            sale_person_in_charge = Employee.objects.get(emp_id='120004'),
+            sale_person_in_charge = Employee.objects.get(emp_id='default'),
             sale_stock_price_total = 0,
             sale_price_total = 0,
             sale_point = 0,
@@ -479,6 +479,48 @@ def saleNext(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return redirect('/app')
     saleMenuOpen = "active menu-open"
+    sale_id_now = request.session['saleIdNow']
+    
+    sale_now = Sale.objects.get(sale_id=sale_id_now)
+    salestock_all = sale_now.salestock_set.all()
+
+    stock_price_total = 0
+    sale_price_total = 0
+    sale_point_total = 0
+    for salestock in salestock_all:
+        sale_price_total += (salestock.salestock_price * salestock.salestock_amount)
+        stock_price_total += (salestock.salestock_stock.stock_price * salestock.salestock_amount)
+        if not salestock.salestock_stock.stock_point:
+            sale_point_total = 0
+        else:
+            sale_point_total += (salestock.salestock_stock.stock_point * salestock.salestock_amount)
+
+    if 'saveB' in request.POST:
+        sale_date = request.POST['sale_date']
+        sale_stock_price_total = request.POST['sale_stock_price_total']
+        sale_price_total = request.POST['sale_price_total']
+        sale_point = request.POST['sale_point']
+        sale_pay = request.POST['sale_pay']
+        sale_type = request.POST['sale_type']
+        sale_remark = request.POST['sale_remark']
+
+        
+
+        Sale.objects.filter(sale_id=sale_id_now).update(
+            sale_date = sale_date,
+            sale_stock_price_total = sale_stock_price_total,
+            sale_price_total = sale_price_total,
+            sale_point = sale_point,
+            sale_pay = sale_pay,
+            sale_type = sale_type,
+            sale_remark = sale_remark,
+            sale_complete = True
+        )
+
+        return redirect('/app/sale')
+
+
+
 
     return render(request, 'saleNext.html', locals())
 
@@ -502,6 +544,9 @@ def service(request):
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
+    serviceAll = Stock.objects.filter(stock_type='服務')
+    empAll = Employee.objects.all().exclude(emp_seeable = False)
+    cusAll = Customer.objects.all().exclude(cus_seeable = False)
 
     saleMenuOpen = "active menu-open"
     return render(request, 'service.html', locals())
