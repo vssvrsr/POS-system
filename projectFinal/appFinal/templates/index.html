@@ -18,6 +18,7 @@
   </ol>
 </section>
 
+<!-- Main content -->
 <section class="content">
   <!-- Small boxes (Stat box) -->
   <div class="row">
@@ -25,14 +26,13 @@
       <!-- small box -->
       <div class="small-box bg-aqua">
         <div class="inner">
-          <h3>150</h3>
-
-          <p>商品一覽</p>
+          <h3>{{ stock_quantity|default:103 }}</h3>
+          <p>庫存總數</p>
         </div>
         <div class="icon">
           <i class="ion ion-bag"></i>
         </div>
-        <a href="#" class="small-box-footer">更多資訊 <i class="fa fa-arrow-circle-right"></i></a>
+        <a href="/app/stock/" class="small-box-footer">品項管理 <i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -40,9 +40,12 @@
       <!-- small box -->
       <div class="small-box bg-green">
         <div class="inner">
-          <h3>53<sup style="font-size: 20px">%</sup></h3>
+          <h3><i class="fa fa-arrow-up" style="font-size:20px;color:white;">
+            </i>
+            {{ stock_turnover_weekly_change_range|default:20 }}
+            <sup style="font-size: 20px">%</sup></h3>
 
-          <p>報表結算</p>
+          <p>本周商品成交量</p>
         </div>
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
@@ -82,6 +85,7 @@
     </div>
     <!-- ./col -->
   </div>
+
 </section>
 {% endblock %}
 

@@ -175,14 +175,15 @@ desired effect
             </li>
 
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{shopNow}} <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{shopNow}} <span
+                  class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 {% for shop in shopAll %}
                 <li><a href="/app/changeShop/{{shop.shop_id}}">{{shop.shop_name}}</a></li>
                 {% endfor %}
               </ul>
             </li>
-   
+
             <!-- 大頭貼 User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
@@ -265,6 +266,7 @@ desired effect
               <li><a href="{% url 'appFinal:sale' %}"><i class="fa fa-circle-o"></i> <span>銷售商品</span></a></li>
               <li><a href="{% url 'appFinal:service' %}"><i class="fa fa-circle-o"></i> <span>服務銷售</span></a></li>
               <li><a href="{% url 'appFinal:deduct' %}"><i class="fa fa-circle-o"></i> <span>課程扣點</span></a></li>
+              <li><a href="{% url 'appFinal:saleLog' %}"><i class="fa fa-circle-o"></i> <span>交易紀錄</span></a></li>
             </ul>
           </li>
 
@@ -313,8 +315,8 @@ desired effect
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="{% url 'appFinal:report' %}"><i class="fa fa-circle-o"></i> <span>交易紀錄</span></a></li>
-              <li><a href="{% url 'appFinal:stock' %}"><i class="fa fa-circle-o"></i> <span>商品庫存</span></a></li>
+
+              <li><a href="{% url 'appFinal:stockReport' %}"><i class="fa fa-circle-o"></i> <span>庫存清算</span></a></li>
               <li><a href="{% url 'appFinal:salaryCount' %}"><i class="fa fa-circle-o"></i> <span>薪資獎金試算</span></a></li>
               <li><a href="{% url 'appFinal:turnoverCount' %}"><i class="fa fa-circle-o"></i> <span>營業額試算</span></a>
               </li>
