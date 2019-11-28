@@ -11,14 +11,14 @@ $(function () {
 
   // Make the dashboard widgets sortable Using jquery UI
   $('.connectedSortable').sortable({
-    placeholder         : 'sort-highlight',
-    connectWith         : '.connectedSortable',
-    handle              : '.box-header, .nav-tabs',
+    placeholder: 'sort-highlight',
+    connectWith: '.connectedSortable',
+    handle: '.box-header, .nav-tabs',
     forcePlaceholderSize: true,
-    zIndex              : 999999
+    zIndex: 999999
   });
   $('.connectedSortable .box-header, .connectedSortable .nav-tabs-custom').css('cursor', 'move');
-
+  /*
   // jQuery UI sortable for the todo list
   $('.todo-list').sortable({
     placeholder         : 'sort-highlight',
@@ -44,7 +44,7 @@ $(function () {
   }, function (start, end) {
     window.alert('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
   });
-
+  */
   /* jQueryKnob */
   $('.knob').knob();
 
@@ -57,29 +57,34 @@ $(function () {
     FR: 760, // France
     CN: 300, // China
     AU: 700, // Australia
-    BR: 600, // Brazil
+    BR: 600, // Brazilz
     IN: 800, // India
     GB: 320, // Great Britain
     RU: 3000 // Russia
   };
+
+
+
+
+  /*
   // World map by jvectormap
   $('#world-map').vectorMap({
-    map              : 'world_mill_en',
-    backgroundColor  : 'transparent',
-    regionStyle      : {
+    map: 'world_mill_en',
+    backgroundColor: 'transparent',
+    regionStyle: {
       initial: {
-        fill            : '#e4e4e4',
-        'fill-opacity'  : 1,
-        stroke          : 'none',
-        'stroke-width'  : 0,
+        fill: '#e4e4e4',
+        'fill-opacity': 1,
+        stroke: 'none',
+        'stroke-width': 0,
         'stroke-opacity': 1
       }
     },
-    series           : {
+    series: {
       regions: [
         {
-          values           : visitorsData,
-          scale            : ['#92c1dc', '#ebf4f9'],
+          values: visitorsData,
+          scale: ['#92c1dc', '#ebf4f9'],
           normalizeFunction: 'polynomial'
         }
       ]
@@ -89,31 +94,31 @@ $(function () {
         el.html(el.html() + ': ' + visitorsData[code] + ' new visitors');
     }
   });
-
+  */
   // Sparkline charts
   var myvalues = [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021];
   $('#sparkline-1').sparkline(myvalues, {
-    type     : 'line',
+    type: 'line',
     lineColor: '#92c1dc',
     fillColor: '#ebf4f9',
-    height   : '50',
-    width    : '80'
+    height: '50',
+    width: '80'
   });
   myvalues = [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921];
   $('#sparkline-2').sparkline(myvalues, {
-    type     : 'line',
+    type: 'line',
     lineColor: '#92c1dc',
     fillColor: '#ebf4f9',
-    height   : '50',
-    width    : '80'
+    height: '50',
+    width: '80'
   });
   myvalues = [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21];
   $('#sparkline-3').sparkline(myvalues, {
-    type     : 'line',
+    type: 'line',
     lineColor: '#92c1dc',
     fillColor: '#ebf4f9',
-    height   : '50',
-    width    : '80'
+    height: '50',
+    width: '80'
   });
 
   // The Calender
@@ -127,9 +132,9 @@ $(function () {
   /* Morris.js Charts */
   // Sales chart
   var area = new Morris.Area({
-    element   : 'revenue-chart',
-    resize    : true,
-    data      : [
+    element: 'revenue-chart',
+    resize: true,
+    data: [
       { y: '2011 Q1', item1: 2666, item2: 2666 },
       { y: '2011 Q2', item1: 2778, item2: 2294 },
       { y: '2011 Q3', item1: 4912, item2: 1969 },
@@ -141,16 +146,16 @@ $(function () {
       { y: '2013 Q1', item1: 10687, item2: 4460 },
       { y: '2013 Q2', item1: 8432, item2: 5713 }
     ],
-    xkey      : 'y',
-    ykeys     : ['item1', 'item2'],
-    labels    : ['Item 1', 'Item 2'],
+    xkey: 'y',
+    ykeys: ['item1', 'item2'],
+    labels: ['Item 1', 'Item 2'],
     lineColors: ['#a0d0e0', '#3c8dbc'],
-    hideHover : 'auto'
+    hideHover: 'auto'
   });
   var line = new Morris.Line({
-    element          : 'line-chart',
-    resize           : true,
-    data             : [
+    element: 'line-chart',
+    resize: true,
+    data: [
       { y: '2011 Q1', item1: 2666 },
       { y: '2011 Q2', item1: 2778 },
       { y: '2011 Q3', item1: 4912 },
@@ -162,27 +167,27 @@ $(function () {
       { y: '2013 Q1', item1: 10687 },
       { y: '2013 Q2', item1: 8432 }
     ],
-    xkey             : 'y',
-    ykeys            : ['item1'],
-    labels           : ['Item 1'],
-    lineColors       : ['#efefef'],
-    lineWidth        : 2,
-    hideHover        : 'auto',
-    gridTextColor    : '#fff',
-    gridStrokeWidth  : 0.4,
-    pointSize        : 4,
+    xkey: 'y',
+    ykeys: ['item1'],
+    labels: ['Item 1'],
+    lineColors: ['#efefef'],
+    lineWidth: 2,
+    hideHover: 'auto',
+    gridTextColor: '#fff',
+    gridStrokeWidth: 0.4,
+    pointSize: 4,
     pointStrokeColors: ['#efefef'],
-    gridLineColor    : '#efefef',
-    gridTextFamily   : 'Open Sans',
-    gridTextSize     : 10
+    gridLineColor: '#efefef',
+    gridTextFamily: 'Open Sans',
+    gridTextSize: 10
   });
 
   // Donut Chart
   var donut = new Morris.Donut({
-    element  : 'sales-chart',
-    resize   : true,
-    colors   : ['#3c8dbc', '#f56954', '#00a65a'],
-    data     : [
+    element: 'sales-chart',
+    resize: true,
+    colors: ['#3c8dbc', '#f56954', '#00a65a'],
+    data: [
       { label: 'Download Sales', value: 12 },
       { label: 'In-Store Sales', value: 30 },
       { label: 'Mail-Order Sales', value: 20 }
@@ -199,7 +204,7 @@ $(function () {
 
   /* The todo list plugin */
   $('.todo-list').todoList({
-    onCheck  : function () {
+    onCheck: function () {
       window.console.log($(this), 'The element has been checked');
     },
     onUnCheck: function () {

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc
+from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc, Service, CustomerClass
 
 
 """
@@ -45,12 +45,16 @@ def login(request):
             request.session['is_login'] = True
             request.session['user_id'] = user.user_id
             request.session['user_emp_id'] = user.user_emp_id
+            request.session['cus_class_cus'] = '請選擇客戶'
 
             irIdNow = ImportReport.objects.all().order_by('-ir_id')[0].ir_id
             request.session['irIdNow'] = irIdNow
 
             saleIdNow = Sale.objects.all().order_by('-sale_id')[0].sale_id
             request.session['saleIdNow'] = saleIdNow
+
+            serv_id_now = Service.objects.all().order_by('-serv_id')[0].serv_id
+            request.session['serv_id_now'] = serv_id_now
 
             try:  # 將進當前店鋪資訊放進session
                 request.session['user_shop'] = userShop
@@ -118,6 +122,7 @@ def index(request):
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
+
 
     return render(request, 'index.html', locals())
 
@@ -413,6 +418,7 @@ def editEmp(request, a):
     ------------------------
     銷售與瀏覽紀錄
 """
+
 # 銷售商品
 def sale(request):
     if not isLogin(request):    # 確認是否登入
@@ -504,8 +510,6 @@ def saleNext(request):
         sale_type = request.POST['sale_type']
         sale_remark = request.POST['sale_remark']
 
-        
-
         Sale.objects.filter(sale_id=sale_id_now).update(
             sale_date = sale_date,
             sale_stock_price_total = sale_stock_price_total,
@@ -516,6 +520,14 @@ def saleNext(request):
             sale_remark = sale_remark,
             sale_complete = True
         )
+
+        for salestock in salestock_all:
+            if salestock.salestock_stock.stock_type == '儲值卡':
+                CustomerClass.objects.create(
+                    cuscl_cus = sale_now.sale_cus,
+                    cuscl_stock = salestock.salestock_stock,
+                    cuscl_quantity = 12
+                )
 
         return redirect('/app/sale')
 
@@ -538,19 +550,110 @@ def selectSale(request, a, b):
 
     return redirect('/app/sale')
 
+def servIdNext(id_now):
+    num = int(id_now[2:5])
+    num += 1
+    num = format(num, '03d')
+    return 'SV' + str(num)
+
 # 課程扣點
 def service(request):
     if not isLogin(request):    # 確認是否登入
         return redirect('/app')
     userNow = request.session['emp_name_ch']
+    user_id_now = request.session['user_id']
     shopNow = request.session['user_shop_name']
+    shop_id_now = request.session['user_shop']
+    serv_id_now = request.session['serv_id_now']
     shopAll = Shop.objects.all()
     serviceAll = Stock.objects.filter(stock_type='服務')
     empAll = Employee.objects.all().exclude(emp_seeable = False)
     cusAll = Customer.objects.all().exclude(cus_seeable = False)
-
     saleMenuOpen = "active menu-open"
+
+    serv_now = Service.objects.get(serv_id=serv_id_now)
+
+    if Service.objects.get(serv_id=serv_id_now).serv_complete:
+        serv_id_next = servIdNext(serv_id_now)
+        serv_id_now = serv_id_next
+        request.session['serv_id_now'] = serv_id_next
+        Service.objects.create(
+            serv_id = serv_id_next,
+            serv_cus = Customer.objects.get(cus_id='default'),
+            serv_date = 'tmp',
+            serv_stock = Stock.objects.get(stock_id='default'),
+            serv_emp1 = Employee.objects.get(emp_id='default'),
+            serv_emp2 = Employee.objects.get(emp_id='default'),
+            serv_emp3 = Employee.objects.get(emp_id='default'),
+            serv_stock_price = 0,
+            serv_price = 0,
+            serv_point = 0,
+            serv_pay = 'tmp',
+            serv_type = 'tmp',
+            serv_shop = Shop.objects.get(shop_id=shop_id_now),
+            serv_remark = 'tmp',
+            serv_created_by_user = User.objects.get(user_id = user_id_now)
+        )
+
+    
     return render(request, 'service.html', locals())
+
+def selectService(request, a, b):
+    service_id = a
+    select_service = b
+
+    Service.objects.filter(serv_id=service_id).update(
+        serv_stock=Stock.objects.get(stock_id=select_service)
+    )
+
+    return redirect('/app/service')
+
+def servNext(request, a):
+    if not isLogin(request):    # 確認是否登入
+        return redirect('/app')
+    serv_now = Service.objects.get(serv_id=a)
+
+    if 'saveB' in request.POST:
+        serv_date = request.POST['serv_date']
+        serv_stock_price = request.POST['serv_stock_price']
+        serv_price = request.POST['serv_price']
+        serv_point = serv_now.serv_stock.stock_point
+        serv_pay = request.POST['serv_pay']
+        serv_type = request.POST['serv_type']
+        serv_remark = request.POST['serv_remark']
+
+        Service.objects.filter(serv_id=a).update(
+            serv_date = serv_date,
+            serv_stock_price = serv_stock_price,
+            serv_price = serv_price,
+            serv_point = serv_point,
+            serv_pay = serv_pay,
+            serv_type = serv_type,
+            serv_remark = serv_remark,
+            serv_complete = True
+        )
+
+        return redirect('/app/service')
+
+    return render(request, 'servNext.html', locals())
+
+def deduct(request):
+    if not isLogin(request):    # 確認是否登入
+        return redirect('/app')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
+    cus_all = Customer.objects.all().exclude(cus_seeable=False)
+    saleMenuOpen = "active menu-open"
+    cus_class_cus = request.session['cus_class_cus']
+    if cus_class_cus == '此客戶無擁有課程':
+        cus_class_all = cus_class_cus
+    else:
+        cus_class_all = CustomerClass.objects.filter(
+            cuscl_cus=Customer.objects.get(cus_id=cus_class_cus)
+        )
+
+    return render(request, 'deduct.html', locals())
 
 # 交易紀錄
 def saleLog(request):
@@ -563,7 +666,7 @@ def saleLog(request):
     saleMenuOpen = "active menu-open"
     return render(request, 'report.html', locals())
 
-# TODO: 補上comment
+# 選擇人員
 def selectPerson(request, a, b, c):
     if not isLogin(request):    # 確認是否登入
         return redirect('/app')
@@ -574,17 +677,50 @@ def selectPerson(request, a, b, c):
 
     if select_type == 'cus':
         Sale.objects.filter(sale_id=select_sale_id).update(sale_cus=Customer.objects.get(cus_id=select_person_id))
+        return redirect('/app/sale')
     if select_type == 'emp':
         Sale.objects.filter(sale_id=select_sale_id).update(sale_person_in_charge=Employee.objects.get(emp_id=select_person_id))
+        return redirect('/app/sale')
     if select_type == 'empAlloc':
         sale_now = Sale.objects.get(sale_id=select_sale_id)
         sale_now.salealloc_set.create(
             salealloc_emp = Employee.objects.get(emp_id=select_person_id),
             salealloc_perc = 0
         )
-        
+        return redirect('/app/sale')
+    if select_type == 'serv_cus':
+        Service.objects.filter(serv_id=select_sale_id).update(
+            serv_cus=Customer.objects.get(cus_id=select_person_id)
+        )
+        return redirect('/app/service')
+    if select_type == 'serv_emp1':
+        Service.objects.filter(serv_id=select_sale_id).update(
+            serv_emp1=Employee.objects.get(emp_id=select_person_id)
+        )
+        return redirect('/app/service')
+    if select_type == 'serv_emp2':
+        Service.objects.filter(serv_id=select_sale_id).update(
+            serv_emp2=Employee.objects.get(emp_id=select_person_id)
+        )
+        return redirect('/app/service')
+    if select_type == 'serv_emp3':
+        Service.objects.filter(serv_id=select_sale_id).update(
+            serv_emp3=Employee.objects.get(emp_id=select_person_id)
+        )
+        return redirect('/app/service')
+    if select_type == 'deduct_cus':
+        if not CustomerClass.objects.filter(
+            cuscl_cus=Customer.objects.get(cus_id=select_person_id)
+        ):
+            cus_class_cus = '此客戶無擁有課程'
+        else:
+            cus_class_cus = select_person_id
 
-    return redirect('/app/sale')
+        request.session['cus_class_cus'] = cus_class_cus
+        return redirect('/app/deduct/')
+        
+    
+            
 
 """
     庫存管理
@@ -677,18 +813,6 @@ def editStock(request, row_index):
     return render(request, 'editStock.html', locals())
     
     ### return HttpResponse("待完善")
-
-
-def deduct(request):
-    if not isLogin(request):    # 確認是否登入
-        return redirect('/app')
-    userNow = request.session['emp_name_ch']
-    shopNow = request.session['user_shop_name']
-    shopAll = Shop.objects.all()
-
-    saleMenuOpen = "active menu-open"
-    return render(request, 'deduct.html', locals())
-
 
 def exportStock(request):
     if not isLogin(request):    # 確認是否登入
@@ -787,7 +911,14 @@ def selectImport(request, a, b):
 """
 # 庫存清算
 def stockReport(request):
-    return HttpResponse("庫存清算:待完成")
+    if not isLogin(request):    # 確認是否登入
+        return redirect('/app')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
+
+    reportMenuOpen = "active menu-open"
+    return render(request, 'stockReport.html', locals())
 
 # 薪資獎金計算
 def salaryCount(request):

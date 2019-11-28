@@ -167,3 +167,39 @@ class Salealloc(models.Model):
 
     def __str__(self):
         return self.salealloc_sale.sale_id
+
+class Service(models.Model):
+    serv_id = models.CharField(max_length=50)
+    serv_cus = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    # serv_person_in_charge = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    serv_date = models.CharField(max_length=50)
+
+    serv_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    serv_emp1 = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='serv_by_emp1')
+    serv_emp2 = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='serv_by_emp2')
+    serv_emp3 = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='serv_by_emp3')
+
+    serv_stock_price = models.IntegerField()
+    serv_price = models.IntegerField()
+    serv_point = models.IntegerField()
+    serv_pay = models.CharField(max_length=50)
+    serv_type = models.CharField(max_length=50)
+    serv_shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
+
+    serv_remark = models.CharField(max_length=50)
+
+    serv_created_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='create_by_this_user_serv')
+    serv_modified_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='modified_by_this_user_serv', null=True)
+
+    serv_complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.serv_id
+
+class CustomerClass(models.Model):
+    cuscl_cus = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    cuscl_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    cuscl_quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.cuscl_cus.cus_id

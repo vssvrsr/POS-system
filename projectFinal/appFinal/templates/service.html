@@ -39,7 +39,7 @@
                                     選擇客戶
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_cus.cus_name}}" placeholder="{{sale_now.sale_cus.cus_name}}" required>
+                            <input type="text" class="form-control" name="cusName" value="{{serv_now.serv_cus.cus_name}}" placeholder="{{serv_now.serv_cus.cus_name}}" required>
                         </div>                              
                     </div>
                 </div>         
@@ -57,7 +57,7 @@
                                     選擇服務
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="cusName" value="{{stock.stock_name}}" required>
+                            <input type="text" class="form-control" name="cusName" value="{{serv_now.serv_stock.stock_name}}" required>
                         </div> 
                     </div>                                                     
                 </div>
@@ -73,33 +73,33 @@
                         <label>專業操作</label>       
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp1">
                                     選擇
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}}" placeholder="{{sale_now.sale_person_in_charge.emp_name_ch}}" required>
+                            <input type="text" class="form-control" name="emp1_name" value="{{serv_now.serv_emp1.emp_name_ch}}" placeholder="{{serv_now.serv_emp1.emp_name_ch}}" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>吹整造型</label> 
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp2">
                                     選擇
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}}" placeholder="{{sale_now.sale_person_in_charge.emp_name_ch}}" required>
+                            <input type="text" class="form-control" name="emp2_name" value="{{serv_now.serv_emp2.emp_name_ch}}" placeholder="{{serv_now.serv_emp2.emp_name_ch}}" required>
                         </div>  
                     </div>           
                     <div class="form-group">
                         <label>洗髮</label> 
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSelectEmp3">
                                     選擇
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="cusName" value="{{sale_now.sale_person_in_charge.emp_name_ch}}" placeholder="{{sale_now.sale_person_in_charge.emp_name_ch}}" required>
+                            <input type="text" class="form-control" name="emp3_name" value="{{serv_now.serv_emp3.emp_name_ch}}" placeholder="{{serv_now.serv_emp3.emp_name_ch}}" required>
                         </div>   
                     </div>                                               
                 </div>         
@@ -109,53 +109,7 @@
                  
     <div class="pull-right">
         <a class="btn btn-default" href="/app/addStock">重整</a>
-        <input type="submit" class="btn btn-primary" name="nextB" value="下一步"></input>
-    </div>
-    <div class="modal fade" id="selectStockModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                  <h2 class="modal-title" id="exampleModalLongTitle">選擇服務</h2>
-              </div>
-              <div class="modal-body">
-                  <table id="selectCusTable" class="table table-bordered table-striped">
-                      <thead>
-                          <tr>
-                          <th>服務名稱</th>
-                          <th>服務編號</th>
-                          <th>牌價</th>
-                          <th>庫存量</th>
-                          <th>選擇</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                      {% for stock in stockAll %}
-                      <tr>
-                          <th>{{stock.stock_name}}</th>
-                          <th>{{stock.stock_id}}</th>
-                          <th>{{stock.stock_price|default:"-"}}</th>
-                          <th>{{stock.instock_qua|default:"-"}}</th>
-                          <th>
-                              <a href="/app/selectSale/{{saleIdNow}}/{{stock.stock_id}}" class="btn btn-primary btn-xs">
-                                  選擇
-                              </a>
-                          </th>
-                      </tr>
-                      {% endfor %}
-                      </tbody>
-                      <tfoot>
-                          <tr>
-                              <th>服務名稱</th>
-                              <th>服務編號</th>
-                              <th>牌價</th>
-                              <th>庫存量</th>
-                              <th>選擇</th>
-                          </tr>
-                      </tfoot>
-                  </table>
-              </div>        
-            </div>
-        </div>
+        <a class="btn btn-primary" href="/app/servNext/{{serv_now.serv_id}}">下一步</a>
     </div>
     <div class="modal fade" id="modalSelectCus" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -164,7 +118,7 @@
                     <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
                 </div>
                 <div class="modal-body">
-                    <table id="selectStockTable" class="table table-bordered table-striped">
+                    <table id="selectCusTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                             <th>客戶姓名</th>
@@ -178,7 +132,7 @@
                             <th>{{cus.cus_name}}</th>
                             <th>{{cus.cus_id}}</th>
                             <th>
-                                <a href="/app/selectPerson/cus/{{saleIdNow}}/{{cus.cus_id}}" class="btn btn-primary btn-xs">
+                                <a href="/app/selectPerson/serv_cus/{{serv_id_now}}/{{cus.cus_id}}" class="btn btn-primary btn-xs">
                                     選擇
                                 </a>
                             </th>
@@ -197,14 +151,15 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalSelectEmp" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+    <div class="modal fade" id="modalSelectEmp1" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇員工
+                    </h2>
                 </div>
                 <div class="modal-body">
-                    <table id="selectStockTable" class="table table-bordered table-striped">
+                    <table id="selectEmp1Table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                             <th>員工姓名</th>
@@ -218,7 +173,87 @@
                             <th>{{emp.emp_name_ch}} {{emp.emp_name_en}}</th>
                             <th>{{emp.emp_id}}</th>
                             <th>
-                                <a href="/app/selectPerson/emp/{{saleIdNow}}/{{emp.emp_id}}" class="btn btn-primary btn-xs">
+                                <a href="/app/selectPerson/serv_emp1/{{serv_id_now}}/{{emp.emp_id}}" class="btn btn-primary btn-xs">
+                                    選擇
+                                </a>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>員工姓名</th>
+                                <th>員工編號</th>
+                                <th>選擇</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>        
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalSelectEmp2" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇員工</h2>
+                </div>
+                <div class="modal-body">
+                    <table id="selectEmp2Table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                            <th>員工姓名</th>
+                            <th>員工編號</th>
+                            <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for emp in empAll %}
+                        <tr>
+                            <th>{{emp.emp_name_ch}} {{emp.emp_name_en}}</th>
+                            <th>{{emp.emp_id}}</th>
+                            <th>
+                                <a href="/app/selectPerson/serv_emp2/{{serv_id_now}}/{{emp.emp_id}}" class="btn btn-primary btn-xs">
+                                    選擇
+                                </a>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>員工姓名</th>
+                                <th>員工編號</th>
+                                <th>選擇</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>        
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalSelectEmp3" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇員工</h2>
+                </div>
+                <div class="modal-body">
+                    <table id="selectEmp3Table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                            <th>員工姓名</th>
+                            <th>員工編號</th>
+                            <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for emp in empAll %}
+                        <tr>
+                            <th>{{emp.emp_name_ch}} {{emp.emp_name_en}}</th>
+                            <th>{{emp.emp_id}}</th>
+                            <th>
+                                <a href="/app/selectPerson/serv_emp3/{{serv_id_now}}/{{emp.emp_id}}" class="btn btn-primary btn-xs">
                                     選擇
                                 </a>
                             </th>
@@ -241,7 +276,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
+                    <h2 class="modal-title" id="exampleModalLongTitle">選擇服務</h2>
                 </div>
                 <div class="modal-body">
                     <table id="selectStockTable" class="table table-bordered table-striped">
@@ -258,7 +293,7 @@
                             <th>{{service.stock_name}}</th>
                             <th>{{service.stock_id}}</th>
                             <th>
-                                <a href="/app/selectPerson/empAlloc/{{saleIdNow}}/{{emp.emp_id}}" class="btn btn-primary btn-xs">
+                                <a href="/app/selectService/{{serv_id_now}}/{{service.stock_id}}" class="btn btn-primary btn-xs">
                                     選擇
                                 </a>
                             </th>
@@ -305,7 +340,7 @@
         'info'        : false,
         'autoWidth'   : true
       })
-      $('#stockTable').DataTable({
+      $('#selectEmp1Table').DataTable({
         'paging'      : true,
         'lengthChange': true,
         'searching'   : true,
@@ -313,7 +348,15 @@
         'info'        : false,
         'autoWidth'   : true
       })
-      $('#empTable').DataTable({
+      $('#selectEmp2Table').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#selectEmp3Table').DataTable({
         'paging'      : true,
         'lengthChange': true,
         'searching'   : true,

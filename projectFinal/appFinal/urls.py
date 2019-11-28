@@ -33,6 +33,10 @@ urlpatterns = [
 
 
     path('service/', appViews.service, name='service'),
+    path('servNext/<str:a>', appViews.servNext, name='servNext'),
+    path('selectService/<str:a>/<str:b>', appViews.selectService, name='selectService'),
+
+
     path('deduct/', appViews.deduct, name='deduct'),
 
 
