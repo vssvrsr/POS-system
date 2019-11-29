@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'appFinal',
+    'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +86,7 @@ DATABASES = {
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+    'projectFinal/static/'
 ]
 
 
@@ -124,3 +127,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+ASGI_APPLICATION = "projectFinal.routing.application"

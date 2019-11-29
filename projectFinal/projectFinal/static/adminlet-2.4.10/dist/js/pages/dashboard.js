@@ -49,6 +49,7 @@ $(function () {
   $('.knob').knob();
 
   // jvectormap data
+  /*
   var visitorsData = {
     US: 398, // USA
     SA: 400, // Saudi Arabia
@@ -62,7 +63,7 @@ $(function () {
     GB: 320, // Great Britain
     RU: 3000 // Russia
   };
-
+*/
 
 
 

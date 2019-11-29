@@ -86,7 +86,9 @@
     <!-- ./col -->
   </div>
   <!-- /.row -->
+
   <!-- Main row -->
+  <!-- TODO: -->
   <div class="row">
     <!-- Left col -->
     <section class="col-lg-7 connectedSortable">
@@ -94,19 +96,23 @@
       <div class="nav-tabs-custom">
         <!-- Tabs within a box -->
         <ul class="nav nav-tabs pull-right">
-          <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
-          <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
-          <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
+          <li class="active"><a href="#revenue-chart-container" data-toggle="tab">營業額</a></li>
+          <li><a href="#sales-chart" data-toggle="tab">訂單數</a></li>
+          <li class="pull-left header"><i class="fa fa-inbox"></i> 本店統計圖表</li>
         </ul>
         <div class="tab-content no-padding">
           <!-- Morris chart - Sales -->
-          <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
-          <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+          <div class="chart tab-pane active" id="revenue-chart-container" style="position: relative; height: 300px;">
+            <canvas id="revenue-chart"></canvas>
+          </div>
+          <!-- <canvas class="chart tab-pane active" id="revenue-chart" style="pos ition: relative; height: 300px;"></canvas> -->
+          <canvas class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></canvas>
         </div>
       </div>
       <!-- /.nav-tabs-custom -->
     </section>
     <!-- /.Left col -->
+
     <!-- right col (We are only adding the ID to make the widgets sortable)-->
     <section class="col-lg-5 connectedSortable">
 
@@ -115,19 +121,17 @@
         <div class="box-header">
           <!-- tools box -->
           <div class="pull-right box-tools">
-            <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip"
-              title="Date range">
-              <i class="fa fa-calendar"></i></button>
-            <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip"
-              title="Collapse" style="margin-right: 5px;">
+            <button type="button" class="btn btn-primary btn-sm" data-widget="collapse">
               <i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-primary btn-sm" data-widget="remove">
+              <i class="fa fa-times"></i></button>
           </div>
           <!-- /. tools -->
 
           <i class="fa fa-map-marker"></i>
 
           <h3 class="box-title">
-            Visitors
+            分店銷售情況
           </h3>
         </div>
         <div class="box-body">
@@ -162,7 +166,7 @@
         <div class="box-header">
           <i class="fa fa-th"></i>
 
-          <h3 class="box-title">Sales Graph</h3>
+          <h3 class="box-title">分店營業額</h3>
 
           <div class="box-tools pull-right">
             <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -326,12 +330,15 @@
 
 <!-- Google Maps Api-->
 <script src="{% static 'adminlet-2.4.10/dist/js/pages/dashboard-google-map.js' %}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQIkEIHxrjh-N8RjrEjpUybc742-VrK6A&callback=initMap" async
-  defer></script>
-
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQIkEIHxrjh-N8RjrEjpUybc742-VrK6A&callback=initMap&language=zh-TW&region=TW"
+  async defer></script>
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<!-- <script src="{% static 'adminlet-2.4.10/bower_components/chart.js/Chart.js' %}"></script> -->
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{% static 'adminlet-2.4.10/dist/js/pages/dashboard.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/dist/js/pages/dashboard-ready-demo.js' %}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'adminlet-2.4.10/dist/js/demo.js' %}"></script>
 {% endblock %}

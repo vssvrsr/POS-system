@@ -305,7 +305,7 @@ function initMap() {
                 ]
             }
         ],
-        { name: 'Styled Map' });
+        { name: '訂製' });
     var store = { lat: 24.1781074, lng: 120.683482 };
     var map = new google.maps.Map(document.getElementById("taichung-map"), {
         center: store,
