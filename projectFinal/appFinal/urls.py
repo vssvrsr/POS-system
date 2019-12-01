@@ -38,6 +38,7 @@ urlpatterns = [
 
 
     path('deduct/', appViews.deduct, name='deduct'),
+    path('deductService/<str:a>', appViews.deductService, name='deductService'),
 
 
 

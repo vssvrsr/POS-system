@@ -20,7 +20,12 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # appFinal app
     path('app/', include('appFinal.urls')),
+
+    # chat app
     path('chat/', include('chat.urls')),
+
+    # websiteicon
     path('favicon.ico', RedirectView.as_view(url='static/img/favicon.ico')),
 ]

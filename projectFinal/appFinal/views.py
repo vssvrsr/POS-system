@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc, Service, CustomerClass
-
+from chat.models import Message
 
 """
     登入、登出、切換分店相關系統
@@ -45,7 +45,8 @@ def login(request):
             request.session['is_login'] = True
             request.session['user_id'] = user.user_id
             request.session['user_emp_id'] = user.user_emp_id
-            request.session['cus_class_cus'] = '請選擇客戶'
+            request.session['cus_class_cus'] = 'default'
+
 
             irIdNow = ImportReport.objects.all().order_by('-ir_id')[0].ir_id
             request.session['irIdNow'] = irIdNow
@@ -73,6 +74,7 @@ def login(request):
 
         else:  # 密碼錯誤
             message = '密碼錯誤'
+
             return render(request, 'login.html', locals())
 
     else:  # 未提交帳號密碼時，提供輸入框，並等待提交
@@ -123,6 +125,13 @@ def index(request):
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
 
+    #chat room 使用
+    user_id_now = request.session['user_id']
+    shop_id_now = request.session['user_shop']
+
+
+    chat_messages = Message.objects.filter(
+        group_name=shop_id_now).order_by("created")[:100]
 
     return render(request, 'index.html', locals())
 
@@ -132,7 +141,7 @@ def index(request):
     ------------------------
     員工管理、顧客管理
 """
-# 
+# 顧客管理
 def cus(request):
     if not isLogin(request):    # 確認是否登入
         return redirect('/app')
@@ -146,7 +155,7 @@ def cus(request):
 
     return render(request, 'cus.html', locals())
 
-
+# 新增顧客
 def addCus(request):
     if not isLogin(request):    # 確認是否登入
         return redirect('/app')
@@ -653,7 +662,49 @@ def deduct(request):
             cuscl_cus=Customer.objects.get(cus_id=cus_class_cus)
         )
 
+    
+
     return render(request, 'deduct.html', locals())
+
+def deductService(request, a):
+    if not isLogin(request):    # 確認是否登入
+        return redirect('/app')
+    serv_id_now = request.session['serv_id_now']
+    user_id_now = request.session['user_id']
+    shop_id_now = request.session['user_shop']
+    cus_class_cus = request.session['cus_class_cus']
+    cuscl_stock_now = Stock.objects.get(stock_id=a)
+    
+    cuscl_qua = CustomerClass.objects.get(cuscl_cus=Customer.objects.get(cus_id=cus_class_cus)).cuscl_quantity - 1
+    CustomerClass.objects.filter(cuscl_cus=Customer.objects.get(cus_id=cus_class_cus)).update(cuscl_quantity=cuscl_qua)
+
+    if Service.objects.get(serv_id=serv_id_now).serv_complete:
+        serv_id_next = servIdNext(serv_id_now)
+        serv_id_now = serv_id_next
+        request.session['serv_id_now'] = serv_id_next
+        Service.objects.create(
+            serv_id = serv_id_next,
+            serv_cus = Customer.objects.get(cus_id=cus_class_cus),
+            serv_date = 'tmp',
+            serv_stock = cuscl_stock_now,
+            serv_emp1 = Employee.objects.get(emp_id='default'),
+            serv_emp2 = Employee.objects.get(emp_id='default'),
+            serv_emp3 = Employee.objects.get(emp_id='default'),
+            serv_stock_price = 0,
+            serv_price = 0,
+            serv_point = 0,
+            serv_pay = 'tmp',
+            serv_type = 'tmp',
+            serv_shop = Shop.objects.get(shop_id=shop_id_now),
+            serv_remark = 'tmp',
+            serv_created_by_user = User.objects.get(user_id = user_id_now)
+        )
+    Service.objects.filter(serv_id=serv_id_now).update(
+        serv_cus = Customer.objects.get(cus_id=cus_class_cus),
+        serv_stock = cuscl_stock_now,
+    )
+
+    return redirect('/app/service')
 
 # 交易紀錄
 def saleLog(request):

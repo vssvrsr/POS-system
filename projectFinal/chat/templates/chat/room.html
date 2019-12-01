@@ -1,0 +1,145 @@
+{# 繼承模板 #}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Title{% endblock title %}
+
+
+{% block css %}
+{% endblock css %}
+
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        店內聊天室
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+        <li>聊天室</a></li>
+        <li class="active">店內聊天室</li>
+    </ol>
+</section>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-5">
+        <div class="box box-primary direct-chat direct-chat-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ shopNow }}</h3>
+
+                <div class="box-tools pull-right">
+                    <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages"
+                        style="display: none;">3</span>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <a href="/chat/">
+                        <button type="button" class="btn btn-box-tool" title="" data-original-title="Contacts">
+                            <i class="fa fa-comments"></i></button>
+                    </a>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="direct-chat-messages" id="all_messages">
+                    {% for message in chat_messages %}
+                    {% if message.user.user_id == user_id_now %}
+                    <!-- chat item -->
+                    <div class="right direct-chat-msg">
+                        <div class="direct-chat-info clearfix">
+                            <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-right">{{ message.user }}</span>
+                                <span class="direct-chat-timestamp pull-left">{{message.created|date:"H:i"}}</span>
+                            </div>
+                        </div>
+                        <img class="direct-chat-img" src="http://placehold.it/50/FA6F57/fff&text=ME">
+                        <div class="direct-chat-text">{{ message.message|safe }}</div>
+                    </div>
+
+                    <!-- /.item -->
+                    {% else %}
+                    <!-- chat item -->
+                    <div class="direct-chat-msg">
+                        <div class="direct-chat-info clearfix">
+                            <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-left">{{ message.user }}</span>
+                                <span class="direct-chat-timestamp pull-right">{{message.created|date:"H:i"}}</span>
+                            </div>
+                        </div>
+                        <img class="direct-chat-img" src="http://placehold.it/50/55C1E7/fff&text=U">
+                        <div class="direct-chat-text">{{ message.message|safe }}</div>
+                    </div>
+                    <!-- /.item -->
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="box-footer">
+                <div class="input-group">
+                    <input id="btn-input" type="text" class="form-control input-sm"
+                        placeholder="Type your message here..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary btn-flat" id="btn-chat">
+                            Send</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script type="text/javascript"
+    src='https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js'></script>
+<script>
+    $('#all_messages').scrollTop($('#all_messages')[0].scrollHeight);
+
+    var room_mame = '{{ shop_id_now }}';
+    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+    var websocket_str = ws_scheme + '://' + window.location.host + '/ws/chat/' + room_mame + '/';
+    var chatSocket = new ReconnectingWebSocket(websocket_str);
+
+    chatSocket.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var now_time = data['now_time'];
+        var receive_user = data['user_id'];
+        var user = "{{user_id_now}}";
+        if (receive_user === user) {
+            $('<div class="right direct-chat-msg"><div class="direct-chat-info clearfix"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-right">' + user + '</span><span class="direct-chat-timestamp pull-left">' + now_time + '</span></div></div><img class="direct-chat-img" src="http://placehold.it/50/FA6F57/fff&text=ME"><div class="direct-chat-text">' + message + '</div></div>').appendTo($('.direct-chat-messages'));
+            console.log(now_time);
+        }
+        else {
+            $('<div class="direct-chat-msg"><div class="direct-chat-info clearfix"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-left">' + receive_user + '</span><span class="direct-chat-timestamp pull-right">' + now_time + '</span></div></div><img class="direct-chat-img" src="http://placehold.it/50/55C1E7/fff&text=U"><div class="direct-chat-text">' + message + '</div></div>').appendTo($('.direct-chat-messages'));
+        }
+        $('#all_messages').scrollTop($('#all_messages')[0].scrollHeight);
+    };
+
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    $("#btn-input").focus();
+    $("#btn-input").keyup(function (e) {
+        if (e.keyCode === 13) {  // enter, return
+            $("#btn-chat").click();
+        }
+    });
+
+    $("#btn-chat").click(function () {
+        var message = $('#btn-input').val();
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'user_id': "{{ user_id_now }}"
+        }));
+        $('#btn-input').val('');
+
+    });
+</script>
+{% endblock script %}

@@ -93,7 +93,7 @@
             <tr>
               <th>{{cus_class.cuscl_stock.stock_name}}</th>
               <th>{{cus_class.cuscl_quantity}}</th>
-              <th><div class="btn btn-xs btn-primary">扣點</div></th>
+              <th><a href="/app/deductService/{{cus_class.cuscl_stock.stock_id}}" class="btn btn-xs btn-primary">扣點</a></th>
             </tr>
             {% endfor %}
             {% endif %}
