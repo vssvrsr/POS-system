@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'appFinal',
     'channels',
     'chat',
@@ -112,9 +113,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
+# LANGUAGE_CODE = 'zh-Hant'
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True
 
@@ -140,4 +142,4 @@ CHANNEL_LAYERS = {
 }
 
 # Project-specific settings
-DATETIME_FORMAT = '%H:%M'
+DATETIME_FORMAT = '%m/%d %H:%M'

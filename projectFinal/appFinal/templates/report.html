@@ -2,25 +2,105 @@
 {% load static %}
 {% block title %}茵悦薈{% endblock %}
 
-{% block css %}{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
 
 {% block breadcrumb %}
-<!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
+
+<section class="content-header">
+    <h1>
         交易紀錄
-      </h1>
-      <ol class="breadcrumb">
+    </h1>
+    <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>報表結算</a></li>
         <li class="active">交易紀錄</li>
-      </ol>
-    </section>
+    </ol>
+</section>
 {% endblock %}
 
 {% block content %}
+<section class="content">
+    <form role="form" method="POST">
+        {% csrf_token %}
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">篩選條件</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label>選擇報表</label>
+                    <select name="selectSection" class="form-control">
+                        <option value="">---</option>
+                        <option value="seleReport">銷售紀錄</option>
+                        <option value="setSaleReport">課程扣點紀錄</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>依照</label>
+                    <select name="selectOrder" class="form-control">
+                        <option value="orderDateFromOld">日期從舊到新</option>
+                        <option value="orderDateFromNew">日期從新到舊</option>
+                    </select>
+                </div>
+                <input type="submit" class="btn btn-primary pull-right" value="查詢" name="searchB">
+            </div>
+        </div>
+    </form>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">查詢結果</h3>
+        </div>
+        <div class="box-body">
+            <table id="reportTable" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>員工姓名</th>
+                    <th>員工編號</th>
+                    <th>手機號碼</th>
+                    <th>市話</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for emp in empAll %}
+                    <tr>
+                        <th><a href="/app/editEmp/{{emp.emp_id}}">{{emp.emp_name_ch}}</a></th>
+                        <th>{{emp.emp_id}}</th>
+                        <th>{{emp.emp_phone1|default:"-"}}</th>
+                        <th>{{emp.emp_phone2|default:"-"}}</th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>員工姓名</th>
+                        <th>員工編號</th>
+                        <th>手機號碼</th>
+                        <th>市話</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
 {% endblock %}
 
 
 {% block script %}
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#reportTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
 {% endblock %}

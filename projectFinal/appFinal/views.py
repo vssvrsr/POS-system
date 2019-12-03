@@ -133,6 +133,20 @@ def index(request):
     chat_messages = Message.objects.filter(
         group_name=shop_id_now).order_by("created")[:100]
 
+     # 取得User中文名
+    message_list = []
+    for message_item in chat_messages:
+        employee = Employee.objects.get(emp_id=message_item.user.user_emp_id)
+        emp_name_ch = employee.emp_name_ch
+
+        message_list.append({
+            'user': message_item.user,
+            'emp_name_ch': emp_name_ch,
+            'group_name': message_item.group_name,
+            'message': message_item.message,
+            'created': message_item.created
+        })
+
     return render(request, 'index.html', locals())
 
 
@@ -713,8 +727,12 @@ def saleLog(request):
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
-
     saleMenuOpen = "active menu-open"
+
+    if 'searchB' in request.POST:
+        select_section = request.POST['selectSection']
+        select_order = request.POST['selectOrder']
+
     return render(request, 'report.html', locals())
 
 # 選擇人員

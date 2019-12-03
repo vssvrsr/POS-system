@@ -6,7 +6,7 @@ from channels.generic.websocket import WebsocketConsumer
 from django.conf import settings
 
 from .models import Message
-from appFinal.models import User
+from appFinal.models import User, Employee
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -37,10 +37,12 @@ class ChatConsumer(WebsocketConsumer):
 
         if not message:
             return
-
+        user = User.objects.get(user_id=text_data_json['user_id'])
         Message.objects.create(
-            user=User.objects.get(user_id=text_data_json['user_id']), message=message, group_name=self.room_group_name)
+            user=user, message=message, group_name=self.room_group_name)
 
+        employee = Employee.objects.get(emp_id=user.user_emp_id)
+        emp_name_ch = employee.emp_name_ch
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -48,6 +50,7 @@ class ChatConsumer(WebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'user_id': user_id,
+                'emp_name_ch':emp_name_ch,
                 'now_time': now_time
             }
         )
@@ -57,9 +60,11 @@ class ChatConsumer(WebsocketConsumer):
         message = event['message']
         now_time = event['now_time']
         user_id = event['user_id']
+        emp_name_ch = event['emp_name_ch']
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': message,
             'user_id': user_id,
-            'now_time': now_time,
+            'emp_name_ch':emp_name_ch,
+            'now_time': now_time
         }))

@@ -1,6 +1,7 @@
 {# 繼承模板 #}
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block title %}Title{% endblock title %}
 
 
@@ -45,18 +46,20 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <div class="direct-chat-messages" id="all_messages">
-                    {% for message in chat_messages %}
+                <div class="direct-chat-messages" id="all_messages" style="height: 500px;">
+                    {% for message in message_list %}
                     {% if message.user.user_id == user_id_now %}
                     <!-- chat item -->
                     <div class="right direct-chat-msg">
                         <div class="direct-chat-info clearfix">
                             <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-right">{{ message.user }}</span>
-                                <span class="direct-chat-timestamp pull-left">{{message.created|date:"H:i"}}</span>
+                                <span
+                                    class="direct-chat-name pull-right">{{ message.emp_name_ch }}-{{ message.user }}</span>
+                                <span class="direct-chat-timestamp pull-left">{{message.created|date:"m/d H:i"}}</span>
                             </div>
                         </div>
-                        <img class="direct-chat-img" src="http://placehold.it/50/FA6F57/fff&text=ME">
+                        <img class="direct-chat-img"
+                            src="http://placehold.it/50/FA6F57/fff&text={{ message.user.user_id|first|capfirst }}">
                         <div class="direct-chat-text">{{ message.message|safe }}</div>
                     </div>
 
@@ -66,11 +69,14 @@
                     <div class="direct-chat-msg">
                         <div class="direct-chat-info clearfix">
                             <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-left">{{ message.user }}</span>
-                                <span class="direct-chat-timestamp pull-right">{{message.created|date:"H:i"}}</span>
+                                <span
+                                    class="direct-chat-name pull-left">{{ message.emp_name_ch }}-{{ message.user }}</span>
+                                <span class="direct-chat-timestamp pull-right">
+                                    {{message.created|date:"m/d H:i"}}</span>
                             </div>
                         </div>
-                        <img class="direct-chat-img" src="http://placehold.it/50/55C1E7/fff&text=U">
+                        <img class="direct-chat-img"
+                            src="http://placehold.it/50/55C1E7/fff&text={{ message.user.user_id|first|capfirst }}">
                         <div class="direct-chat-text">{{ message.message|safe }}</div>
                     </div>
                     <!-- /.item -->
@@ -111,13 +117,15 @@
         var now_time = data['now_time'];
         var receive_user = data['user_id'];
         var user = "{{user_id_now}}";
+        var emp_name_ch = data['emp_name_ch'];
+
         if (receive_user === user) {
-            $('<div class="right direct-chat-msg"><div class="direct-chat-info clearfix"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-right">' + user + '</span><span class="direct-chat-timestamp pull-left">' + now_time + '</span></div></div><img class="direct-chat-img" src="http://placehold.it/50/FA6F57/fff&text=ME"><div class="direct-chat-text">' + message + '</div></div>').appendTo($('.direct-chat-messages'));
-            console.log(now_time);
+            $('<div class="right direct-chat-msg"><div class="direct-chat-info clearfix"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-right">' + emp_name_ch + '-' + user + '</span><span class="direct-chat-timestamp pull-left">' + now_time + '</span></div></div><img class="direct-chat-img" src="http://placehold.it/50/FA6F57/fff&text=' + user[0].toUpperCase() + '"><div class="direct-chat-text">' + message + '</div></div>').appendTo($('.direct-chat-messages'));
         }
         else {
-            $('<div class="direct-chat-msg"><div class="direct-chat-info clearfix"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-left">' + receive_user + '</span><span class="direct-chat-timestamp pull-right">' + now_time + '</span></div></div><img class="direct-chat-img" src="http://placehold.it/50/55C1E7/fff&text=U"><div class="direct-chat-text">' + message + '</div></div>').appendTo($('.direct-chat-messages'));
+            $('<div class="direct-chat-msg"><div class="direct-chat-info clearfix"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-left">' + emp_name_ch + '-' + receive_user + '</span><span class="direct-chat-timestamp pull-right">' + now_time + '</span></div></div><img class="direct-chat-img" src="http://placehold.it/50/55C1E7/fff&text=' + receive_user[0].toUpperCase() + '"><div class="direct-chat-text">' + message + '</div></div>').appendTo($('.direct-chat-messages'));
         }
+
         $('#all_messages').scrollTop($('#all_messages')[0].scrollHeight);
     };
 
