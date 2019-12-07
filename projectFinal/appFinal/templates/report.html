@@ -37,13 +37,6 @@
                         <option value="setSaleReport">課程扣點紀錄</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>依照</label>
-                    <select name="selectOrder" class="form-control">
-                        <option value="orderDateFromOld">日期從舊到新</option>
-                        <option value="orderDateFromNew">日期從新到舊</option>
-                    </select>
-                </div>
                 <input type="submit" class="btn btn-primary pull-right" value="查詢" name="searchB">
             </div>
         </div>
@@ -56,28 +49,50 @@
             <table id="reportTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>員工姓名</th>
-                    <th>員工編號</th>
-                    <th>手機號碼</th>
-                    <th>市話</th>
+                    <th>銷售單號</th>
+                    <th>銷售顧客</th>
+                    <th>銷售日期</th>
+                    <th>銷售員工</th>
+                    <th>銷售商品</th>
+                    <th>總牌價</th>
+                    <th>總售價</th>
+                    <th>總計積</th>
+                    <th>付款方式</th>
+                    <th>銷售商店</th>
+                    <th>收入類別</th>
+                    <th>備註</th>
                 </tr>
                 </thead>
                 <tbody>
-                    {% for emp in empAll %}
+                    {% for sale in sale_all %}
                     <tr>
-                        <th><a href="/app/editEmp/{{emp.emp_id}}">{{emp.emp_name_ch}}</a></th>
-                        <th>{{emp.emp_id}}</th>
-                        <th>{{emp.emp_phone1|default:"-"}}</th>
-                        <th>{{emp.emp_phone2|default:"-"}}</th>
+                        <th>{{sale.sale_id}}</th>
+                        <th>{{sale.sale_cus}}</th>
+                        <th>{{sale.sale_date}}</th>
+                        <th>{{sale.sale_person_in_charge}}</th>
+                        <th>查看</th>
+                        <th>{{sale.sale_stock_price_total}}</th>
+                        <th>{{sale.sale_price_total}}</th>
+                        <th>{{sale.sale_point}}</th>
+                        <th>{{sale.sale_pay}}</th>
+                        <th>{{sale.sale_shop}}</th>
+                        <th>{{sale.sale_type}}</th>
                     </tr>
                     {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>員工姓名</th>
-                        <th>員工編號</th>
-                        <th>手機號碼</th>
-                        <th>市話</th>
+                        <th>銷售單號</th>
+                        <th>銷售顧客</th>
+                        <th>銷售日期</th>
+                        <th>銷售員工</th>
+                        <th>銷售商品</th>
+                        <th>銷售總價</th>
+                        <th>銷售總計積</th>
+                        <th>付款方式</th>
+                        <th>銷售商店</th>
+                        <th>收入類別</th>
+                        <th>備註</th>
                     </tr>
                 </tfoot>
             </table>

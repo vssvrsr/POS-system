@@ -731,7 +731,8 @@ def saleLog(request):
 
     if 'searchB' in request.POST:
         select_section = request.POST['selectSection']
-        select_order = request.POST['selectOrder']
+
+        sale_all = Sale.objects.all().exclude(sale_id='ST000').exclude(sale_cus=Customer.objects.get(cus_id='default'))
 
     return render(request, 'report.html', locals())
 
