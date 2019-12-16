@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc, Service, CustomerClass
+from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc, Service, CustomerClass, RegularBonus, Commission, CustomerClass, CommLimit, MultiSevicePercent, SalarySelectEmp, SalaryResult, CommIncomeType
 from chat.models import Message
 
 """
@@ -324,12 +324,13 @@ def delete(request, a, b):
 
     if a == 'cus':
         Customer.objects.get(cus_id=b).delete()
-        return redirect('/app/removed/stock')
+        return redirect('/app/removed/cus')
 
     if a == 'stock':
-        Customer.objects.get(stock_id=b).delete()
-        Instock.objects.filter(stock_id=b).delete()
-        return redirect('/app/removed/cus')
+        return HttpResponse(a + "/" + b)
+        # Customer.objects.get(stock_id=b).delete()
+        # Instock.objects.filter(stock_id=b).delete()
+        # return redirect('/app/removed/stock')
 
 
 def emp(request):
@@ -1067,6 +1068,127 @@ def addShop(request):
 
     return render(request, 'addShop.html', locals())
 
+def nextSalaryCode(code_prev):
+    if code_prev[0:3] == "MSP":
+        eng = code_prev[0:3]
+        num = int(code_prev[3:6]) + 1
+        return eng + format(num, '03d')
+    eng = code_prev[0:2]
+    num = int(code_prev[2:5]) + 1
+    return eng + format(num, '03d')
+
+def setSalary(request):
+    salary_all = []
+    RB_all = RegularBonus.objects.all()
+    CM_all = Commission.objects.all().exclude(comm_code='tmp')
+    MSP_all = MultiSevicePercent.objects.all()
+    for RB in RB_all:
+        tmp = {'name' : RB.bonus_name}
+        salary_all.append(tmp)
+    for CM in CM_all:
+        tmp = {'name' : CM.comm_name}
+        salary_all.append(tmp)
+    for MSP in MSP_all:
+        tmp = {'name' : MSP.MSP_name}
+        salary_all.append(tmp)
+    return render(request, 'setSalary.html', locals())
+
+def addSalary(request):
+    return render(request, 'addSalary.html', locals())
+
+
+def addSalaryA(request, a):
+    if not isLogin(request):    # 確認是否登入
+        return redirect('/app')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    shopAll = Shop.objects.all()
+    if a == 'comm':
+        cit_all = CommIncomeType.objects.filter(
+            CIT_comm = Commission.objects.get(comm_code = 'tmp')
+        )
+        cl_all = CommLimit.objects.filter(
+            CL_comm = Commission.objects.get(comm_code = 'tmp')
+        )
+
+        code_prev = Commission.objects.all().exclude(comm_code = 'tmp').order_by('-comm_code')[0].comm_code
+        code_now = nextSalaryCode(code_prev)
+
+        if 'addB' in request.POST:
+            limit = request.POST['limit']
+            perc = request.POST['perc']
+            CommLimit.objects.create(
+                CL_comm = Commission.objects.get(comm_code = 'tmp'),
+                CL_income_limit = limit,
+                CL_bonus_perc = perc
+            )
+            return redirect('/app/setting/addSalary/comm')
+        
+        if 'saveB' in request.POST:
+            name = request.POST['name']
+            code = request.POST['code']
+            Commission.objects.create(
+                comm_name = name,
+                comm_code = code
+            )
+            CommIncomeType.objects.filter(
+                CIT_comm = Commission.objects.get(comm_code = 'tmp')
+            ).update(
+                CIT_comm = Commission.objects.get(comm_code = code)
+            )
+
+            CommLimit.objects.filter(
+                CL_comm = Commission.objects.get(comm_code = 'tmp')
+            ).update(
+                CL_comm = Commission.objects.get(comm_code = code)
+            )
+            return redirect('/app/setting/salary')
+    
+        return render(request, 'addSalaryComm.html', locals())
+
+    if a == 'regularBonus':
+        code_prev = RegularBonus.objects.all().order_by('-bonus_code')[0].bonus_code
+        code_now = nextSalaryCode(code_prev)
+        if 'saveB' in request.POST:
+            name = request.POST['name']
+            value = request.POST['value']
+            code = request.POST['code']
+            RegularBonus.objects.create(
+                bonus_name = name,
+                bonus_code = code,
+                bonus_value = value
+            )
+            return redirect('/app/setting/salary')
+
+        return render(request, 'addSalaryRegular.html', locals())
+
+    if a == 'MSP':
+        code_prev = MultiSevicePercent.objects.all().order_by('-MSP_code')[0].MSP_code
+        code_now = nextSalaryCode(code_prev)
+        if 'saveB' in request.POST:
+            name = request.POST['name']
+            code = request.POST['code']
+            emp1 = request.POST['emp1']
+            emp2 = request.POST['emp2']
+            emp3 = request.POST['emp3']
+            MultiSevicePercent.objects.create(
+                    MSP_name = name,
+                    MSP_code = code,
+                    MSP_emp1 = emp1,
+                    MSP_emp2 = emp2,
+                    MSP_emp3 = emp3
+            )
+            return redirect('/app/setting/salary')
+        return render(request, 'addSalaryMSP.html', locals())
+def addCIT(request, a):
+    CommIncomeType.objects.create(
+        CIT_comm = Commission.objects.get(comm_code='tmp'),
+        CIT_type = a
+    )
+    return redirect('/app/setting/addSalary/comm')
+
+
+
 """
     員工福利區
     ------------------------
@@ -1081,4 +1203,3 @@ def ok(request):
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
     return render(request, 'ok.html', locals())
-

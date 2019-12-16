@@ -203,3 +203,70 @@ class CustomerClass(models.Model):
 
     def __str__(self):
         return self.cuscl_cus.cus_id
+
+class RegularBonus(models.Model):
+    bonus_name = models.CharField(max_length=50)
+    bonus_code = models.CharField(max_length=50)
+    bonus_value = models.IntegerField()
+
+    def __str__(self):
+        return self.bonus_name
+
+class Commission(models.Model):
+    comm_name = models.CharField(max_length=50)
+    comm_code = models.CharField(max_length=50)
+    comm_income_type = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return self.comm_name
+
+class CommIncomeType(models.Model):
+    CIT_comm = models.ForeignKey(Commission, on_delete=models.CASCADE)
+    CIT_type = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.CIT_comm.comm_name
+
+class CommLimit(models.Model):
+    CL_comm = models.ForeignKey(Commission, on_delete=models.CASCADE)
+    CL_income_limit = models.IntegerField()
+    CL_bonus_perc = models.IntegerField()
+
+    def __str__(self):
+        return self.CL_comm.comm_name
+
+class MultiSevicePercent(models.Model):
+    MSP_name = models.CharField(max_length=50)
+    MSP_code = models.CharField(max_length=50)
+    MSP_emp1 = models.IntegerField()
+    MSP_emp2 = models.IntegerField()
+    MSP_emp3 = models.IntegerField()
+
+    def __str__(self):
+        return self.MSP_name
+
+class SalarySelectEmp(models.Model):
+    SSE_emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.SSE_emp
+
+class SalaryResult(models.Model):
+    SR_emp_name = models.CharField(max_length=50)
+    SR_salary = models.IntegerField()
+    SR_point = models.IntegerField()
+    SR_point1 = models.IntegerField()
+    SR_point2 = models.IntegerField()
+    SR_point3 = models.IntegerField()
+    SR_stock_income_comm = models.IntegerField()
+    SR_income = models.IntegerField()
+    SRSCIncomeComm = models.IntegerField()
+    SRSCIncome = models.IntegerField()
+    SRbarberIncomeComm = models.IntegerField()
+    SRbarberIncome = models.IntegerField()
+    SRresult = models.IntegerField()
+
+    def __str__(self):
+        return self.SRempName
+
+

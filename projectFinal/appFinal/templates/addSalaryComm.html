@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈 | 薪資獎金設定{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+  新增月收入提成
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+    <li><a href="/app/setting">系統設定</a></li>
+    <li class="active">薪資獎金規則設定</li>
+  </ol>
+</section>  
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <form role="form" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">選擇套用的收入類別</h3>
+                    </div>
+                    <div class="box-body">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#selectIncomeTypeModal">
+                            選擇套用收入類別
+                        </button>
+                        <table id="citAllTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>選擇的收入類別</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cit in cit_all %}
+                                <tr>
+                                    <th>{{cit.CIT_type}}</th>
+                                </tr>
+                                {% endfor %}                                    
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>選擇的收入類別</th>
+                                </tr>
+                            </tfoot>
+                        </table>                                  
+                    </div>                 
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">基本資料</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>規則名稱</label>
+                            <input type="text" class="form-control" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label>規則編號</label>
+                            <input type="text" class="form-control" name="code" value="{{code_now}}">
+                        </div>                                             
+                    </div>                 
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">新增門檻</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>收入門檻</label>
+                                    <input type="text" class="form-control" name="limit">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>提成百分比</label>
+                                    <input type="text" class="form-control" name="perc">
+                                </div>  
+                            </div> 
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>&nbsp;</label><br>
+                                    <input type="submit" class="btn btn-primary" name="addB" value="新增">
+                                </div>
+                            </div>                                               
+                        </div>
+                        <table id="clAllTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>收入門檻</th>
+                                    <th>提成百分比</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cl in cl_all %}
+                                <tr>
+                                    <th>{{cl.CL_income_limit}}</th>
+                                    <th>{{cl.CL_bonus_perc}}</th>
+                                </tr>
+                                {% endfor %}                                    
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>收入門檻</th>
+                                    <th>提成百分比</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>      
+                </div>                                                   
+
+                <div class="pull-right">
+                    <a class="btn btn-default" href="/app/addCus">重整</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                        完成
+                    </button>
+                </div>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                            </div>
+                            <div class="modal-body">
+                                確定儲存嗎?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                                <input type="submit" class="btn btn-primary" name="saveB" value="儲存">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="selectIncomeTypeModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">選擇收入類別</h2>
+                    </div>
+                    <div class="modal-body">
+                    <table id="stockTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>收入類別</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                        <tr>
+                            <th>洗剪染燙收入</th>
+                            <th><a href="/app/addCIT/洗剪染燙收入" class="btn btn-primary btn-xs">選擇</a></th>
+                        </tr>
+                        <tr>
+                            <th>儲值卡收入</th>
+                            <th><a href="/app/addCIT/儲值卡收入" class="btn btn-primary btn-xs">選擇</a></th>
+                        </tr>    
+                        <tr>
+                            <th>頭皮護理收入</th>
+                            <th><a href="/app/addCIT/頭皮護理收入" class="btn btn-primary btn-xs">選擇</a></th>
+                        </tr>
+                        <tr>
+                            <th>商品銷售收入</th>
+                            <th><a href="/app/addCIT/商品銷售收入" class="btn btn-primary btn-xs">選擇</a></th>
+                        </tr>                                      
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>收入類別</th>
+                                <th>操作</th>
+                            </tr>
+                        </tfoot>
+                    </table>   
+                    </div>        
+                </div>
+            </div>
+        </div>
+    </form>     
+</section>
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#stockTable').DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      })
+      $('#citAllTable').DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      })
+      $('#clAllTable').DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      })
+      
+    })
+  </script>
+{% endblock %}

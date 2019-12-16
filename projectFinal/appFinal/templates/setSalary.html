@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈 | 薪資獎金規則設定{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+    薪資獎金規則設定
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+      <li><a href="/app/setting">系統設定</a></li>
+      <li class="active">薪資獎金規則設定</li>
+    </ol>
+</section>  
+{% endblock %}
+
+{% block content %}
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+        <h3 class="box-title">薪資獎金規則設定</h3>
+        <div class="pull-right">
+            <a class="btn btn-primary" href="/app/setting/addSalary"><i class="fa fa-plus"></i>&nbsp;新增規則</a>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="salaryTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>規則名稱</th>
+                    {% comment %} <th>操作</th> {% endcomment %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for salary in salary_all %}
+                <tr>
+                    <th>{{salary.name}}</th>
+                    {% comment %} <th><a href="/app/editSalary/{{salary.type}}/{{salary_code}}" class="btn-primary btn-sm"></a></th> {% endcomment %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>規則名稱</th>
+                    {% comment %} <th>操作</th> {% endcomment %}
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script>
+    $(function () {
+      $('#salaryTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+    })
+  </script>
+{% endblock %}

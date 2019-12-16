@@ -5,6 +5,7 @@
 {% block css %}
 
 <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {% endblock %}
 
 {% block breadcrumb %}
@@ -35,13 +36,15 @@
                         <h3 class="box-title">基本資料</h3>
                     </div>
                     <div class="box-body">
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>客戶姓名</label>
                             <input type="text" class="form-control" name="cusName" required>
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>英文名</label>
                             <input type="text" class="form-control" name="cusEnName">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
                         </div>
                         <div class="form-group">
                             <label>性別</label>
@@ -64,9 +67,10 @@
                                 <option value="1">金</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>身份證字號</label>
                             <input type="text" class="form-control" name="cusIdCard">
+                            <span class="fa fa-id-badge form-control-feedback"></span>
                         </div>
                         <div class="form-group">
                             <label>生日:</label>
@@ -99,25 +103,30 @@
                         <h3 class="box-title">聯絡資訊</h3>
                     </div>
                     <div class="box-body">
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>手機</label>
                             <input type="text" class="form-control" name="cusPhone1" required>
+                            <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>市話</label>
                             <input type="text" class="form-control" name="cusPhone2">
+                            <span class="glyphicon glyphicon-phone-alt form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>通訊地址</label>
                             <input type="text" class="form-control" name="cusAddr1">
+                            <span class="fa fa-address-card form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>戶籍地址</label>
                             <input type="text" class="form-control" name="cusAddr2">
+                            <span class="fa fa-address-card-o form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>Email</label>
                             <input type="email" class="form-control" name="cusEmail">
+                            <i class="material-icons form-control-feedback">email</i>
                         </div>
                     </div>
                 </div>

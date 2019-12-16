@@ -40,9 +40,6 @@ urlpatterns = [
     path('deduct/', appViews.deduct, name='deduct'),
     path('deductService/<str:a>', appViews.deductService, name='deductService'),
 
-
-
-
     path('stock/', appViews.stock, name='stock'),
     path('addStock/', appViews.addStock, name='addStock'),
     path('editStock/<str:row_index>', appViews.editStock, name='editStock'),
@@ -59,6 +56,10 @@ urlpatterns = [
     path('setting/', appViews.setting, name='setting'),
     path('setting/shop', appViews.setShop, name='setShop'),
     path('setting/addShop', appViews.addShop, name='addShop'),
+    path('setting/salary', appViews.setSalary, name='setSalary'),
+    path('setting/addSalary', appViews.addSalary, name='addSalary'),
+    path('setting/addSalary/<str:a>', appViews.addSalaryA, name='addSalary'),
+    path('addCIT/<str:a>', appViews.addCIT, name='addCIT'),
 
     path('selectPerson/<str:a>/<str:b>/<str:c>',
          appViews.selectPerson, name='selectPerson'),

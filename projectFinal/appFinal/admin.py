@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc, Service, CustomerClass
-
+from .models import User, Customer, LogedIn, Employee, Shop, Stock, Instock, ImportReport, ImportStock, Sale, Salestock, Salealloc, Service, CustomerClass, RegularBonus, Commission, CustomerClass, CommLimit, MultiSevicePercent, SalarySelectEmp, SalaryResult, CommIncomeType
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -40,4 +39,11 @@ admin.site.register(Sale)
 admin.site.register(Salestock)
 admin.site.register(Salealloc)
 admin.site.register(Service)
+admin.site.register(RegularBonus)
+admin.site.register(Commission)
 admin.site.register(CustomerClass)
+admin.site.register(CommLimit)
+admin.site.register(MultiSevicePercent)
+admin.site.register(SalarySelectEmp)
+admin.site.register(SalaryResult)
+admin.site.register(CommIncomeType)

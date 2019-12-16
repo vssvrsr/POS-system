@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈 | 薪資獎金設定{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+  薪資獎金設定
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+    <li><a href="/app/setting">系統設定</a></li>
+    <li class="active">薪資獎金規則設定</li>
+  </ol>
+</section>  
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">新增規則</h3>
+        </div>
+        <div class="box-body">
+            <label>選擇要新增的獎金類型</label><br>
+            <a href="/app/setting/addSalary/regularBonus" class="btn btn-primary btn-lg">固定獎金</a>
+            <a href="/app/setting/addSalary/comm" class="btn btn-primary btn-lg">月收入提成</a>
+            <a href="/app/setting/addSalary/MSP" class="btn btn-primary btn-lg">多人服務提成</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}

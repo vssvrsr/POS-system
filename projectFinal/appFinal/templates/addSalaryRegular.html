@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}茵悦薈 | 薪資獎金設定{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+  新增固定獎金
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+    <li><a href="/app/setting">系統設定</a></li>
+    <li class="active">薪資獎金規則設定</li>
+  </ol>
+</section>  
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <form role="form" method="POST">
+        {% csrf_token %}
+ 
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">基本資料</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>規則名稱</label>
+                            <input type="text" class="form-control" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label>獎金金額</label>
+                            <input type="text" class="form-control" name="value">
+                        </div>
+                        <div class="form-group">
+                            <label>規則編號</label>
+                            <input type="text" class="form-control" name="code" value="{{code_now}}">
+                        </div>                                             
+                    </div>                 
+                </div>
+            
+                                <div class="pull-right">
+                    <a class="btn btn-default" href="/app/addCus">重整</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                        完成
+                    </button>
+                </div>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title" id="exampleModalLongTitle">注意</h2>
+                            </div>
+                            <div class="modal-body">
+                                確定儲存嗎?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+                                <input type="submit" class="btn btn-primary" name="saveB" value="儲存">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+    </form>     
+</section>
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}
