@@ -132,11 +132,13 @@ class ImportStock(models.Model):
     def __str__(self):
         return self.is_ir_id
 
+
 class Sale(models.Model):
     sale_id = models.CharField(max_length=50)
     sale_cus = models.ForeignKey(Customer, on_delete=models.CASCADE)
     sale_date = models.CharField(max_length=50)
-    sale_person_in_charge = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    sale_person_in_charge = models.ForeignKey(
+        Employee, on_delete=models.CASCADE)
     sale_stock_price_total = models.IntegerField()
     sale_price_total = models.IntegerField()
     sale_point = models.IntegerField()
@@ -144,12 +146,15 @@ class Sale(models.Model):
     sale_type = models.CharField(max_length=50)
     sale_shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     sale_remark = models.CharField(max_length=50)
-    sale_created_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='create_by_this_user', null=True)
-    sale_modified_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='modified_by_this_user', null=True)
+    sale_created_by_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='create_by_this_user', null=True)
+    sale_modified_by_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='modified_by_this_user', null=True)
     sale_complete = models.BooleanField(default=False)
 
     def __str__(self):
         return self.sale_id
+
 
 class Salestock(models.Model):
     salestock_sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
@@ -160,6 +165,7 @@ class Salestock(models.Model):
     def __str__(self):
         return self.salestock_sale.sale_id
 
+
 class Salealloc(models.Model):
     salealloc_sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
     salealloc_emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -168,6 +174,7 @@ class Salealloc(models.Model):
     def __str__(self):
         return self.salealloc_sale.sale_id
 
+
 class Service(models.Model):
     serv_id = models.CharField(max_length=50)
     serv_cus = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -175,9 +182,12 @@ class Service(models.Model):
     serv_date = models.CharField(max_length=50)
 
     serv_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    serv_emp1 = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='serv_by_emp1')
-    serv_emp2 = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='serv_by_emp2')
-    serv_emp3 = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='serv_by_emp3')
+    serv_emp1 = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name='serv_by_emp1')
+    serv_emp2 = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name='serv_by_emp2')
+    serv_emp3 = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name='serv_by_emp3')
 
     serv_stock_price = models.IntegerField()
     serv_price = models.IntegerField()
@@ -188,13 +198,16 @@ class Service(models.Model):
 
     serv_remark = models.CharField(max_length=50)
 
-    serv_created_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='create_by_this_user_serv')
-    serv_modified_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='modified_by_this_user_serv', null=True)
+    serv_created_by_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='create_by_this_user_serv')
+    serv_modified_by_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='modified_by_this_user_serv', null=True)
 
     serv_complete = models.BooleanField(default=False)
 
     def __str__(self):
         return self.serv_id
+
 
 class CustomerClass(models.Model):
     cuscl_cus = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -204,6 +217,7 @@ class CustomerClass(models.Model):
     def __str__(self):
         return self.cuscl_cus.cus_id
 
+
 class RegularBonus(models.Model):
     bonus_name = models.CharField(max_length=50)
     bonus_code = models.CharField(max_length=50)
@@ -211,6 +225,7 @@ class RegularBonus(models.Model):
 
     def __str__(self):
         return self.bonus_name
+
 
 class Commission(models.Model):
     comm_name = models.CharField(max_length=50)
@@ -220,12 +235,14 @@ class Commission(models.Model):
     def __str__(self):
         return self.comm_name
 
+
 class CommIncomeType(models.Model):
     CIT_comm = models.ForeignKey(Commission, on_delete=models.CASCADE)
     CIT_type = models.CharField(max_length=50)
 
     def __str__(self):
         return self.CIT_comm.comm_name
+
 
 class CommLimit(models.Model):
     CL_comm = models.ForeignKey(Commission, on_delete=models.CASCADE)
@@ -234,6 +251,7 @@ class CommLimit(models.Model):
 
     def __str__(self):
         return self.CL_comm.comm_name
+
 
 class MultiSevicePercent(models.Model):
     MSP_name = models.CharField(max_length=50)
@@ -245,28 +263,36 @@ class MultiSevicePercent(models.Model):
     def __str__(self):
         return self.MSP_name
 
+
 class SalarySelectEmp(models.Model):
     SSE_emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.SSE_emp
+        return self.SSE_emp.emp_name_ch
+
 
 class SalaryResult(models.Model):
-    SR_emp_name = models.CharField(max_length=50)
-    SR_salary = models.IntegerField()
-    SR_point = models.IntegerField()
-    SR_point1 = models.IntegerField()
-    SR_point2 = models.IntegerField()
-    SR_point3 = models.IntegerField()
-    SR_stock_income_comm = models.IntegerField()
-    SR_income = models.IntegerField()
-    SRSCIncomeComm = models.IntegerField()
-    SRSCIncome = models.IntegerField()
-    SRbarberIncomeComm = models.IntegerField()
-    SRbarberIncome = models.IntegerField()
-    SRresult = models.IntegerField()
+    SR_emp = models.ForeignKey(Employee, on_delete=models.CASCADE, null=True)
+    stock_point_all = models.IntegerField(null=True)
+    stock_income_all = models.IntegerField(null=True)
+    head_income_all_emp1 = models.IntegerField(null=True)
+    head_point_all_emp1 = models.IntegerField(null=True)
+    head_income_all_emp2 = models.IntegerField(null=True)
+    head_point_all_emp2 = models.IntegerField(null=True)
+    head_income_all_emp3 = models.IntegerField(null=True)
+    head_point_all_emp3 = models.IntegerField(null=True)
+    hair_income_all_emp1 = models.IntegerField(null=True)
+    hair_point_all_emp1 = models.IntegerField(null=True)
+    hair_income_all_emp2 = models.IntegerField(null=True)
+    hair_point_all_emp2 = models.IntegerField(null=True)
+    hair_income_all_emp3 = models.IntegerField(null=True)
+    hair_point_all_emp3 = models.IntegerField(null=True)
+    head_income_all = models.IntegerField(null=True)
+    hair_income_all = models.IntegerField(null=True)
+    head_income_all_comm = models.IntegerField(null=True)
+    hair_income_all_comm = models.IntegerField(null=True)
+    stock_income_all_comm = models.IntegerField(null=True)
+    SR_result = models.IntegerField(null=True)
 
     def __str__(self):
-        return self.SRempName
-
-
+        return self.SR_emp.emp_name_ch

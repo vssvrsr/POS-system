@@ -4,23 +4,24 @@
 
 {% block css %}
 
-<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+<link rel="stylesheet"
+    href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
+<section class="content-header">
+    <h1>
         顧客資料修改
-      </h1>
+    </h1>
 
-      <ol class="breadcrumb">
+    <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>人員管理</li>
         <li><a href="/app/cus">顧客管理</a></li>
         <li class="active">顧客資料修改</li>
-      </ol>
-    </section>
+    </ol>
+</section>
 
 {% endblock %}
 
@@ -37,11 +38,13 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>客戶姓名</label>
-                            <input type="text" class="form-control" name="cusName" required value="{{cusThis.cus_name}}">
+                            <input type="text" class="form-control" name="cusName" required
+                                value="{{cusThis.cus_name}}">
                         </div>
                         <div class="form-group">
                             <label>英文名</label>
-                            <input type="text" class="form-control" name="cusEnName" value="{{cusThis.cus_name_en|default:''}}">
+                            <input type="text" class="form-control" name="cusEnName"
+                                value="{{cusThis.cus_name_en|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>性別</label>
@@ -52,40 +55,44 @@
                         </div>
                         <div class="form-group">
                             <label>客戶編號</label>
-                            <input type="text" class="form-control" name="cusId" required value="{{cusThis.cus_id}}">
+                            <input type="text" class="form-control" name="cusId" required value="{{cusThis.cus_id}}"
+                                readonly>
                         </div>
                         <div class="form-group">
                             <label>等級</label>
                             <select class="form-control" name="cusClass" value="{{cusThis.cus_class|default:''}}">
                                 <option value="cusThis.cus_class">{{cusThisClass}}</option>
                                 {% for classOther, classOtherValue in cusThisClassOther %}
-                                    <option value="{{classOtherValue}}">{{classOther}}</option>
+                                <option value="{{classOtherValue}}">{{classOther}}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" hidden>
                             <label>身份證字號</label>
-                            <input type="text" class="form-control" name="cusIdCard" value="{{cusThis.cus_idcard|default:''}}">
+                            <input type="text" class="form-control" name="cusIdCard"
+                                value="{{cusThis.cus_idcard|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>生日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker1" name="cusBd" value="{{cusThis.cus_bd}}">
+                                <input type="text" class="form-control pull-right" id="datepicker1" name="cusBd"
+                                    value="{{cusThis.cus_bd}}">
                             </div>
                             <!-- /.input group -->
                         </div>
                         <div class="form-group">
                             <label>加入日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker2" name="cusArrDate" value="{{cusThis.cus_arr_date}}">
+                                <input type="text" class="form-control pull-right" id="datepicker2" name="cusArrDate"
+                                    value="{{cusThis.cus_arr_date}}">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -100,23 +107,28 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>手機</label>
-                            <input type="text" class="form-control" name="cusPhone1" required value="{{cusThis.cus_phone1|default:''}}">
+                            <input type="text" class="form-control" name="cusPhone1" required
+                                value="{{cusThis.cus_phone1|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>市話</label>
-                            <input type="text" class="form-control" name="cusPhone2" value="{{cusThis.cus_phone2|default:''}}">
+                            <input type="text" class="form-control" name="cusPhone2"
+                                value="{{cusThis.cus_phone2|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>通訊地址</label>
-                            <input type="text" class="form-control" name="cusAddr1" value="{{cusThis.cus_addr1|default:''}}">
+                            <input type="text" class="form-control" name="cusAddr1"
+                                value="{{cusThis.cus_addr1|default:''}}">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" hidden>
                             <label>戶籍地址</label>
-                            <input type="text" class="form-control" name="cusAddr2" value="{{cusThis.cus_addr2|default:''}}">
+                            <input type="text" class="form-control" name="cusAddr2"
+                                value="{{cusThis.cus_addr2|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" name="cusEmail" reired value="{{cusThis.cus_email|default:''}}">
+                            <input type="email" class="form-control" name="cusEmail" reired
+                                value="{{cusThis.cus_email|default:''}}">
                         </div>
                     </div>
                 </div>
@@ -127,7 +139,8 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>備註</label>
-                            <textarea type="text" class="form-control" name="cusRemark" row="3" value="{{cusThis.cus_remark}}"></textarea>
+                            <textarea type="text" class="form-control" name="cusRemark" row="3"
+                                value="{{cusThis.cus_remark}}"></textarea>
                         </div>
                     </div>
                 </div>
@@ -141,7 +154,8 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalComplete">
                 完成
             </button>
-            <div class="modal fade" id="modalComplete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="modalComplete" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -157,7 +171,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -180,18 +195,20 @@
 
 
 {% block script %}
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
 
 <script>
     $(function () {
         $('#datepicker1').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
         $('#datepicker2').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
     })
 </script>

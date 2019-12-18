@@ -4,24 +4,25 @@
 
 {% block css %}
 
-<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+<link rel="stylesheet"
+    href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
+<section class="content-header">
+    <h1>
         新增顧客
-      </h1>
+    </h1>
 
-      <ol class="breadcrumb">
+    <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>人員管理</li>
         <li><a href="/app/cus">顧客管理</a></li>
         <li class="active">新增顧客</li>
-      </ol>
-    </section>
+    </ol>
+</section>
 
 {% endblock %}
 
@@ -38,7 +39,7 @@
                     <div class="box-body">
                         <div class="form-group has-feedback">
                             <label>客戶姓名</label>
-                            <input type="text" class="form-control" name="cusName" required>
+                            <input type="text" class="form-control" name="cusName" placeholder="必填" required>
                             <span class="glyphicon glyphicon-user form-control-feedback"></span>
                         </div>
                         <div class="form-group has-feedback">
@@ -56,7 +57,7 @@
                         </div>
                         <div class="form-group">
                             <label>客戶編號</label>
-                            <input type="text" class="form-control" name="cusId" p required>
+                            <input type="text" class="form-control" name="cusId" required value="{{next_id}}" readonly>
                         </div>
                         <div class="form-group">
                             <label>等級</label>
@@ -67,17 +68,17 @@
                                 <option value="1">金</option>
                             </select>
                         </div>
-                        <div class="form-group has-feedback">
+                        <div class="form-group has-feedback" hidden>
                             <label>身份證字號</label>
                             <input type="text" class="form-control" name="cusIdCard">
                             <span class="fa fa-id-badge form-control-feedback"></span>
                         </div>
                         <div class="form-group">
                             <label>生日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
                                 <input type="text" class="form-control pull-right" id="datepicker1" name="cusBd">
                             </div>
@@ -85,10 +86,10 @@
                         </div>
                         <div class="form-group">
                             <label>加入日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
                                 <input type="text" class="form-control pull-right" id="datepicker2" name="cusArrDate">
                             </div>
@@ -105,7 +106,8 @@
                     <div class="box-body">
                         <div class="form-group has-feedback">
                             <label>手機</label>
-                            <input type="text" class="form-control" name="cusPhone1" required>
+                            <input type="text" class="form-control" name="cusPhone1" value="09" placeholder="必填"
+                                required>
                             <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                         </div>
                         <div class="form-group has-feedback">
@@ -118,7 +120,7 @@
                             <input type="text" class="form-control" name="cusAddr1">
                             <span class="fa fa-address-card form-control-feedback"></span>
                         </div>
-                        <div class="form-group has-feedback">
+                        <div class="form-group has-feedback" hidden>
                             <label>戶籍地址</label>
                             <input type="text" class="form-control" name="cusAddr2">
                             <span class="fa fa-address-card-o form-control-feedback"></span>
@@ -126,7 +128,7 @@
                         <div class="form-group has-feedback">
                             <label>Email</label>
                             <input type="email" class="form-control" name="cusEmail">
-                            <i class="material-icons form-control-feedback">email</i>
+                            <span class="material-icons form-control-feedback">email</span>
                         </div>
                     </div>
                 </div>
@@ -149,7 +151,8 @@
                 完成
             </button>
         </div>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -171,22 +174,29 @@
 
 
 {% block script %}
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
 
 
 
 
 <script>
     $(function () {
+        current_date = new Date();
+        birthday = new Date(1950, 0, 1);
+
         $('#datepicker1').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
+        $("#datepicker1").datepicker("setDate", birthday);
         $('#datepicker2').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
+        $("#datepicker2").datepicker("setDate", current_date);
     })
 </script>
 {% endblock %}

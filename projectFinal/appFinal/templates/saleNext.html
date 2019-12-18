@@ -4,23 +4,24 @@
 
 {% block css %}
 
-<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+<link rel="stylesheet"
+    href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
+<section class="content-header">
+    <h1>
         繼續結帳
-      </h1>
+    </h1>
 
-      <ol class="breadcrumb">
+    <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>前台交易</li>
         <li><a href="/app/sale">商品銷售</a></li>
         <li class="active">繼續結帳</li>
-      </ol>
-    </section>
+    </ol>
+</section>
 
 {% endblock %}
 
@@ -39,36 +40,39 @@
                             <label>日期</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
                                 <input type="text" class="form-control pull-right" id="datepicker1" name="sale_date">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>牌價總額</label>
-                            <input type="text" class="form-control" name="sale_stock_price_total" value="{{stock_price_total}}">
+                            <input type="text" class="form-control" name="sale_stock_price_total"
+                                value="{{stock_price_total}}">
                         </div>
                         <div class="form-group">
                             <label>賣價總額</label>
-                            <input type="text" class="form-control" name="sale_price_total" value="{{sale_price_total}}">
+                            <input type="text" class="form-control" name="sale_price_total"
+                                value="{{sale_price_total}}">
                         </div>
                         <div class="form-group">
                             <label>訂單總計積</label>
-                            <input type="text" class="form-control" name="sale_point" value="{{sale_poin_total|default:"0"}}" required>
+                            <input type="text" class="form-control" name="sale_point"
+                                value="{{sale_poin_total|default:'0' }}" required>
                         </div>
                         <div class="form-group">
                             <label>付款方式</label>
                             <select class="form-control" name="sale_pay" required>
                                 <option value="">---</option>
                                 <option value="credit">信用卡</option>
-                                <option value="cash">現金</option>
+                                <option value="cash" selected>現金</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>收入類別</label>
                             <select class="form-control" name="sale_type" required>
                                 <option value="">---</option>
-                                <option value="income_sotck">商品銷售收入</option>
+                                <option value="income_sotck" selected>商品銷售收入</option>
                                 <option value="income_card">儲值卡收入</option>
                                 <option value="income_head">頭皮護理收入</option>
                                 <option value="income_hair">洗剪染燙收入</option>
@@ -97,7 +101,8 @@
                 完成
             </button>
         </div>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -119,18 +124,22 @@
 
 
 {% block script %}
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
 
 
 
 
 <script>
     $(function () {
+        current_date = new Date();
         $('#datepicker1').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
+        $("#datepicker1").datepicker("setDate", current_date);
     })
 </script>
 {% endblock %}

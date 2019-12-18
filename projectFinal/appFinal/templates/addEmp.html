@@ -4,23 +4,25 @@
 
 {% block css %}
 
-<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+<link rel="stylesheet"
+    href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
+<section class="content-header">
+    <h1>
         新增員工
-      </h1>
+    </h1>
 
-      <ol class="breadcrumb">
+    <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>人員管理</li>
         <li><a href="/app/emp">員工資料操作</a></li>
         <li class="active">新增員工</li>
-      </ol>
-    </section>
+    </ol>
+</section>
 
 {% endblock %}
 
@@ -35,17 +37,19 @@
                         <h3 class="box-title">基本資料</h3>
                     </div>
                     <div class="box-body">
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>員工姓名</label>
-                            <input type="text" class="form-control" name="empName" required>
+                            <input type="text" class="form-control" name="empName" placeholder="必填" required>
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>英文名</label>
                             <input type="text" class="form-control" name="empEnName">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
                         </div>
                         <div class="form-group">
                             <label>員工編號</label>
-                            <input type="text" class="form-control" name="empId" p required>
+                            <input type="text" class="form-control" name="empId" required value="{{next_id}}" readonly>
                         </div>
                         <div class="form-group">
                             <label>職階</label>
@@ -57,20 +61,21 @@
                                 <option value="助理">助理</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>身份證字號</label>
                             <input type="text" class="form-control" name="empIdCard">
+                            <span class="fa fa-id-badge form-control-feedback"></span>
                         </div>
                         <div class="form-group">
                             <label>底薪</label>
-                            <input type="text" class="form-control" name="empSalary" required>
+                            <input type="text" class="form-control" name="empSalary" placeholder="必填" required>
                         </div>
                         <div class="form-group">
                             <label>生日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
                                 <input type="text" class="form-control pull-right" id="datepicker1" name="empBd">
                             </div>
@@ -78,10 +83,10 @@
                         </div>
                         <div class="form-group">
                             <label>到職日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
                                 <input type="text" class="form-control pull-right" id="datepicker2" name="empArrDate">
                             </div>
@@ -89,12 +94,13 @@
                         </div>
                         <div class="form-group">
                             <label>離職日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker3" name="empLeaveDate">
+                                <input type="text" class="form-control pull-right" id="datepicker3" name="empLeaveDate"
+                                    readonly>
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -107,25 +113,31 @@
                         <h3 class="box-title">聯絡資訊</h3>
                     </div>
                     <div class="box-body">
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>手機</label>
-                            <input type="text" class="form-control" name="empPhone1" required>
+                            <input type="text" class="form-control" name="empPhone1" value="09" placeholder="必填"
+                                required>
+                            <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>市話</label>
                             <input type="text" class="form-control" name="empPhone2">
+                            <span class="glyphicon glyphicon-phone-alt form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>通訊地址</label>
                             <input type="text" class="form-control" name="empAddr1">
+                            <span class="fa fa-address-card form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>戶籍地址</label>
                             <input type="text" class="form-control" name="empAddr2">
+                            <span class="fa fa-address-card-o form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>Email</label>
                             <input type="email" class="form-control" name="empEmail">
+                            <span class="material-icons form-control-feedback">email</span>
                         </div>
                     </div>
                 </div>
@@ -148,7 +160,8 @@
                 完成
             </button>
         </div>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -170,26 +183,43 @@
 
 
 {% block script %}
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
 
 
 
 
 <script>
+    /*
+     *  初始化datepicker
+     */
     $(function () {
+        current_date = new Date();
+        birthday = new Date(1950, 0, 1);
+
+        /* 生日 */
         $('#datepicker1').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            language: "zh-TW",
+            autoclose: true,
         })
+        $("#datepicker1").datepicker("setDate", birthday);
+
+        /* 到職日 */
         $('#datepicker2').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            language: "zh-TW",
+            autoclose: true,
         })
+        $("#datepicker2").datepicker("setDate", current_date);
+
+        /* 離職日 */
         $('#datepicker3').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            language: "zh-TW",
+            autoclose: true,
         })
     })
+
+
 </script>
 {% endblock %}

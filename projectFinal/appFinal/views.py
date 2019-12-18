@@ -156,6 +156,12 @@ def index(request):
     員工管理、顧客管理
 """
 # 顧客管理
+def nextCusId(prev_id):
+    eng = prev_id[0:2]
+    num = prev_id[2:7]
+    num = int(num) + 1
+    return eng + format(num, '05d')
+
 def cus(request):
     if not isLogin(request):    # 確認是否登入
         return redirect('/app')
@@ -165,7 +171,7 @@ def cus(request):
 
     persMenuOpen = "active menu-open"
 
-    cusAll = Customer.objects.all().exclude(cus_seeable=False)
+    cusAll = Customer.objects.all().exclude(cus_seeable=False).exclude(cus_id='default')
 
     return render(request, 'cus.html', locals())
 
@@ -177,6 +183,8 @@ def addCus(request):
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
+    prev_id = Customer.objects.all().exclude(cus_id='default').order_by('-cus_id')[0].cus_id
+    next_id = nextCusId(prev_id)
 
     persMenuOpen = "active menu-open"
     if 'saveB' in request.POST:
@@ -332,6 +340,10 @@ def delete(request, a, b):
         # Instock.objects.filter(stock_id=b).delete()
         # return redirect('/app/removed/stock')
 
+def nextEmpId(prev_id):
+    eng = prev_id[0:2]
+    num = int(prev_id[2:5]) + 1
+    return eng + format(num, '03d')
 
 def emp(request):
     if not isLogin(request):    # 確認是否登入
@@ -343,7 +355,7 @@ def emp(request):
 
     persMenuOpen = "active menu-open"
 
-    empAll = Employee.objects.all().exclude(emp_seeable=False)
+    empAll = Employee.objects.all().exclude(emp_seeable=False).exclude(emp_id='default')
 
     return render(request, 'emp.html', locals())
 
@@ -355,6 +367,8 @@ def addEmp(request):
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
+    prev_id = Employee.objects.all().exclude(emp_id='default').order_by('-emp_id')[0].emp_id
+    next_id = nextEmpId(prev_id)
 
     persMenuOpen = "active menu-open"
 
@@ -807,13 +821,14 @@ def stock(request):
 
     stockMenuOpen = "active menu-open"
 
-    stockAll = Stock.objects.all().exclude(stock_seeable=False)
+    stockAll = Stock.objects.all().exclude(stock_seeable=False).exclude(stock_id='default')
 
     # 庫存量目前有空值，待修改
     for stock in stockAll:
         try:
             stock.instock_qua = Instock.objects.get(
-            instock_id=stock.stock_id, instock_shop_id=request.session['user_shop']).instock_qua
+                instock_id=stock.stock_id, instock_shop_id=request.session['user_shop']
+            ).instock_qua
         except:
             stock.instock_qua = 10
 
@@ -998,9 +1013,156 @@ def salaryCount(request):
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
+    emp_all = Employee.objects.all().exclude(emp_id='default')
+    SSE_all = SalarySelectEmp.objects.all()
 
     reportMenuOpen = "active menu-open"
     return render(request, 'salaryCount.html', locals())
+
+def salaryCountNext(request):
+    if not isLogin(request):    # 確認是否登入
+        return redirect('/app')
+    userNow = request.session['emp_name_ch']
+    shopNow = request.session['user_shop_name']
+    emp_all = SalarySelectEmp.objects.all()
+    SalaryResult.objects.all().delete()
+
+    for emp in emp_all:
+        stock_income_all = 0
+        stock_point_all = 0
+        head_income_all_emp1 = 0
+        head_income_all_emp2 = 0
+        head_income_all_emp3 = 0
+        head_point_all_emp1 = 0
+        head_point_all_emp2 = 0
+        head_point_all_emp3 = 0
+        hair_income_all_emp1 = 0
+        hair_income_all_emp2 = 0
+        hair_income_all_emp3 = 0
+        hair_point_all_emp1 = 0
+        hair_point_all_emp2 = 0
+        hair_point_all_emp3 = 0
+        
+        sale_all = Sale.objects.all().exclude(sale_complete=False)
+        for sale in sale_all:
+            sale_alloc_all = sale.salealloc_set.all()
+            for sale_alloc in sale_alloc_all:
+                if sale_alloc.salealloc_emp == emp.SSE_emp:
+                    perc = sale_alloc.salealloc_perc
+                    stock_point_all += sale.sale_point * perc / 100                   #商品銷售總計積
+                    stock_income_all += sale.sale_price_total * perc / 100            #商品銷售總收入
+        
+        serv_all = Service.objects.all().exclude(serv_complete=False)
+        for serv in serv_all:
+            if serv.serv_type == 'income_head':
+                if serv.serv_emp1 == emp.SSE_emp:  
+                    MSP_all = MultiSevicePercent.objects.all()
+                    for MSP in MSP_all:
+                        if serv.serv_stock.stock_name == MSP.MSP_name:
+                            head_income_all_emp1 += serv.serv_price * MSP.MSP_emp1 / 100     #頭皮護理專業操作總收入
+                            head_point_all_emp1 += serv.serv_point * MSP.MSP_emp1 / 100      #頭皮護理專業操作總計積
+                if serv.serv_emp2 == emp.SSE_emp:
+                    MSP_all = MultiSevicePercent.objects.all()
+                    for MSP in MSP_all:
+                        if serv.serv_stock.stock_name == MSP.MSP_name:
+                            head_income_all_emp2 += serv.serv_price * MSP.MSP_emp2 / 100     #頭皮護理洗髮總收入
+                            head_point_all_emp2 += serv.serv_point * MSP.MSP_emp2 / 100      #頭皮護理洗髮總計機
+                if serv.serv_emp3 == emp.SSE_emp:
+                    MSP_all = MultiSevicePercent.objects.all()
+                    for MSP in MSP_all:
+                        if serv.serv_stock.stock_name == MSP.MSP_name:
+                            head_income_all_emp3 += serv.serv_price * MSP.MSP_emp3 / 100     #頭皮護理吹整造型總收入
+                            head_point_all_emp3 += serv.serv_point * MSP.MSP_emp3 / 100      #頭皮護理吹整造型總總計積
+            if serv.serv_type == 'income_hair':
+                if serv.serv_emp1 == emp.SSE_emp:
+                    MSP_all = MultiSevicePercent.objects.all()
+                    for MSP in MSP_all:
+                        if serv.serv_stock.stock_name == MSP.MSP_name:
+                            hair_income_all_emp1 += serv.serv_price * MSP.MSP_emp1 / 100     #洗剪染燙專業操作總收入
+                            hair_point_all_emp1 += serv.serv_point * MSP.MSP_emp1 / 100      #洗剪染燙專業操作總計積
+                if serv.serv_emp2 == emp.SSE_emp:
+                    MSP_all = MultiSevicePercent.objects.all()
+                    for MSP in MSP_all:
+                        if serv.serv_stock.stock_name == MSP.MSP_name:
+                            hair_income_all_emp2 += serv.serv_price * MSP.MSP_emp2 / 100     #洗剪染燙洗髮總收入
+                            hair_point_all_emp2 += serv.serv_point * MSP.MSP_emp2 / 100      #洗剪染燙洗髮總計機
+                if serv.serv_emp3 == emp.SSE_emp:
+                    MSP_all = MultiSevicePercent.objects.all()
+                    for MSP in MSP_all:
+                        if serv.serv_stock.stock_name == MSP.MSP_name:
+                            hair_income_all_emp3 += serv.serv_price * MSP.MSP_emp3 / 100     #洗剪染燙吹整造型總收入
+                            hair_point_all_emp3 += serv.serv_point * MSP.MSP_emp3 / 100      #洗剪染燙吹整造型總總計積
+
+        head_income_all = head_income_all_emp1 + head_income_all_emp2 + head_income_all_emp3  #頭皮護理總收入
+        hair_income_all = hair_income_all_emp1 + hair_income_all_emp2 + hair_income_all_emp3  #洗剪染燙總收入
+
+        comm_all  = Commission.objects.all()
+        for comm in comm_all:
+            CIT_all = comm.commincometype_set.all()
+            for CIT in CIT_all:
+                if CIT.CIT_type == '頭皮護理收入':
+                    CL_all = comm.commlimit_set.all()
+                    for CL in CL_all:
+                        if head_income_all >= CL.CL_income_limit:
+                            percent_now = CL.CL_bonus_perc
+                        elif head_income_all < CL.CL_income_limit:
+                            break
+                    head_income_all_comm = head_income_all * percent_now / 100    #頭皮護理收入提成結果
+                if CIT.CIT_type == '洗剪染燙收入':
+                    CL_all = comm.commlimit_set.all()
+                    for CL in CL_all:
+                        if hair_income_all >= CL.CL_income_limit:
+                            percent_now = CL.CL_bonus_perc
+                        elif hair_income_all < CL.CL_income_limit:
+                            break
+                    hair_income_all_comm = hair_income_all * percent_now / 100    #洗剪染燙收入提成結果
+                else:
+                    CL_all = comm.commlimit_set.all()
+                    for CL in CL_all:
+                        if stock_income_all >= CL.CL_income_limit:
+                            percent_now = CL.CL_bonus_perc
+                        elif stock_income_all < CL.CL_income_limit:
+                            break
+                    stock_income_all_comm = stock_income_all * percent_now / 100    #商品收入提成結果
+
+        SR_result = emp.SSE_emp.emp_salary + head_income_all_comm + hair_income_all_comm + stock_income_all_comm + stock_point_all + head_point_all_emp1 + head_point_all_emp2 + head_point_all_emp3 + hair_point_all_emp1 + hair_point_all_emp2 + hair_point_all_emp3
+        
+        SalaryResult.objects.create(
+            SR_emp = emp.SSE_emp,
+            stock_point_all = int(stock_point_all + 0.5),
+            stock_income_all = int(stock_income_all + 0.5),
+            head_income_all_emp1 = int(head_income_all_emp1 + 0.5),
+            head_point_all_emp1 = int(head_point_all_emp1 + 0.5),
+            head_income_all_emp2 = int(head_income_all_emp2 + 0.5),
+            head_point_all_emp2 = int(head_point_all_emp2 + 0.5),
+            head_income_all_emp3 = int(head_income_all_emp3 + 0.5),
+            head_point_all_emp3 = int(head_point_all_emp3 + 0.5),
+            hair_income_all_emp1 = int(hair_income_all_emp1 + 0.5),
+            hair_point_all_emp1 = int(hair_point_all_emp1 + 0.5),
+            hair_income_all_emp2 = int(hair_income_all_emp2 + 0.5),
+            hair_point_all_emp2 = int(hair_point_all_emp2 + 0.5),
+            hair_income_all_emp3 = int(hair_income_all_emp3 + 0.5),
+            hair_point_all_emp3 = int(hair_point_all_emp3 + 0.5),
+            head_income_all = int(head_income_all + 0.5),
+            hair_income_all = int(hair_income_all + 0.5),
+            head_income_all_comm = int(head_income_all_comm + 0.5),
+            hair_income_all_comm = int(hair_income_all_comm + 0.5),
+            stock_income_all_comm = int(stock_income_all_comm + 0.5),
+            SR_result = int(SR_result + 0.5)
+        )
+    SR_all = SalaryResult.objects.all()
+    for SR in SR_all:
+        SR.salary = SR.SR_emp.emp_salary 
+
+    SalarySelectEmp.objects.all().delete()
+
+    return render(request, 'salaryCountNext.html', locals())
+
+def selectSalaryEmp(reques, a):
+    SalarySelectEmp.objects.create(
+        SSE_emp = Employee.objects.get(emp_id=a)
+        )
+    return redirect('/app/salaryCount')
 
 # 營業額計算
 def turnoverCount(request):

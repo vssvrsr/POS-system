@@ -4,23 +4,24 @@
 
 {% block css %}
 
-<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+<link rel="stylesheet"
+    href="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
+<section class="content-header">
+    <h1>
         員工資料修改
-      </h1>
+    </h1>
 
-      <ol class="breadcrumb">
+    <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>人員管理</li>
         <li><a href="/app/emp">員工管理</a></li>
         <li class="active">員工資料修改</li>
-      </ol>
-    </section>
+    </ol>
+</section>
 
 {% endblock %}
 
@@ -37,63 +38,71 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>員工姓名</label>
-                            <input type="text" class="form-control" name="empName" required value="{{empThis.emp_name_ch}}">
+                            <input type="text" class="form-control" name="empName" required
+                                value="{{empThis.emp_name_ch}}">
                         </div>
                         <div class="form-group">
                             <label>英文名</label>
-                            <input type="text" class="form-control" name="empEnName" value="{{empThis.emp_name_en|default:''}}">
+                            <input type="text" class="form-control" name="empEnName"
+                                value="{{empThis.emp_name_en|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>員工編號</label>
-                            <input type="text" class="form-control" name="empId" required value="{{empThis.emp_id}}">
+                            <input type="text" class="form-control" name="empId" required value="{{empThis.emp_id}}"
+                                readonly>
                         </div>
                         <div class="form-group">
                             <label>職稱</label>
                             <select class="form-control" name="empClass" value="{{empThis.emp_class|default:''}}">
                                 <option value="{{empThisClass}}">{{empThisClass}}</option>
                                 {% for classOther in empThisClassOther %}
-                                    <option value="{{classOther}}">{{classOther}}</option>
+                                <option value="{{classOther}}">{{classOther}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="form-group">
                             <label>身份證字號</label>
-                            <input type="text" class="form-control" name="empIdCard" value="{{empThis.emp_idcard|default:''}}">
+                            <input type="text" class="form-control" name="empIdCard"
+                                value="{{empThis.emp_idcard|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>底薪</label>
-                            <input type="text" class="form-control" name="empSalary" value="{{empThis.emp_salary|default:''}}">
+                            <input type="text" class="form-control" name="empSalary"
+                                value="{{empThis.emp_salary|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>生日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker1" name="empBd" value="{{empThis.emp_bd}}">
+                                <input type="text" class="form-control pull-right" id="datepicker1" name="empBd"
+                                    value="{{empThis.emp_bd}}">
                             </div>
                             <!-- /.input group -->
                         </div>
                         <div class="form-group">
                             <label>到職日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker2" name="empArrDate" value="{{empThis.emp_arr_date}}">
+                                <input type="text" class="form-control pull-right" id="datepicker2" name="empArrDate"
+                                    value="{{empThis.emp_arr_date}}">
                             </div>
                             <!-- /.input group -->
                         </div>
                         <div class="form-group">
                             <label>離職日:</label>
-            
+
                             <div class="input-group date">
                                 <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
+                                    <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker3" name="empLeaveDate" value="{{empThis.emp_leave_date}}">
+                                <input type="text" class="form-control pull-right" id="datepicker3" name="empLeaveDate"
+                                    value="{{empThis.emp_leave_date}}">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -108,23 +117,28 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>手機</label>
-                            <input type="text" class="form-control" name="empPhone1" required value="{{empThis.emp_phone1|default:''}}">
+                            <input type="text" class="form-control" name="empPhone1" required
+                                value="{{empThis.emp_phone1|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>市話</label>
-                            <input type="text" class="form-control" name="empPhone2" value="{{empThis.emp_phone2|default:''}}">
+                            <input type="text" class="form-control" name="empPhone2"
+                                value="{{empThis.emp_phone2|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>通訊地址</label>
-                            <input type="text" class="form-control" name="empAddr1" value="{{empThis.emp_addr1|default:''}}">
+                            <input type="text" class="form-control" name="empAddr1"
+                                value="{{empThis.emp_addr1|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>戶籍地址</label>
-                            <input type="text" class="form-control" name="empAddr2" value="{{empThis.emp_addr2|default:''}}">
+                            <input type="text" class="form-control" name="empAddr2"
+                                value="{{empThis.emp_addr2|default:''}}">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" name="empEmail" reired value="{{empThis.emp_email|default:''}}">
+                            <input type="email" class="form-control" name="empEmail" reired
+                                value="{{empThis.emp_email|default:''}}">
                         </div>
                     </div>
                 </div>
@@ -135,7 +149,8 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>備註</label>
-                            <textarea type="text" class="form-control" name="empRemark" row="3" value="{{empThis.emp_remark}}"></textarea>
+                            <textarea type="text" class="form-control" name="empRemark" row="3"
+                                value="{{empThis.emp_remark}}"></textarea>
                         </div>
                     </div>
                 </div>
@@ -149,7 +164,8 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalComplete">
                 完成
             </button>
-            <div class="modal fade" id="modalComplete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="modalComplete" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -165,7 +181,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -188,22 +205,24 @@
 
 
 {% block script %}
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script
+    src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
 
 <script>
     $(function () {
         $('#datepicker1').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
         $('#datepicker2').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
         $('#datepicker3').datepicker({
-            autoclose:true,
-            language:"zh-TW"
+            autoclose: true,
+            language: "zh-TW"
         })
     })
 </script>

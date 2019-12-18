@@ -3,142 +3,145 @@
 {% block title %}茵悦薈{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+<link rel="stylesheet"
+  href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        課程扣點
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
-        <li>前台交易</a></li>
-        <li class="active">課程扣點</li>
-      </ol>
-    </section>
+<section class="content-header">
+  <h1>
+    課程扣點
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
+    <li>前台交易</a></li>
+    <li class="active">課程扣點</li>
+  </ol>
+</section>
 {% endblock %}
 
 {% block content %}
 <section class="content">
-<div class="row">
-  <div class="col-md-6">
-    <div class="box">
-      <div class="box-header">
-        <h3 class="box-title">搜尋顧客</h3>
-        <div class ="pull-right">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">搜尋顧客</h3>
+          <div class="pull-right">
             <a class="btn btn-defaut" href="/app/removed/cus">已移籍客戶</a>
             <a class="btn btn-primary" href="/app/addCus"><i class="fa fa-plus"></i>&nbsp;新增資料</a>
             <a class="btn btn-primary" href="#"><i class="fa fa-file-excel-o"></i>&nbsp;批量操作</a>
+          </div>
         </div>
+        <div class="box-body">
+          <table id="cusTable" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>顧客姓名</th>
+                <th>顧客編號</th>
+                <th>手機號碼</th>
+                <th>市話</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cus in cus_all %}
+              <tr>
+                <th>{{cus.cus_name}}</th>
+                <th>{{cus.cus_id}}</th>
+                <th>{{cus.cus_phone1|default:"-"}}</th>
+                <th>{{cus.cus_phone2|default:"-"}}</th>
+                <th><a href='/app/selectPerson/deduct_cus/deduct_tmp/{{cus.cus_id}}'
+                    class='btn btn-primary btn-xs'>選擇<a></th>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>顧客姓名</th>
+                <th>顧客編號</th>
+                <th>手機號碼</th>
+                <th>市話</th>
+                <th>操作</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
       </div>
-      <div class="box-body">
-        <table id="cusTable" class="table table-bordered table-striped">
-          <thead>
-          <tr>
-            <th>顧客姓名</th>
-            <th>顧客編號</th>
-            <th>手機號碼</th>
-            <th>市話</th>
-            <th>操作</th>
-          </tr>
-          </thead>
-          <tbody>
-            {% for cus in cus_all %}
-            <tr>
-              <th>{{cus.cus_name}}</th>
-              <th>{{cus.cus_id}}</th>
-              <th>{{cus.cus_phone1|default:"-"}}</th>
-              <th>{{cus.cus_phone2|default:"-"}}</th>
-              <th><a href='/app/selectPerson/deduct_cus/deduct_tmp/{{cus.cus_id}}' class='btn btn-primary btn-xs'>選擇<a></th>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-          <tr>
-              <th>顧客姓名</th>
-              <th>顧客編號</th>
-              <th>手機號碼</th>
-              <th>市話</th>
-              <th>操作</th>
-          </tr>
-          </tfoot>
-        </table>
+    </div>
+    <div class="col-lg-6">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">顧客擁有課程</h3>
+        </div>
+        <div class="box-body">
+          <table id="cusclTable" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>課程名稱</th>
+                <th>剩餘堂數</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if cus_class_all == '此客戶無擁有課程' %}
+              <tr>
+                <th>此客戶無擁有課程</th>
+              </tr>
+              {% else %}
+              {% for cus_class in cus_class_all %}
+              <tr>
+                <th>{{cus_class.cuscl_stock.stock_name}}</th>
+                <th>{{cus_class.cuscl_quantity}}</th>
+                <th><a href="/app/deductService/{{cus_class.cuscl_stock.stock_id}}"
+                    class="btn btn-xs btn-primary">扣點</a></th>
+              </tr>
+              {% endfor %}
+              {% endif %}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>課程名稱</th>
+                <th>剩餘堂數</th>
+                <th>操作</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
       </div>
-      <!-- /.box-body -->
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="box">
-      <div class="box-header">
-        <h3 class="box-title">顧客擁有課程</h3>
-      </div>
-      <div class="box-body">
-        <table id="cusclTable" class="table table-bordered table-striped">
-          <thead>
-          <tr>
-            <th>課程名稱</th>
-            <th>剩餘堂數</th>
-            <th>操作</th>
-          </tr>
-          </thead>
-          <tbody>
-            {% if cus_class_all == '此客戶無擁有課程' %}
-            <tr>
-              <th>此客戶無擁有課程</th>
-            </tr>
-            {% else %}
-            {% for cus_class in cus_class_all %}
-            <tr>
-              <th>{{cus_class.cuscl_stock.stock_name}}</th>
-              <th>{{cus_class.cuscl_quantity}}</th>
-              <th><a href="/app/deductService/{{cus_class.cuscl_stock.stock_id}}" class="btn btn-xs btn-primary">扣點</a></th>
-            </tr>
-            {% endfor %}
-            {% endif %}
-          </tbody>
-          <tfoot>
-          <tr>
-              <th>課程名稱</th>
-              <th>剩餘堂數</th>
-              <th>操作</th>
-          </tr>
-          </tfoot>
-        </table>
-      </div>
-      <!-- /.box-body -->
-    </div>
-  </div>
-</div>
 </section>
 {% endblock %}
 
 
 {% block script %}
-  <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
-  <script>
-      $(function () {
-        $('#cusTable').DataTable({
-          'paging'      : true,
-          'lengthChange': true,
-          'searching'   : true,
-          'ordering'    : true,
-          'info'        : false,
-          'autoWidth'   : true
-        })
-      })
-      $(function () {
-        $('#cusclTable').DataTable({
-          'paging'      : true,
-          'lengthChange': true,
-          'searching'   : true,
-          'ordering'    : true,
-          'info'        : false,
-          'autoWidth'   : true
-        })
-      })
-  </script>
+<script>
+  $(function () {
+    $('#cusTable').DataTable({
+      'paging': true,
+      'lengthChange': true,
+      'searching': true,
+      'ordering': true,
+      'info': false,
+      'autoWidth': true
+    })
+  })
+  $(function () {
+    $('#cusclTable').DataTable({
+      'paging': true,
+      'lengthChange': true,
+      'searching': true,
+      'ordering': true,
+      'info': false,
+      'autoWidth': true
+    })
+  })
+</script>
 {% endblock %}

@@ -51,7 +51,10 @@ urlpatterns = [
     # 報表結算
     path('stockReport/', appViews.stockReport, name='stockReport'),
     path('salaryCount/', appViews.salaryCount, name='salaryCount'),
+    path('salaryCount/next', appViews.salaryCountNext, name='salaryCountNext'),
+    path('selectSalaryEmp/<str:a>', appViews.selectSalaryEmp, name='selectSalaryEmp'),
     path('turnoverCount/', appViews.turnoverCount, name='turnoverCount'),
+    
 
     path('setting/', appViews.setting, name='setting'),
     path('setting/shop', appViews.setShop, name='setShop'),
