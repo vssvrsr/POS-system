@@ -73,10 +73,10 @@
                         <th>{{sale.sale_date}}</th>
                         <th>{{sale.sale_person_in_charge}} {{sale.sale_person_in_charge.emp_id}}</th>
                         <th>
-                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#stockInfoModal">
+                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#{{sale.sale_id}}stock">
                                 查看
-                            </button>
-                            <div class="modal fade" id="stockInfoModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+                            </button> 
+                            <div class="modal fade" id="{{sale.sale_id}}stock" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -120,14 +120,14 @@
                             </div>
                         </th> 
                         <th>
-                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#empInfoModal">
+                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#{{sale.sale_id}}emp">
                                 查看
                             </button>
-                            <div class="modal fade" id="empInfoModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+                            <div class="modal fade" id="{{sale.sale_id}}emp" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h2 class="modal-title" id="exampleModalLongTitle">商品銷售清單</h2>
+                                            <h2 class="modal-title" id="exampleModalLongTitle">業務分配清單</h2>
                                         </div>
                                         <div class="modal-body">
                                             <table id="empModalTable" class="table table-bordered table-striped">
