@@ -50,8 +50,7 @@ $(function () {
         width: '80'
     });
 
-    // The Calender
-    $('#calendar').datepicker();
+
 
     /* Chart.js */
     //revenue chart
@@ -82,47 +81,85 @@ $(function () {
             maintainAspectRatio: false
         }
     });
-    // donut chart
-    /*
-    var type2 = "line";
-    var data2 = {
-        labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+
+
+    //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+
+    console.log('pie')
+    var pieData = {
+        labels: ['一般商品', '服務銷售', '課程扣點'],
         datasets: [
             {
-                label: "今年",
-                data: [10, 20, 42, 20, 16, 35, 25, 26, 25, 60, 50, 25, 25],
-                borderColor: 'rgba(60, 141, 188, 0.5)',
-                backgroundColor: 'rgba(60, 141, 188, 0.5)'
-            },
-            {
-                label: "去年同期",
-                data: [52, 10, 20, 43, 41, 10, 20, 30, 30, 30, 36, 34, 15],
-                borderColor: 'rgba(160, 208, 224, 0.5)',
-                backgroundColor: 'rgba(160, 208, 224, 0.5)'
+                data: [5, 4, 2],
+                backgroundColor: ["#f56954", "#00a65a", "#f39c12"]
             }
         ]
+    }
+    var pieOptions = {
+        title: {
+            display: false,
+            text: "PIE",
+            fontColor: "indigo",
+            fontSize: "24"
+        }
+    }
+    var type = "doughnut"; //pie, doughnut
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    var pieChart = new Chart(pieChartCanvas, {
+        type: type,
+        data: pieData,
+        options: pieOptions
+    });
+
+
+
+    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    var type = "bar"; //line, bar, horizontalBar,...
+
+    var today = new Date().getDay();
+    var day_list = ['日', '一', '二', '三', '四', '五', '六'];
+    if (today != 6) {
+        day_list = day_list.slice(today + 1).concat(day_list);
+    }
+    day_list = day_list.slice(0, 6);
+    day_list.push('今日');
+
+    var bar_data = {
+        labels: day_list,
+        datasets: [
+            {
+                label: '上周',
+                backgroundColor: 'rgba(210, 214, 222, 1)',
+
+                data: [65, 59, 80, 81, 56, 55, 40]
+            },
+            {
+                label: '本周',
+                backgroundColor: '#00a65a',
+
+                data: [28, 48, 40, 19, 86, 27, 90]
+            }
+        ]
+    }
+
+    var bar_options = {
+        title: {
+            display: false,
+            text: "小马视频",
+            fontColor: "green",
+            fontSize: "24"
+        }
     };
 
-    var ctx2 = document.getElementById("sales-chart").getContext("2d");
-    var chart2 = new Chart(ctx, {
-        type: type2,
-        data: data2,
-        options: {
-            maintainAspectRatio: false
-        }
-    });
-    */
-    // Donut Chart
-    var donut = new Morris.Donut({
-        element: 'sales-chart',
-        resize: true,
-        colors: ['#3c8dbc', '#f56954', '#00a65a'],
-        data: [
-            { label: '一般商品', value: 12 },
-            { label: '服務', value: 30 },
-            { label: '課程扣點', value: 20 }
-        ],
-        hideHover: 'auto'
+    var bar_chart = new Chart(barChartCanvas, {
+        type: type,
+        data: bar_data,
+        options: bar_options
     });
 
     // Fix for charts under tabs

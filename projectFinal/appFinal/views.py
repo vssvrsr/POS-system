@@ -476,7 +476,7 @@ def sale(request):
         saleIdNext = nextSaleId(saleIdNow)
         saleIdNow = saleIdNext
         request.session['saleIdNow'] = saleIdNext
-        Sale.objects.create(
+        Sale.objects.get_or_create(
             sale_id = saleIdNext,
             sale_cus = Customer.objects.get(cus_id='default'),
             sale_date = 'tmp',
@@ -580,7 +580,7 @@ def selectSale(request, a, b):
     sale_id = a
     select_stock = b
     sale_now = Sale.objects.get(sale_id=sale_id)
-    sale_now.salestock_set.create(
+    sale_now.salestock_set.get_or_create(
         salestock_stock = Stock.objects.get(stock_id=select_stock),
         salestock_price = 0,
         salestock_amount = 0
@@ -615,7 +615,7 @@ def service(request):
         serv_id_next = servIdNext(serv_id_now)
         serv_id_now = serv_id_next
         request.session['serv_id_now'] = serv_id_next
-        Service.objects.create(
+        Service.objects.get_or_create(
             serv_id = serv_id_next,
             serv_cus = Customer.objects.get(cus_id='default'),
             serv_date = 'tmp',
@@ -746,8 +746,8 @@ def saleLog(request):
 
     if 'searchB' in request.POST:
         select_section = request.POST['selectSection']
-
-        sale_all = Sale.objects.all().exclude(sale_id='ST000').exclude(sale_cus=Customer.objects.get(cus_id='default'))
+        serv_all = Service.objects.all().exclude(serv_id='SV000').exclude(serv_complete=False)
+        sale_all = Sale.objects.all().exclude(sale_id='ST000').exclude(sale_complete=False)
 
     return render(request, 'report.html', locals())
 
@@ -768,7 +768,7 @@ def selectPerson(request, a, b, c):
         return redirect('/app/sale')
     if select_type == 'empAlloc':
         sale_now = Sale.objects.get(sale_id=select_sale_id)
-        sale_now.salealloc_set.create(
+        sale_now.salealloc_set.get_or_create(
             salealloc_emp = Employee.objects.get(emp_id=select_person_id),
             salealloc_perc = 0
         )

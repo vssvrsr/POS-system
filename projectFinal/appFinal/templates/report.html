@@ -33,8 +33,8 @@
                     <label>選擇報表</label>
                     <select name="selectSection" class="form-control">
                         <option value="">---</option>
-                        <option value="seleReport">銷售紀錄</option>
-                        <option value="setSaleReport">課程扣點紀錄</option>
+                        <option value="saleReport">商品銷售銷售紀錄</option>
+                        <option value="servReport">服務銷售紀錄</option>
                     </select>
                 </div>
                 <input type="submit" class="btn btn-primary pull-right" value="查詢" name="searchB">
@@ -46,13 +46,14 @@
             <h3 class="box-title">查詢結果</h3>
         </div>
         <div class="box-body">
-            <table id="reportTable" class="table table-bordered table-striped">
+            {% if select_section == 'saleReport' %}
+            <table id="saleReportTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>銷售單號</th>
                     <th>銷售顧客</th>
                     <th>銷售日期</th>
-                    <th>銷售員工</th>
+                    <th>操作員工</th>
                     <th>銷售商品</th>
                     <th>總牌價</th>
                     <th>總售價</th>
@@ -74,9 +75,22 @@
                         <th>{{sale.sale_stock_price_total}}</th>
                         <th>{{sale.sale_price_total}}</th>
                         <th>{{sale.sale_point}}</th>
-                        <th>{{sale.sale_pay}}</th>
+                        {% if sale.sale_pay == 'credit'%}
+                        <th>信用卡</th>
+                        {% elif sale.sale_pay == 'cash'%}
+                        <th>現金</th>
+                        {% endif %}
                         <th>{{sale.sale_shop}}</th>
-                        <th>{{sale.sale_type}}</th>
+                        {% if sale.sale_type == 'income_stock'%}
+                        <th>商品銷售收入{{sale.sale_type}}</th>
+                        {% elif sale.sale_type == 'income_card'%}
+                        <th>儲值卡收入{{sale.sale_type}}</th>
+                        {% elif sale.sale_type == 'income_head'%}
+                        <th>頭皮護理收入{{sale.sale_type}}</th>
+                        {% elif sale.sale_type == 'income_hair'%}
+                        <th>洗剪染燙收入{{sale.sale_type}}</th>
+                        {% endif %}
+                        <th>{{sale.sale_remark}}</th>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -85,10 +99,11 @@
                         <th>銷售單號</th>
                         <th>銷售顧客</th>
                         <th>銷售日期</th>
-                        <th>銷售員工</th>
+                        <th>操作員工</th>
                         <th>銷售商品</th>
-                        <th>銷售總價</th>
-                        <th>銷售總計積</th>
+                        <th>總牌價</th>
+                        <th>總售價</th>
+                        <th>總計積</th>
                         <th>付款方式</th>
                         <th>銷售商店</th>
                         <th>收入類別</th>
@@ -96,6 +111,70 @@
                     </tr>
                 </tfoot>
             </table>
+            {% endif %}
+            {% if select_section == 'servReport' %}
+            <table id="servReportTable" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>服務單號</th>
+                    <th>服務顧客</th>
+                    <th>銷售單服務日期</th>
+                    <th>操作員工</th>
+                    <th>服務名稱</th>
+                    <th>專業操作</th>
+                    <th>洗髮</th>
+                    <th>吹整造型</th>
+                    <th>牌價</th>
+                    <th>售價</th>
+                    <th>計積</th>
+                    <th>付款方式</th>
+                    <th>服務商店</th>
+                    <th>收入類別</th>
+                    <th>備註</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for serv in serv_all %}
+                    <tr>
+                        <th>{{serv.serv_id}}</th>
+                        <th>{{serv.serv_cus}}</th>
+                        <th>{{serv.serv_date}}</th>
+                        <th>{{serv.serv_person_in_charge}}</th>
+                        <th>{{serv.serv_stock}}</th>
+                        <th>{{serv.serv_emp1}}</th>
+                        <th>{{serv.serv_emp2}}</th>
+                        <th>{{serv.serv_emp3}}</th>
+                        <th>{{serv.serv_stock_price}}</th>
+                        <th>{{serv.serv_price}}</th>
+                        <th>{{serv.serv_point}}</th>
+                        <th>{{serv.serv_pay}}</th>
+                        <th>{{serv.serv_shop}}</th>
+                        <th>{{serv.serv_type}}</th>
+                        <th>{{serv.serv_remark}}</th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>服務單號</th>
+                        <th>服務顧客</th>
+                        <th>銷售單服務日期</th>
+                        <th>操作員工</th>
+                        <th>服務名稱</th>
+                        <th>專業操作</th>
+                        <th>洗髮</th>
+                        <th>吹整造型</th>
+                        <th>牌價</th>
+                        <th>售價</th>
+                        <th>計積</th>
+                        <th>付款方式</th>
+                        <th>服務商店</th>
+                        <th>收入類別</th>
+                        <th>備註</th>
+                        </tr>
+                </tfoot>
+            </table>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -108,7 +187,15 @@
 
 <script>
     $(function () {
-      $('#reportTable').DataTable({
+      $('#saleReportTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#servReportTable').DataTable({
         'paging'      : true,
         'lengthChange': true,
         'searching'   : true,

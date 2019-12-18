@@ -3,6 +3,7 @@
 {% block title %}茵悦薈 | 新增品項{% endblock %}
 
 {% block css %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {% endblock %}
 
 {% block breadcrumb %}
@@ -31,17 +32,19 @@
                         <h3 class="box-title">基本資料</h3>
                     </div>
                     <div class="box-body">
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>類型</label>
-                            <input type="text" class="form-control" name="stock_type" required>
+                            <input type="text" class="form-control" placeholder="必填" name="stock_type" required>
+                            <span class="glyphicon glyphicon-th-list form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>商品編號</label>
                             <input type="text" class="form-control" name="stock_id">
+                            <span class="fa fa-list-ol form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>商品名稱</label>
-                            <input type="text" class="form-control" name="stock_name">
+                            <input type="text" class="form-control" placeholder="必填" name="stock_name" required>
                         </div>
                     </div>
                 </div>
@@ -63,17 +66,20 @@
                         <h3 class="box-title">銷售資訊</h3>
                     </div>
                     <div class="box-body">
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>牌價</label>
-                            <input type="text" class="form-control" name="stock_price" required>
+                            <input type="text" class="form-control" placeholder="必填" name="stock_price" required>
+                            <span class="fa fa-money form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>進貨價</label>
                             <input type="text" class="form-control" name="stock_cost">
+                            <span class="fa fa-money form-control-feedback"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label>計積點數</label>
                             <input type="text" class="form-control" name="stock_point">
+                            <span class="material-icons form-control-feedback">control_point</span>
                         </div>
                     </div>
                 </div>

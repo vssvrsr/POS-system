@@ -3,8 +3,15 @@
 {% block title %}茵悦薈{% endblock %}
 
 {% block css %}
-<link rel="stylesheet"
-  href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+<style>
+  th {
+    text-align: -internal-center;
+  }
+
+  td {
+    text-align: -internal-center;
+  }
+</style>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -178,13 +185,53 @@
         </div>
       </div>
       <!-- /.Chat -->
+
+      <!-- DONUT CHART -->
+      <div class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">今日交易數量</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+          <canvas id="pieChart" style="height:250px"></canvas>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+
+      <!-- BAR CHART -->
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">過去七天店內成交量</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="chart">
+            <canvas id="barChart" style="height:300px"></canvas>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
     </section>
     <!-- /.Left col -->
+
+
+
 
     <!-- right col (We are only adding the ID to make the widgets sortable)-->
     <section class="col-lg-5 connectedSortable">
       <!-- Map box -->
-      <!--TODO: 修改footer的Graph -->
       <div class="box box-solid bg-light-blue-gradient">
         <div class="box-header">
           <!-- tools box -->
@@ -210,17 +257,17 @@
           <div class="row">
             <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
               <div id="sparkline-1"></div>
-              <div class="knob-label">Visitors</div>
+              <div class="knob-label">訂單數</div>
             </div>
             <!-- ./col -->
             <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
               <div id="sparkline-2"></div>
-              <div class="knob-label">Online</div>
+              <div class="knob-label">營業額</div>
             </div>
             <!-- ./col -->
             <div class="col-xs-4 text-center">
               <div id="sparkline-3"></div>
-              <div class="knob-label">Exists</div>
+              <div class="knob-label">進貨量</div>
             </div>
             <!-- ./col -->
           </div>
@@ -235,7 +282,7 @@
         <div class="box-header">
           <i class="fa fa-th"></i>
 
-          <h3 class="box-title">分店營業額</h3>
+          <h3 class="box-title">個人業務目標</h3>
 
           <div class="box-tools pull-right">
             <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -247,10 +294,10 @@
         <div class="box-body border-radius-none">
           <div class="chart" id="line-chart" style="height: 250px;">
             <p class="text-center">
-              <strong>Goal Completion</strong>
+              <strong>距離下一階段</strong>
             </p>
             <div class="progress-group">
-              <span class="progress-text">Add Products to Cart</span>
+              <span class="progress-text">中藥髮泥頭皮護理</span>
               <span class="progress-number"><b>160</b>/200</span>
 
               <div class="progress sm">
@@ -259,29 +306,29 @@
             </div>
             <!-- /.progress-group -->
             <div class="progress-group">
-              <span class="progress-text">Complete Purchase</span>
+              <span class="progress-text">漢方烏髮滋養</span>
               <span class="progress-number"><b>310</b>/400</span>
 
               <div class="progress sm">
-                <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                <div class="progress-bar progress-bar-red" style="width: 78%"></div>
               </div>
             </div>
             <!-- /.progress-group -->
             <div class="progress-group">
-              <span class="progress-text">Visit Premium Page</span>
+              <span class="progress-text">質感剪髮</span>
               <span class="progress-number"><b>480</b>/800</span>
 
               <div class="progress sm">
-                <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                <div class="progress-bar progress-bar-green" style="width: 60%"></div>
               </div>
             </div>
             <!-- /.progress-group -->
             <div class="progress-group">
-              <span class="progress-text">Send Inquiries</span>
+              <span class="progress-text">質感洗髮</span>
               <span class="progress-number"><b>250</b>/500</span>
 
               <div class="progress sm">
-                <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                <div class="progress-bar progress-bar-yellow" style="width: 50%"></div>
               </div>
             </div>
             <!-- /.progress-group -->
@@ -294,21 +341,21 @@
               <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
                 data-fgColor="#39CCCC">
 
-              <div class="knob-label">Mail-Orders</div>
+              <div class="knob-label">一般商品</div>
             </div>
             <!-- ./col -->
             <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
               <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
                 data-fgColor="#39CCCC">
 
-              <div class="knob-label">Online</div>
+              <div class="knob-label">服務銷售</div>
             </div>
             <!-- ./col -->
             <div class="col-xs-4 text-center">
               <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
                 data-fgColor="#39CCCC">
 
-              <div class="knob-label">In-Store</div>
+              <div class="knob-label">課程扣點</div>
             </div>
             <!-- ./col -->
           </div>
@@ -319,12 +366,11 @@
       <!-- /.box -->
 
       <!-- Calendar -->
-      <!--TODO: 看要不要實作-->>
       <div class="box box-solid bg-green-gradient">
         <div class="box-header">
           <i class="fa fa-calendar"></i>
 
-          <h3 class="box-title">Calendar</h3>
+          <h3 class="box-title">月曆</h3>
           <!-- tools box -->
           <div class="pull-right box-tools">
             <!-- button with a dropdown -->
@@ -332,10 +378,10 @@
               <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-bars"></i></button>
               <ul class="dropdown-menu pull-right" role="menu">
-                <li><a href="#">Add new event</a></li>
-                <li><a href="#">Clear events</a></li>
+                <li><a href="#">添加新任務</a></li>
+                <li><a href="#">清除任務</a></li>
                 <li class="divider"></li>
-                <li><a href="#">View calendar</a></li>
+                <li><a href="#">詳細資料</a></li>
               </ul>
             </div>
             <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -348,7 +394,7 @@
         <!-- /.box-header -->
         <div class="box-body no-padding">
           <!--The calendar -->
-          <div id="calendar" style="width: 100%"></div>
+          <div id="calendar1" style="width: 100%; text-align: -internal-center;"></div>
         </div>
         <!-- /.box-body -->
         <div class="box-footer text-black">
@@ -356,15 +402,15 @@
             <div class="col-sm-6">
               <!-- Progress bars -->
               <div class="clearfix">
-                <span class="pull-left">Task #1</span>
-                <small class="pull-right">90%</small>
+                <span class="pull-left">廠商調貨</span>
+                <small class="pull-right">完成</small>
               </div>
               <div class="progress xs">
                 <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
               </div>
 
               <div class="clearfix">
-                <span class="pull-left">Task #2</span>
+                <span class="pull-left">上架新商品</span>
                 <small class="pull-right">70%</small>
               </div>
               <div class="progress xs">
@@ -374,7 +420,7 @@
             <!-- /.col -->
             <div class="col-sm-6">
               <div class="clearfix">
-                <span class="pull-left">Task #3</span>
+                <span class="pull-left">下個月排班</span>
                 <small class="pull-right">60%</small>
               </div>
               <div class="progress xs">
@@ -382,7 +428,7 @@
               </div>
 
               <div class="clearfix">
-                <span class="pull-left">Task #4</span>
+                <span class="pull-left">大盤點</span>
                 <small class="pull-right">40%</small>
               </div>
               <div class="progress xs">
@@ -431,6 +477,20 @@
 <!-- datepicker -->
 <script
   src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script
+  src="{% static 'adminlet-2.4.10/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js' %}"></script>
+<script>
+  //calendar
+  $(function () {
+    // The Calender
+    $('#calendar1').datepicker({
+      language: "zh-TW"
+    });
+    console.log('executed');
+    $('#calendar1').datepicker("setDate", new Date());
+  })
+</script>
+
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{% static 'adminlet-2.4.10/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js' %}"></script>
 <!-- Slimscroll -->
@@ -501,6 +561,8 @@
     $('#btn-input').val('');
 
   });
+
+
 </script>
 <!-- /.Chat room-->
 {% endblock %}
