@@ -55,6 +55,7 @@
                     <th>銷售日期</th>
                     <th>操作員工</th>
                     <th>銷售商品</th>
+                    <th>銷售業務</th>
                     <th>總牌價</th>
                     <th>總售價</th>
                     <th>總計積</th>
@@ -68,10 +69,96 @@
                     {% for sale in sale_all %}
                     <tr>
                         <th>{{sale.sale_id}}</th>
-                        <th>{{sale.sale_cus}}</th>
+                        <th>{{sale.sale_cus.cus_name}} {{sale.sale_cus.cus_id}}</th>
                         <th>{{sale.sale_date}}</th>
-                        <th>{{sale.sale_person_in_charge}}</th>
-                        <th>查看</th>
+                        <th>{{sale.sale_person_in_charge}} {{sale.sale_person_in_charge.emp_id}}</th>
+                        <th>
+                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#stockInfoModal">
+                                查看
+                            </button>
+                            <div class="modal fade" id="stockInfoModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="modal-title" id="exampleModalLongTitle">商品銷售清單</h2>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table id="stockModalTable" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                    <th>銷售商品</th>
+                                                    <th>商品編號</th>
+                                                    <th>牌價</th>
+                                                    <th>賣價</th>
+                                                    <th>數量</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for st in sale.st_all %}
+                                                <tr>
+                                                    <th>{{st.salestock_stock.stock_name}}</th>
+                                                    <th>{{st.salestock_stock.stock_id}}</th>
+                                                    <th>{{st.salestock_stock.stock_price}}</th>
+                                                    <th>{{st.salestock_price}}</th>
+                                                    <th>{{st.salestock_amount}}</th>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>銷售商品</th>
+                                                        <th>商品編號</th>
+                                                        <th>牌價</th>
+                                                        <th>賣價</th>
+                                                        <th>數量</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
+                        </th> 
+                        <th>
+                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#empInfoModal">
+                                查看
+                            </button>
+                            <div class="modal fade" id="empInfoModal" tabindex="-1" role="dialog" aria-labelledby="selectStockModalTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="modal-title" id="exampleModalLongTitle">商品銷售清單</h2>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table id="empModalTable" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                    <th>銷售員工</th>
+                                                    <th>分配比例</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for sa in sale.sa_all %}
+                                                <tr>
+                                                    <th>{{sa.salealloc_emp.emp_name_ch}} {{sa.salealloc_emp.emp_id}}</th>
+                                                    <th>{{sa.salealloc_perc}}</th>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>銷售員工</th>
+                                                        <th>分配比例</th>
+
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
+                        </th> 
+                                          
                         <th>{{sale.sale_stock_price_total}}</th>
                         <th>{{sale.sale_price_total}}</th>
                         <th>{{sale.sale_point}}</th>
@@ -82,13 +169,13 @@
                         {% endif %}
                         <th>{{sale.sale_shop}}</th>
                         {% if sale.sale_type == 'income_stock'%}
-                        <th>商品銷售收入{{sale.sale_type}}</th>
+                        <th>商品銷售收入</th>
                         {% elif sale.sale_type == 'income_card'%}
-                        <th>儲值卡收入{{sale.sale_type}}</th>
+                        <th>儲值卡收入</th>
                         {% elif sale.sale_type == 'income_head'%}
-                        <th>頭皮護理收入{{sale.sale_type}}</th>
+                        <th>頭皮護理收入</th>
                         {% elif sale.sale_type == 'income_hair'%}
-                        <th>洗剪染燙收入{{sale.sale_type}}</th>
+                        <th>洗剪染燙收入</th>
                         {% endif %}
                         <th>{{sale.sale_remark}}</th>
                     </tr>
@@ -101,6 +188,7 @@
                         <th>銷售日期</th>
                         <th>操作員工</th>
                         <th>銷售商品</th>
+                        <th>銷售業務</th>
                         <th>總牌價</th>
                         <th>總售價</th>
                         <th>總計積</th>
@@ -119,7 +207,6 @@
                     <th>服務單號</th>
                     <th>服務顧客</th>
                     <th>銷售單服務日期</th>
-                    <th>操作員工</th>
                     <th>服務名稱</th>
                     <th>專業操作</th>
                     <th>洗髮</th>
@@ -137,19 +224,30 @@
                     {% for serv in serv_all %}
                     <tr>
                         <th>{{serv.serv_id}}</th>
-                        <th>{{serv.serv_cus}}</th>
+                        <th>{{serv.serv_cus}} {{serv.serv_cus.cus_id}}</th>
                         <th>{{serv.serv_date}}</th>
-                        <th>{{serv.serv_person_in_charge}}</th>
                         <th>{{serv.serv_stock}}</th>
-                        <th>{{serv.serv_emp1}}</th>
-                        <th>{{serv.serv_emp2}}</th>
-                        <th>{{serv.serv_emp3}}</th>
+                        <th>{{serv.serv_emp1}} {{serv.serv_emp1.emp_id}}</th>
+                        <th>{{serv.serv_emp2}} {{serv.serv_emp2.emp_id}}</th>
+                        <th>{{serv.serv_emp3}} {{serv.serv_emp3.emp_id}}</th>
                         <th>{{serv.serv_stock_price}}</th>
                         <th>{{serv.serv_price}}</th>
                         <th>{{serv.serv_point}}</th>
-                        <th>{{serv.serv_pay}}</th>
+                        {% if serv.serv_pay == 'credit'%}
+                        <th>信用卡</th>
+                        {% elif serv.serv_pay == 'cash'%}
+                        <th>現金</th>
+                        {% endif %}
                         <th>{{serv.serv_shop}}</th>
-                        <th>{{serv.serv_type}}</th>
+                        {% if serv.serv_type == 'income_stock'%}
+                        <th>商品銷售收入</th>
+                        {% elif serv.serv_type == 'income_card'%}
+                        <th>儲值卡收入</th>
+                        {% elif serv.serv_type == 'income_head'%}
+                        <th>頭皮護理收入</th>
+                        {% elif serv.serv_type == 'income_hair'%}
+                        <th>洗剪染燙收入</th>
+                        {% endif %}
                         <th>{{serv.serv_remark}}</th>
                     </tr>
                     {% endfor %}
@@ -159,7 +257,6 @@
                         <th>服務單號</th>
                         <th>服務顧客</th>
                         <th>銷售單服務日期</th>
-                        <th>操作員工</th>
                         <th>服務名稱</th>
                         <th>專業操作</th>
                         <th>洗髮</th>
@@ -177,6 +274,7 @@
             {% endif %}
         </div>
     </div>
+    
 </section>
 {% endblock %}
 
@@ -196,6 +294,22 @@
         'autoWidth'   : true
       })
       $('#servReportTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#stockModalTable').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : true
+      })
+      $('#empModalTable').DataTable({
         'paging'      : true,
         'lengthChange': true,
         'searching'   : true,

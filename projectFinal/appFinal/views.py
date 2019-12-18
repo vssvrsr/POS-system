@@ -12,6 +12,8 @@ from chat.models import Message
 """
 
 # 登入
+
+
 def login(request):
     """
     歡迎畫面
@@ -47,7 +49,6 @@ def login(request):
             request.session['user_emp_id'] = user.user_emp_id
             request.session['cus_class_cus'] = 'default'
 
-
             irIdNow = ImportReport.objects.all().order_by('-ir_id')[0].ir_id
             request.session['irIdNow'] = irIdNow
 
@@ -81,12 +82,16 @@ def login(request):
         return render(request, 'login.html', locals())
 
 # 確認是否為登入狀態
+
+
 def isLogin(request):
     if not request.session.get('is_login', None):  # 確認是否登入
         return False
     return True
 
 # 登出
+
+
 def logout(request):
 
     if not isLogin(request):  # 如果本來就沒登入
@@ -101,6 +106,8 @@ def logout(request):
     return redirect('/app')
 
 # 切換分店
+
+
 def changeShop(request, a):
     request.session['user_shop'] = a
     request.session['user_shop_name'] = Shop.objects.get(shop_id=a).shop_name
@@ -118,6 +125,8 @@ def changeShop(request, a):
 """
 
 # 主頁
+
+
 def index(request):
     if not isLogin(request):    # 確認是否登入
         return redirect('/app')
@@ -125,15 +134,29 @@ def index(request):
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
 
-    #chat room 使用
+    """
+    SMALLBOX
+    """
+    # 抓取庫存量
+    try:
+        stock_quantity = Stock.objects.count()
+        numbers_of_member = Customer.objects.count()
+        numbers_of_shop = Shop.objects.count()
+    except:
+        pass
+    
+
+
+    """
+    CHATROOM
+    """
     user_id_now = request.session['user_id']
     shop_id_now = request.session['user_shop']
-
 
     chat_messages = Message.objects.filter(
         group_name=shop_id_now).order_by("created")[:100]
 
-     # 取得User中文名
+    # 訊息
     message_list = []
     for message_item in chat_messages:
         employee = Employee.objects.get(emp_id=message_item.user.user_emp_id)
@@ -468,8 +491,10 @@ def sale(request):
     saleIdNow = request.session['saleIdNow']
     shopAll = Shop.objects.all()
     stockAll = Stock.objects.all().exclude(stock_seeable=False)
-    cusAll = Customer.objects.all().exclude(cus_seeable=False)
-    empAll = Employee.objects.all().exclude(emp_seeable=False)
+    for stock in stockAll:
+        stock.instock_qua = Instock.objects.get(instock_id=stock.stock_id, instock_shop_id=shopIdNow).instock_qua
+    cusAll = Customer.objects.all().exclude(cus_seeable=False).exclude(cus_id='default')
+    empAll = Employee.objects.all().exclude(emp_seeable=False).exclude(emp_id='default')
     saleMenuOpen = "active menu-open"
 
     if Sale.objects.get(sale_id=saleIdNow).sale_complete:
@@ -605,11 +630,9 @@ def service(request):
     serv_id_now = request.session['serv_id_now']
     shopAll = Shop.objects.all()
     serviceAll = Stock.objects.filter(stock_type='服務')
-    empAll = Employee.objects.all().exclude(emp_seeable = False)
-    cusAll = Customer.objects.all().exclude(cus_seeable = False)
+    empAll = Employee.objects.all().exclude(emp_seeable = False).exclude(emp_id='default')
+    cusAll = Customer.objects.all().exclude(cus_seeable = False).exclude(cus_id='default')
     saleMenuOpen = "active menu-open"
-
-    serv_now = Service.objects.get(serv_id=serv_id_now)
 
     if Service.objects.get(serv_id=serv_id_now).serv_complete:
         serv_id_next = servIdNext(serv_id_now)
@@ -632,6 +655,7 @@ def service(request):
             serv_remark = 'tmp',
             serv_created_by_user = User.objects.get(user_id = user_id_now)
         )
+    serv_now = Service.objects.get(serv_id=serv_id_now)
 
     
     return render(request, 'service.html', locals())
@@ -742,12 +766,15 @@ def saleLog(request):
     userNow = request.session['emp_name_ch']
     shopNow = request.session['user_shop_name']
     shopAll = Shop.objects.all()
-    saleMenuOpen = "active menu-open"
+    reportMenuOpen = "active menu-open"
 
     if 'searchB' in request.POST:
         select_section = request.POST['selectSection']
         serv_all = Service.objects.all().exclude(serv_id='SV000').exclude(serv_complete=False)
         sale_all = Sale.objects.all().exclude(sale_id='ST000').exclude(sale_complete=False)
+        for sale in sale_all:
+            sale.st_all = sale.salestock_set.all()
+            sale.sa_all = sale.salealloc_set.all()
 
     return render(request, 'report.html', locals())
 
@@ -898,7 +925,7 @@ def editStock(request, row_index):
 
     return render(request, 'editStock.html', locals())
     
-    ### return HttpResponse("待完善")
+    # return HttpResponse("待完善")
 
 def exportStock(request):
     if not isLogin(request):    # 確認是否登入
@@ -1043,7 +1070,7 @@ def salaryCountNext(request):
         hair_point_all_emp2 = 0
         hair_point_all_emp3 = 0
         
-        sale_all = Sale.objects.all().exclude(sale_complete=False)
+        sale_all = Sale.objects.all().exclude(sale_complete=False).exclude(sale_id='ST000')
         for sale in sale_all:
             sale_alloc_all = sale.salealloc_set.all()
             for sale_alloc in sale_alloc_all:
@@ -1052,7 +1079,7 @@ def salaryCountNext(request):
                     stock_point_all += sale.sale_point * perc / 100                   #商品銷售總計積
                     stock_income_all += sale.sale_price_total * perc / 100            #商品銷售總收入
         
-        serv_all = Service.objects.all().exclude(serv_complete=False)
+        serv_all = Service.objects.all().exclude(serv_complete=False).exclude(serv_id='SV000')
         for serv in serv_all:
             if serv.serv_type == 'income_head':
                 if serv.serv_emp1 == emp.SSE_emp:  

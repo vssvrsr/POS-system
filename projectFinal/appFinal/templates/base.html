@@ -179,7 +179,7 @@ desired effect
                   class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 {% for shop in shopAll %}
-                <li><a href="/app/changeShop/{{shop.shop_id}}">{{shop.shop_name}}</a></li>
+                <li><a href="/app/changeShop/{{shop.shop_id}}" style="color: gray;">{{shop.shop_name}}</a></li>
                 {% endfor %}
               </ul>
             </li>
@@ -315,7 +315,7 @@ desired effect
               </span>
             </a>
             <ul class="treeview-menu">
-
+              <li><a href="{% url 'appFinal:saleLog' %}"><i class="fa fa-circle-o"></i> <span>交易紀錄</span></a></li>
               <li><a href="{% url 'appFinal:stockReport' %}"><i class="fa fa-circle-o"></i> <span>庫存清算</span></a></li>
               <li><a href="{% url 'appFinal:salaryCount' %}"><i class="fa fa-circle-o"></i> <span>薪資獎金試算</span></a></li>
               <li><a href="{% url 'appFinal:turnoverCount' %}"><i class="fa fa-circle-o"></i> <span>營業額試算</span></a>

@@ -141,8 +141,9 @@
                                 <tr>
                                     <td>{{saleAlloc.salealloc_emp.emp_name_ch}}</a></td>
                                     <td>{{saleAlloc.salealloc_emp.emp_id}}</td>
-                                    <td><input type="text" class="form-control"
-                                            name="{{saleAlloc.salealloc_emp.emp_id}}_perc" required></td>
+                                    <td><input type=" text" class="form-control"
+                                            name="{{saleAlloc.salealloc_emp.emp_id}}_perc" required>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -188,7 +189,7 @@
                                     <td>{{stock.stock_name}}</td>
                                     <td>{{stock.stock_id}}</td>
                                     <td>{{stock.stock_price|default:"-"}}</td>
-                                    <td>{{stock.instock_qua|default:"-"}}</td>
+                                    <td>{{stock.instock_qua}}</td>
                                     <td>
                                         <a href="/app/selectSale/{{saleIdNow}}/{{stock.stock_id}}"
                                             class="btn btn-primary btn-xs">
@@ -262,7 +263,7 @@
                         <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
                     </div>
                     <div class="modal-body">
-                        <table id="selectStockTable" class="table table-bordered table-striped">
+                        <table id="selectEmpTable1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>員工姓名</th>
@@ -304,7 +305,7 @@
                         <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
                     </div>
                     <div class="modal-body">
-                        <table id="selectStockTable" class="table table-bordered table-striped">
+                        <table id="selectEmpTable2" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>員工姓名</th>
@@ -350,7 +351,15 @@
 
 <script>
     $(function () {
-        $('#selectStockTable').DataTable({
+        $('#selectEmpTable1').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': true
+        })
+        $('#selectEmpTable2').DataTable({
             'paging': true,
             'lengthChange': true,
             'searching': true,
@@ -375,6 +384,14 @@
             'autoWidth': true
         })
         $('#empTable').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': true
+        })
+        $('#selectStockTable').DataTable({
             'paging': true,
             'lengthChange': true,
             'searching': true,

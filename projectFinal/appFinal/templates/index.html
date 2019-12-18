@@ -57,7 +57,7 @@
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
         </div>
-        <a href="#" class="small-box-footer">更多資訊 <i class="fa fa-arrow-circle-right"></i></a>
+        <a href="#barChart" class="small-box-footer">更多資訊 <i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -65,14 +65,14 @@
       <!-- small box -->
       <div class="small-box bg-yellow">
         <div class="inner">
-          <h3>44</h3>
+          <h3>{{ numbers_of_member|default:103 }}</h3>
 
           <p>人員管理</p>
         </div>
         <div class="icon">
           <i class="ion ion-person-add"></i>
         </div>
-        <a href="#" class="small-box-footer">更多資訊 <i class="fa fa-arrow-circle-right"></i></a>
+        <a href="/app/cus/" class="small-box-footer">更多資訊 <i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -80,14 +80,14 @@
       <!-- small box -->
       <div class="small-box bg-red">
         <div class="inner">
-          <h3>65</h3>
+          <h3>{{ numbers_of_shop|default:63 }}</h3>
 
           <p>分店管理</p>
         </div>
         <div class="icon">
           <i class="ion ion-pie-graph"></i>
         </div>
-        <a href="#" class="small-box-footer">更多資訊 <i class="fa fa-arrow-circle-right"></i></a>
+        <a href="/app/setting/shop" class="small-box-footer">更多資訊 <i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -406,7 +406,7 @@
                 <small class="pull-right">完成</small>
               </div>
               <div class="progress xs">
-                <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
+                <div class="progress-bar progress-bar-green" style="width: 100%;"></div>
               </div>
 
               <div class="clearfix">

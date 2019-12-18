@@ -3,19 +3,20 @@
 {% block title %}茵悦薈{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+<link rel="stylesheet"
+    href="{% static 'adminlet-2.4.10/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
 
 <section class="content-header">
     <h1>
-        交易紀錄
+        薪資獎金試算
     </h1>
     <ol class="breadcrumb">
         <li><a href="/app/index"><i class="fa fa-home"></i>主頁</a></li>
         <li>報表結算</a></li>
-        <li class="active">交易紀錄</li>
+        <li class="active">薪資獎金試算</li>
     </ol>
 </section>
 {% endblock %}
@@ -27,32 +28,33 @@
             <h3 class="box-title">查詢結果</h3>
         </div>
         <div class="box-body">
-            <table id="reportTable" class="table table-bordered table-striped">
+            <table id="reportTable" class="table table-bordered table-striped table-sm" cellspacing="0" style="width:250%;
+                max-width: 3000px;">
                 <thead>
-                <tr>
-                    <th>員工姓名</th>
-                    <th>頭皮護理專業操作總收入</th>
-                    <th>頭皮護理洗髮總收入</th>
-                    <th>頭皮護理吹整造型總收入</th>
-                    <th>洗剪染燙專業操作總收入</th>
-                    <th>洗剪染燙洗髮總收入</th>
-                    <th>洗剪染燙吹整造型總收入</th>
-                    <th>商品銷售總收入</th>
-                    <th>頭皮護理總收入</th>
-                    <th>洗剪染燙總收入</th>
-                    <th>商品銷售總計積</th>
-                    <th>頭皮護理專業操作總計積</th>
-                    <th>頭皮護理洗髮總計機</th>
-                    <th>頭皮護理吹整造型總計積</th>
-                    <th>洗剪染燙專業操作總計積</th>
-                    <th>洗剪染燙洗髮總計機</th>
-                    <th>洗剪染燙吹整造型總計積</th>
-                    <th>商品收入提成結果</th>  
-                    <th>頭皮護理收入提成結果</th>                 
-                    <th>洗剪染燙收入提成結果</th>      
-                    <th>員工底薪</th>
-                    <th>計算結果</th>         
-                </tr>
+                    <tr>
+                        <th>員工姓名</th>
+                        <th>頭皮護理專業操作總收入</th>
+                        <th>頭皮護理洗髮總收入</th>
+                        <th>頭皮護理吹整造型總收入</th>
+                        <th>洗剪染燙專業操作總收入</th>
+                        <th>洗剪染燙洗髮總收入</th>
+                        <th>洗剪染燙吹整造型總收入</th>
+                        <th>商品銷售總收入</th>
+                        <th>頭皮護理總收入</th>
+                        <th>洗剪染燙總收入</th>
+                        <th>商品銷售總計積</th>
+                        <th>頭皮護理專業操作總計積</th>
+                        <th>頭皮護理洗髮總計機</th>
+                        <th>頭皮護理吹整造型總計積</th>
+                        <th>洗剪染燙專業操作總計積</th>
+                        <th>洗剪染燙洗髮總計機</th>
+                        <th>洗剪染燙吹整造型總計積</th>
+                        <th>商品收入提成結果</th>
+                        <th>頭皮護理收入提成結果</th>
+                        <th>洗剪染燙收入提成結果</th>
+                        <th>員工底薪</th>
+                        <th>計算結果</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {% for SR in SR_all %}
@@ -84,28 +86,28 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                    <th>員工姓名</th>
-                    <th>頭皮護理專業操作總收入</th>
-                    <th>頭皮護理洗髮總收入</th>
-                    <th>頭皮護理吹整造型總收入</th>
-                    <th>洗剪染燙專業操作總收入</th>
-                    <th>洗剪染燙洗髮總收入</th>
-                    <th>洗剪染燙吹整造型總收入</th>
-                    <th>商品銷售總收入</th>
-                    <th>頭皮護理總收入</th>
-                    <th>洗剪染燙總收入</th>
-                    <th>商品銷售總計積</th>
-                    <th>頭皮護理專業操作總計積</th>
-                    <th>頭皮護理洗髮總計機</th>
-                    <th>頭皮護理吹整造型總計積</th>
-                    <th>洗剪染燙專業操作總計積</th>
-                    <th>洗剪染燙洗髮總計機</th>
-                    <th>洗剪染燙吹整造型總計積</th>
-                    <th>商品收入提成結果</th>  
-                    <th>頭皮護理收入提成結果</th>
-                    <th>洗剪染燙收入提成結果</th>  
-                    <th>員工底薪</th>
-                    <th>計算結果</th> 
+                        <th>員工姓名</th>
+                        <th>頭皮護理專業操作總收入</th>
+                        <th>頭皮護理洗髮總收入</th>
+                        <th>頭皮護理吹整造型總收入</th>
+                        <th>洗剪染燙專業操作總收入</th>
+                        <th>洗剪染燙洗髮總收入</th>
+                        <th>洗剪染燙吹整造型總收入</th>
+                        <th>商品銷售總收入</th>
+                        <th>頭皮護理總收入</th>
+                        <th>洗剪染燙總收入</th>
+                        <th>商品銷售總計積</th>
+                        <th>頭皮護理專業操作總計積</th>
+                        <th>頭皮護理洗髮總計機</th>
+                        <th>頭皮護理吹整造型總計積</th>
+                        <th>洗剪染燙專業操作總計積</th>
+                        <th>洗剪染燙洗髮總計機</th>
+                        <th>洗剪染燙吹整造型總計積</th>
+                        <th>商品收入提成結果</th>
+                        <th>頭皮護理收入提成結果</th>
+                        <th>洗剪染燙收入提成結果</th>
+                        <th>員工底薪</th>
+                        <th>計算結果</th>
                     </tr>
                 </tfoot>
             </table>
@@ -121,14 +123,15 @@
 
 <script>
     $(function () {
-      $('#reportTable').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
-        'searching'   : true,
-        'ordering'    : true,
-        'info'        : false,
-        'autoWidth'   : true
-      })
+        $('#reportTable').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': true,
+            "scrollX": true
+        })
     })
-  </script>
+</script>
 {% endblock %}
