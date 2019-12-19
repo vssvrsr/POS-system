@@ -67,6 +67,7 @@
                                     <th>牌價</th>
                                     <th>賣價</th>
                                     <th>數量</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,9 +77,11 @@
                                     <td>{{salestock.salestock_stock.stock_id}}</td>
                                     <td>{{salestock.salestock_stock.stock_price}}</td>
                                     <td><input type="text" class="form-control"
-                                            name="{{salestock.salestock_stock.stock_id}}_price" required></td>
+                                            name="{{salestock.salestock_stock.stock_id}}_price" required value={{salestock.salestock_stock.stock_price}}></td>
                                     <td><input type="text" class="form-control"
                                             name="{{salestock.salestock_stock.stock_id}}_amount" required></td>
+                                    <td><a href='/app/delete/saleStock/{{salestock.salestock_sale.sale_id}}{{salestock.salestock_stock.stock_id}}'
+                                            class='btn btn-danger btn-xs'>移除</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -89,6 +92,7 @@
                                     <th>牌價</th>
                                     <th>賣價</th>
                                     <th>數量</th>
+                                    <th>操作</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -134,6 +138,7 @@
                                     <th>員工姓名</th>
                                     <th>員工編號</th>
                                     <th>分配百分比</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -144,6 +149,8 @@
                                     <td><input type=" text" class="form-control"
                                             name="{{saleAlloc.salealloc_emp.emp_id}}_perc" required>
                                     </td>
+                                    <td><a href='/app/delete/saleAlloc/{{saleAlloc.salealloc_sale.sale_id}}{{saleAlloc.salealloc_emp.emp_id}}'
+                                            class='btn btn-danger btn-xs'>移除</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -152,6 +159,7 @@
                                     <th>員工姓名</th>
                                     <th>員工編號</th>
                                     <th>分配百分比</th>
+                                    <th>操作</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -260,7 +268,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
+                        <h2 class="modal-title" id="exampleModalLongTitle">選擇員工</h2>
                     </div>
                     <div class="modal-body">
                         <table id="selectEmpTable1" class="table table-bordered table-striped">
@@ -302,7 +310,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title" id="exampleModalLongTitle">選擇客戶</h2>
+                        <h2 class="modal-title" id="exampleModalLongTitle">選擇員工</h2>
                     </div>
                     <div class="modal-body">
                         <table id="selectEmpTable2" class="table table-bordered table-striped">

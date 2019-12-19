@@ -362,6 +362,23 @@ def delete(request, a, b):
         # Customer.objects.get(stock_id=b).delete()
         # Instock.objects.filter(stock_id=b).delete()
         # return redirect('/app/removed/stock')
+    if a == 'saleStock':
+        sale_id = b[0:5]
+        sale_stock_id = b[5:]
+        Salestock.objects.get(
+            salestock_sale = Sale.objects.get(sale_id = sale_id),
+            salestock_stock = Stock.objects.get(stock_id = sale_stock_id)
+        ).delete()
+        return redirect('/app/sale')
+
+    if a == 'saleAlloc':
+        sale_id = b[0:5]
+        sale_alloc_id = b[5:]
+        Salealloc.objects.get(
+            salealloc_sale = Sale.objects.get(sale_id = sale_id),
+            salealloc_emp = Employee.objects.get(emp_id = sale_alloc_id)
+        ).delete()
+        return redirect('/app/sale')
 
 def nextEmpId(prev_id):
     eng = prev_id[0:2]
@@ -674,7 +691,13 @@ def servNext(request, a):
     if not isLogin(request):    # 確認是否登入
         return redirect('/app')
     serv_now = Service.objects.get(serv_id=a)
-
+    serv_stock_price = serv_now.serv_stock.stock_price
+    serv_point = serv_now.serv_stock.stock_point
+    serv_price = serv_now.serv_stock.stock_price
+    if serv_now.serv_stock.stock_type == '儲值卡':
+        serv_stock_price = int(serv_now.serv_stock.stock_price / 10)
+        serv_price = int(serv_stock_price)
+        serv_point = int(serv_price / 10)
     if 'saveB' in request.POST:
         serv_date = request.POST['serv_date']
         serv_stock_price = request.POST['serv_stock_price']

@@ -68,17 +68,18 @@
                     <div class="box-body">
                         <div class="form-group has-feedback">
                             <label>牌價</label>
-                            <input type="text" class="form-control" placeholder="必填" name="stock_price" required>
+                            <input type="number" class="form-control" placeholder="必填" id="stock_price"
+                                name="stock_price" required>
                             <span class="fa fa-money form-control-feedback"></span>
                         </div>
                         <div class="form-group has-feedback">
                             <label>進貨價</label>
-                            <input type="text" class="form-control" name="stock_cost">
+                            <input type="number" class="form-control" id="stock_cost" name="stock_cost">
                             <span class="fa fa-money form-control-feedback"></span>
                         </div>
                         <div class="form-group has-feedback">
                             <label>計積點數</label>
-                            <input type="text" class="form-control" name="stock_point">
+                            <input type="text" class="form-control" id="stock_point" name="stock_point">
                             <span class="material-icons form-control-feedback">control_point</span>
                         </div>
                     </div>
@@ -114,4 +115,14 @@
 
 
 {% block script %}
+<script>
+    $(function () {
+        $("#stock_price").on('input', function () {
+            let stock_price_value = $(this).val();
+            $("#stock_cost").val(stock_price_value / 2);
+            $("#stock_point").val(stock_price_value / 10);
+
+        })
+    });
+</script>
 {% endblock %}
